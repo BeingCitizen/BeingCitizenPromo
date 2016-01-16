@@ -1,0 +1,48 @@
+<html>
+  <head>
+    <title>Admin Login</title>
+    <link href = "css/admin.css" rel = "stylesheet" />
+    <link href = "css/menu.css" rel = "stylesheet" />
+    <link href="fonts/stylesheet.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class = "form-container bebas">
+      <form onsubmit="return false;" id="login_form" type="POST">
+        <label> The admin login page </label>
+        <br />
+        <label class = "hidden err">Oops! Seems like the credentials don't match!</label>
+        <br />
+        <input type = "text" placeholder = "Username" required="true" id="adminName"/>
+        <br />
+        <input type = "password" placeholder ="Password" required="true" id = "password"/>
+        <br />
+        <button type = "submit" onclick = "checkAdmin()"  />
+          Submit
+        </button>
+      </form>
+    </div>
+  </body>
+  <script src = "js/jquery.js"></script>
+  <script type="text/javascript">
+
+    function checkAdmin()
+    {
+	  var object = {
+                    username : $("#adminName").val(),
+                    password : $("#password").val()
+                   };
+      $.post('/laravel/public/login_admin',object,function(data){
+          //if validated send to dashboard
+          //otherwise just reloop it here with an error message
+		  if(data){
+		    console.log(data) ;
+			window.location='/BeingCitizen/debate_start.html';
+		  }
+		  else{
+		    window.location.reload(); 
+		  }
+			  		  
+      });
+    }
+  </script>
+</html>

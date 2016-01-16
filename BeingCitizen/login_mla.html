@@ -1,0 +1,50 @@
+<html>
+	<head>
+		<link href="fonts/stylesheet.css" rel="stylesheet" />
+		<link href="css/login_signup.css" rel="stylesheet" />
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	</head>
+	<body>
+		<div class="backdrop">
+			<div class="canopy">
+				<div class="big">Being Citizen</div>
+				<div class="small">Democracy, the way you like it</div>
+				<form onsubmit="return false;" id="login_form" type="POST">
+					<input type="text" placeholder="Username" id="username" required/><br />
+					<input type="password" placeholder="Password" id="password" required/><br />
+					<button onclick="user_submit()">Log Me In</button>
+				</form>
+				<button onclick="signup_redirect()" class="smaller">New to Being Citizen? Sign Up here</button>
+			</div>
+		</div>
+		<script src="js/jquery.js"></script>
+		<script type="text/javascript">
+			$("#login_form").submit(function(){
+				user_submit();
+			});
+
+			function user_submit(){
+				var user_info ={
+					user_name : $("#username").val(),
+					password : $("#password").val(),
+				};
+				$.post('/laravel/public/login_mla',
+				user_info,
+				function(data){
+					data = JSON.parse(data);
+					if(data){
+						window.location='/BeingCitizen/profile_mla.html?constituency='+data['constituency'];
+					}
+					else{
+						window.location.reload();
+					}
+				}
+				);
+			}
+
+			function signup_redirect(){
+				window.location="signup.html";
+			}
+		</script>
+	</body>
+</html>

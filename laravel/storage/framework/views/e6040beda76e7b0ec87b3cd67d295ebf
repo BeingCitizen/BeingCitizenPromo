@@ -1,0 +1,10 @@
+﻿
+<?php $__env->startSection('content'); ?>
+<h2>Show Products</h2>
+Product name : <?php echo e($product->pname); ?><br>
+Price : <?php echo e($product->price); ?><br>
+Quantity : <?php echo e($product->quantity); ?><br>
+
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('app1', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

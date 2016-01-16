@@ -1,0 +1,143 @@
+<html>
+	<head>
+		<title>Campaigns: Being Citizen.com</title>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+		<script src="js/jquery.js"></script>
+		<!--For the editor's text-->
+		<link href = "css/campaign.css" rel = "stylesheet" />
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<link rel = "stylesheet" href="css/filter.css" />
+		<style>
+			.fa-plus
+			{
+			margin-right:4px;
+			}
+		</style>
+	</head>
+	<body>
+		<!--
+			THe menu bar loader
+		-->
+		<div id="header">
+			<script>
+				$("#header").load('menu.html');
+			</script>
+		</div>
+		<!--
+			Main campaign space
+		-->
+		<div class = "campaign-fake">
+			<div class = "debate-body">
+				<!--Left screen-->
+				<div class = "left-side">
+					<div class = "title">Campaigns</div>
+					<div class = "label-text" id = "banner">Nothing to show here!</div>
+					<div id = "space">
+					</div>
+					<div>
+						<a href = "/BeingCitizen/campaign_list.html" class = "tiny-link">
+							<i class = "fa fa-arrow-left"></i>Go to campaign - category page
+						</a>
+					</div>
+				</div>
+			</div>
+			<script>
+				var uid = 0;
+				var obj={uid:uid};
+				$(document).ready(function(){
+
+					$.post('/laravel/public/user_id',
+					function(data){
+						if(data){
+							data=JSON.parse(data);
+							uid=data['user_id'];
+							$('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
+							$("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+uid+'">'+data.name+'</a>');
+							$('#toggle-menu').css("visibility","visible");
+						}
+					});
+
+
+					var queryString = location.search.substring(1);
+					queryString = queryString.split('&');
+					var type = queryString[0].split('=')[1];
+					var name = queryString[1].split('=')[1];
+					name = name.split('%20').join(' ');
+
+					if(type=='category')
+					{
+						$("#banner").html('Belonging to category <i>'+name+'</i>');
+						sortCategories(name);
+					}
+					else if(type=='tags')
+					{
+						$("#banner").html('Belonging to tag <i>'+name+'</i>');
+						sortTag(name);
+					}
+					else if(type=='const')
+					{
+						$("#banner").html('Belonging to constituency<i>'+name+'</i>');
+						sortConstituency(name);
+					}
+					else
+					{
+						//window.reload=404page;
+					}
+				});
+
+				function class_action(status){
+					if(status==1)return "no-action";
+					if(status==2)return "cant-take-action";
+					if(status==3)return "taken-action";
+				}
+
+				function returnLink(campaign_info)
+				{
+					if(!campaign_info.image)
+					campaign_info.image = '/public/uploads/null/null.jpg';
+					var string = '<div class="campaign-object">';
+					string += '<img src = "/laravel/public'+campaign_info.image+'" class="thumbnail"/><br />';
+					string += '<a href="campaign_display.html?campaign_id='+campaign_info.campaign_id+'" class="'+class_action(campaign_info.status)+'">'+campaign_info.name+'</a>';
+					string += '</div>';
+					return string;
+				}
+
+				function sortCategories(string){
+					var object = {category:string};
+					$.post('/laravel/public/get_campaignCategory',object,function(data){
+						data= JSON.parse(data);
+						$("#space").html("");
+						for(var j = 0;data[j];j++)
+						{
+							$("#space").append(returnLink(data[j]));
+						}
+					});
+				}
+
+				function sortTag(string){
+					var object = {tag:string};
+					$.post('/laravel/public/get_campaignTag',object,function(data){
+						$("#space").html("");
+						data= JSON.parse(data);
+						for(var j = 0;data[j];j++)
+						{
+							$("#space").append(returnLink(data[j]));
+						}
+					});
+				}
+
+				function sortConstituency(string){
+					var object = {constituency:string};
+					$.post('/laravel/public/get_campaignConstituency',object,function(data){
+						data= JSON.parse(data);
+						console.log(data);
+						$("#space").html("");
+						for(var j = 0;data[j];j++)
+						{
+							$("#space").append(returnLink(data[j]));
+						}
+					});
+				}
+			</script>
+		</body>
+	</html>

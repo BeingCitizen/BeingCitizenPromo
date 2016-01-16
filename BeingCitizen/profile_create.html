@@ -1,0 +1,324 @@
+<html>
+	<head>
+		<link href="css/profile.css" rel="stylesheet" />
+		<link href="css/menu.css" rel="stylesheet">
+		<link href="css/fonts.css" rel="stylesheet" />
+		<link href="flaticons/flaticon.css" rel="stylesheet" >
+		<style>
+			.conditional,.profile-space{
+			display:none;
+			}
+			.show{
+			display:block;
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+			(function() {
+				var po = document.createElement('script');
+				po.type = 'text/javascript';
+				po.async = true;
+				po.src = 'https://apis.google.com/js/client.js?onload=onLoadCallback';
+				var s = document.getElementsByTagName('script')[0];
+				s.parentNode.insertBefore(po, s);
+			})();
+			function onLoadCallback()
+			{
+				gapi.client.setApiKey('AIzaSyA185Q1oBLk5CDflC7ocXTYcj6RovAViaQ'); //set your API KEY
+				gapi.client.load('plus', 'v1',function(){});//Load Google + API
+			}
+		</script>
+		<script>
+			window.fbAsyncInit = function() {
+				FB.init({
+					appId      : '1467677160210062',
+					xfbml      : true,
+					version    : 'v2.3'
+				});
+			};
+			
+			(function(d, s, id){
+				var js, fjs = d.getElementsByTagName(s)[0];
+				if (d.getElementById(id)) {return;}
+				js = d.createElement(s); js.id = id;
+				js.src = "//connect.facebook.net/en_US/sdk.js";
+				fjs.parentNode.insertBefore(js, fjs);
+			}(document, 'script', 'facebook-jssdk'));
+		</script>
+		
+		<div class="screen">
+			Sign up
+			<button onclick="showScreen()">Manually</button>
+			<button onclick="signUpFB()">From FaceBook</button>
+			<button onclick="signUpGoogle()">From Google Plus</button>
+			<!--The profile screen comes here-->
+			<div class="profile-space">
+				Name <div contenteditable="true" id="uname" class = "input-text-type"></div><br />
+				Gender <div contenteditable="true" id="ugender" class = "input-text-type"></div><br />
+				
+				Profile Picture
+				<br />
+				<img src="#" id="display-pic" /><br />
+				<input type="checkbox" name="agree-pic">Use this as my DP<br />
+				Password <div contenteditable=true id="upwd" class = "input-text-type"></div><br />
+				Confirm Password <div contenteditable=true id="confirm" class = "input-text-type"></div><br />
+				Telephone number (optional) <input type="number" id="phone-number" /><br />
+				I live
+				<input type = "radio" name="place" value="Delhi" />In Delhi
+				<input type = "radio" checked name="place" value="Outside" />Outside Delhi
+				<br />
+				<!--A dropdown for the list of states-->
+				<span id="Outside" class="conditional" >
+					Select a states / a UT from below :
+					<select id="states-ut">
+						<option value="Andaman_and_Nicobar_Islands" selected>Andaman and Nicobar Islands</option>
+						<option value="Andhra_Pradesh">Andhra Pradesh</option>
+						<option value="Arunachal_Pradesh">Arunachal Pradesh</option>
+						<option value="Assam">Assam</option>
+						<option value="Bihar">Bihar</option>
+						<option value="Chandigarh">Chandigarh</option>
+						<option value="Chattisgarh">Chattisgarh</option>
+						<option value="Dadra_and_Nagar_Haveli">Dadra and Nagar Haveli</option>
+						<option value="Daman_and_Diu">Daman and Diu</option>
+						<option value="Goa">Goa</option>
+						<option value="Gujarat">Gujarat</option>
+						<option value="Haryana">Haryana</option>
+						<option value="Himachal_Pradesh">Himachal Pradesh</option>
+						<option value="Jammu_and_Kashmir">Jammu and Kashmir</option>
+						<option value="Jharkhand">Jharkhand</option>
+						<option value="Karnataka">Karnataka</option>
+						<option value="Kerala">Kerala</option>
+						<option value="Lakshadweep">Lakshadweep</option>
+						<option value="Madhya_Pradesh">Madhya Pradesh</option>
+						<option value="Maharashtra">Maharashtra</option>
+						<option value="Manipur">Manipur</option>
+						<option value="Meghalaya">Meghalaya</option>
+						<option value="Mizoram">Mizoram</option>
+						<option value="Nagaland">Nagaland</option>
+						<option value="Orissa">Orissa</option>
+						<option value="Pondicherry">Pondicherry</option>
+						<option value="Punjab">Punjab</option>
+						<option value="Rajasthan">Rajasthan</option>
+						<option value="Sikkim">Sikkim</option>
+						<option value="Tamil_Nadu">Tamil Nadu</option>
+						<option value="Telangana">Telangana</option>
+						<option value="Tripura">Tripura</option>
+						<option value="Uttaranchal">Uttaranchal</option>
+						<option value="Uttar_Pradesh">Uttar Pradesh</option>
+						<option value="West_Bengal">West Bengal</option>
+					</select>
+					<br />
+				</span>
+				<span class = "conditional" id="Delhi">
+					Choose your constituency :
+				</span>
+				<br />
+				About me (optional)<br />
+				<div contenteditable="true" class = "input-text-type bio" id="bio">
+				</div>
+				<br />
+				<button onclick="submit_data()">Go</button>
+			</div>
+		</div>
+		<script src="js/jquery.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("input:radio[name=place]").each(function(){
+					var selected_val = $(this).val();
+					if($(this).is(":checked"))
+					$("#"+selected_val).removeClass("conditional").addClass("show");
+				})
+			});
+			
+			function signUpFB()
+			{
+				FB.getLoginStatus(function(response) {
+					if (response.status === 'connected') {
+						console.log('Logged in.');
+						testAPI();
+					}
+					else FB.login(function(response) {
+						if (response.status === 'connected') {
+							testAPI();
+						}
+					},{scope:'user_hometown, user_location, user_photos, user_about_me, email, publish_actions, public_profile'});
+				});
+			}
+			
+			function testAPI() {
+				console.log('Welcome!  Fetching your information.... ');
+				FB.api('/me',function(response) {
+					console.log(response);
+					$("#uname").text(response.first_name+" "+response.last_name);
+					$("#ugender").text(response.gender);
+					//select delhi, delhi could either be in
+					var hometown = response.hometown.name;
+					var location = response.location.name;
+					
+					if(hometown.toLowerCase().indexOf("delhi")>=0||location.toLowerCase().indexOf("delhi")>=0)
+					{
+						//prefill location as Delhi
+						$("input:radio[name=place]").each(function(){
+							var value = $(this).val();
+							if(value=="Delhi"){
+								$(this).prop('checked',true);
+							}
+							else if(value=="Outside"){
+								$(this).prop('checked',false);
+							}
+						});
+					}
+					else
+					{
+						$("input:radio[name=place]").each(function(){
+							var value = $(this).val();
+							if(value=="Delhi"){
+								$(this).prop('checked',false);
+							}
+							else if(value=="Outside"){
+								$(this).prop('checked',true);
+							}
+						});
+					}
+					$("#bio").text(response.bio);
+					showScreen();
+				});
+				FB.api('/me/picture?width=180&height=180',function(response){
+					console.log(response);
+					$("#display-pic").attr("src",response['data']['url']);
+				});
+			}
+			
+			function showScreen()
+			{
+				$("input:radio[name=place]").each(function(){
+					var selected_val = $(this).val();
+					if($(this).is(":checked"))
+					$("#"+selected_val).removeClass("conditional").addClass("show");
+				});
+				$(".profile-space").slideDown("slow").fadeIn("slow");
+			}
+			
+			$("input:radio[name=place]").on('click',function(){
+				var selected_val = $(this).val();
+				$(".show").addClass("conditional").removeClass("show");
+				$("#"+selected_val).removeClass("conditional").addClass("show");
+			})
+			
+			function signUpGoogle()
+			{
+				//function to prefetch data from GooglePlus
+				//and prepopulate fields over here
+				//then show the screen
+				var myParams = {
+					'clientid' : '461450685366-s354q669up76283ftvb35g7jipfnabol.apps.googleusercontent.com', //You need to set client id
+					'cookiepolicy' : 'single_host_origin',
+					'callback' : 'loginGoogle', //callback function
+					'approvalprompt':'force',
+					'scope' : 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read'
+				};
+				gapi.auth.signIn(myParams);
+			}
+			
+			function loginGoogle(result)
+			{
+				if(result['status']['signed_in'])
+				{
+				}
+				var request = gapi.client.plus.people.get(
+				{
+					'userId': 'me'
+				});
+				request.execute(function (resp)
+				{
+					console.log(resp);
+					//prefill here
+					$("#uname").text(resp.name.givenName+" "+resp.name.familyName);
+					$("#display-pic").attr("src",resp.image.url);
+					$("#bio").html(resp.aboutMe);
+					showScreen();
+				});
+			}
+			
+			function submit_data()
+			{
+				//Validation and then post to submit data
+				//uname,upwd,confirm
+				if($("#uname").text()=="")
+				{
+					alert("Name cannot be left blank");
+					return;
+				}
+				if($("#ugender").text()=="")
+				{
+					alert("Gender cannot be left blank");
+					return;
+				}
+				
+				if($("#upwd").text()=="")
+				{
+					alert("Password cannot be empty!");
+					return;
+				}
+				if($("#confirm").text()=="")
+				{
+					alert("Confirmation box cannot be left blank");
+					return;
+				}
+				if($("#confirm").text()!=$("#upwd").text())
+				{
+					alert("The passwords do not match!");
+					return;
+				}
+				if(isNaN(parseInt($("#phone-number").val())) && $("#phone-number").val()!=null)
+				{
+					alert("The phone number is in an invalid format!");
+					return;
+				}
+				//if there are no mistakes, then proceed
+				var user_info ={
+					user_name : $("#uname").text(),
+					gender : $("#ugender").text(),
+					password : $("#upwd").text(),
+					picture_link:null,//null for now
+					contact : $("#phone-number").val(), //is NULLable as well
+					residence : "Delhi", // a sham value to be replaced later on
+					state : "Delhi", //another sham value to be replaced later on
+					neighbourhood : null,//not applicable if not in Delhi
+					about_user : $("#bio").text()
+				};
+				
+				if($("input:checkbox[name=agree-pic]").is(":checked")){
+					user_info.picture_link = $("#display-pic").attr("src");//save the image picture here
+				}
+				
+				$("input:radio[name=place]").each(function(){
+					if($(this).is(":checked"))
+					{
+						var value = $(this).val();
+						if(value=="Delhi"){
+							user_info.neighbourhood = "CP";
+						}
+						else if(value=="Outside"){
+							user_info.residence = "Outside";
+							user_info.state = $("#states-ut").val();
+						}
+					}
+				})
+				
+				$.post('/laravel/public/user_signup',
+				user_info,
+				function(data){
+					//on success
+					if(data){
+						alert(data);
+					} 
+					else
+					alert("Your data has been successfully sent");
+				}
+				);
+			}
+		</script>
+	</body>
+</html>

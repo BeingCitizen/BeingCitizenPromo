@@ -1,0 +1,178 @@
+/*From Campaign.css*/
+hr{
+  clear:both;
+  float:none;
+  width:100%;
+  height:1px;
+  margin 1.4em 0;
+  border:none;
+  background:#2c3e50;/*#ddd;*/
+  background-image: -webkit-gradient(
+    linear,left-bottom,right-bottom,
+    color-stop(0,rgb(255,255,255)),
+    color-stop(0.1,rgb(221,221,221)),
+    color-stop(0.9,rgb(221,221,221)),
+    color-stop(1,rgb(255,255,255))
+  );
+  background-image: -moz-linear-gradient(
+    left center,
+    rgb(255,255,255) 0%,
+    rgb(221,221,221) 10%,
+    rgb(221,221,221) 90%,
+    rgb(255,255,255) 100%
+  );
+}
+.hidden
+{
+	display:none;
+}
+/*Native to this file*/
+.close-tag
+{
+  cursor:pointer;
+}
+.lbl-tag{
+  display:inline-block;
+}
+.instructions{
+  font-family: 'aaarghnormal';
+  font-size:14px;
+}
+.column-big, .column-small{
+  display:inline-block;
+  position:relative;
+  vertical-align: top;
+  margin:6px;
+}
+.column-small{
+  width:30%;
+}
+.column-big{
+  width:60%;
+}
+.feed-box{
+  margin-left:2%;
+  vertical-align:top;
+  background:white;
+  height:30%;
+  overflow-x:none;
+  overflow-y:scroll;
+  margin-bottom:2%;
+  font-family:'aaarghnormal';
+  font-size:15px;
+  padding:1px;
+}
+.tag-master{
+  width:100%;
+  vertical-align: top;
+}
+.width-big{
+  width:100%;
+}
+#tag{
+  background: white;
+  margin-bottom:2%;
+}
+#tag, .tag-master option{
+  font-family:'aaarghnormal';
+  font-size:15px;
+}
+#tag:empty:before
+{
+  content:"Start with a #";
+}
+.lbl-tag{
+  background-color:#E0F2F1;
+  border-radius:4px;
+  padding:1px;
+}
+.submit{
+  margin-left:90%;
+  padding:4px;
+  cursor:pointer;
+}
+.feedElementBox
+{
+	position:relative;
+	padding:2px;
+	background:#ECEFF1;
+	margin:2px;
+	border-radius:4px;
+}
+.feedElementBox .imgBox
+{
+	position:relative;
+	display:inline-block;
+  text-align:center;
+	margin-right:3px;
+  text-transform:uppercase;
+  font-size:15px;
+  width:100px;
+}
+.feedElementBox .imgBox img{
+	width:50px;
+}
+.feedElementBox .msgMix:before
+{
+  content:' ';
+  position:absolute;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right:10px solid #3498db;
+  left:-10px;
+}
+.feedElementBox .msgMix
+{
+	/*has message or feed or tweet*/
+	position: relative;
+	display:inline-block;
+	vertical-align:top;
+  padding:6px;
+  margin:2px;
+  background:#3498db;
+  color:white;
+}
+.feedElementBox .imgBox .hashName
+{
+	vertical-align:top;
+	font-family:'district_prothin';
+  font-family:13px;
+}
+.feedElementBox .imgBox .hashName a
+{
+	font-weight:bolder;
+	text-decoration:none;
+	color:black;
+}
+.feedElementBox .msgMix .hashMSG
+{
+	vertical-align:top;
+	font-family:'district_prothin';
+	font-size:15px;
+	word-break:break-all;
+  color:white;
+}
+.feedElementBox .msgMix .hashMSG a
+{
+  color:white;
+}
+.feedElementBox .msgMix .hashMSG .lbl-tag
+{
+	background:none;
+	text-decoration:underline;
+	cursor:pointer;
+	margin-right:2px;
+  color:white;
+}
+.fa{
+  margin:4px;
+  font-size:25px !important;
+}
+.bar-left{
+  border-left:1px solid #ddd;
+}
+.bar-right{
+  border-right:1px solid #ddd;
+}

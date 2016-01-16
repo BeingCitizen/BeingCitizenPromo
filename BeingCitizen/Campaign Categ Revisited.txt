@@ -1,0 +1,10 @@
+<option value="Public Law and Order">Public Law and Order</option>
+<option value="Police">Police</option>
+<option value="Public Health and Sanitation">Public Health and Sanitation</option>
+<option value="Local Government">Local Government</option>
+<option value="Communications – Roads and Bridges">Communications andmdash; Roads and Bridges</option>
+<option value="Water Supplies">Water Supplies</option>
+<option value="Industries">Industries</option>
+<option value="Markets and Fairs">Markets and Fairs</option>
+<option value="Trade and Commerce">Trade and Commerce (within State)</option>
+<option value="State Taxes">State Taxes (Electricity, Land, Roads, Toll)</option>

@@ -1,0 +1,11 @@
+﻿
+<?php $__env->startSection('content'); ?>
+<h1>ABOUT US</h1>
+<p>This is Laravel!! We provide a framework for developing applications in PHP</p>
+<p>For mor details.. contact </p>
+<ul>
+<li><a href=http://www.laracasts.com>Laracasts</a></li>
+<li><a href=http://www.gitHub.com>GitHub</a></li>
+</ul>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('app1', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

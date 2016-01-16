@@ -1,0 +1,10 @@
+﻿
+<?php $__env->startSection('content'); ?>
+<h2>Products</h2>
+<?php foreach($product as $p): ?>
+<h3><a href="<?php echo e(action('ArticleController@id',[$p->id])); ?>"><?php echo e($p->pname); ?></a></h3>
+<h4><?php echo e($p->price); ?>  <?php echo e($p->quantity); ?></h4><br>
+<?php endforeach; ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('app1', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

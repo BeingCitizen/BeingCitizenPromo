@@ -1,0 +1,719 @@
+<html>
+	<head>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+		<script src="js/jquery.js"></script>
+		<!--For the editor's text-->
+		<link href = "css/bootstrap.min.css" rel="stylesheet" />
+		<link href = "css/campaign.css" rel = "stylesheet" />
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+	</head>
+	<body>
+		<div id = "overlay-load">
+			
+		</div>
+		
+		<!--
+			Normal Screen starts here
+		-->
+		
+		<div id="header">
+			<script>
+				$("#header").load('menu.html');
+			</script>
+		</div>
+		
+		<div class = "campaign-screen">
+			<!--
+				Campaign screen display HTML comes here
+			-->
+			<div class = "debate-body">
+				<div id="campaign-title" class="title"></div>
+				
+				<hr />
+				
+				<div class = "inline-band">
+					<div id="campaign-category"></div>
+					<div id="campaign-status"></div>
+					<div id="campaign-constituency"></div>
+					<div id="campaign-date"></div>
+				</div>
+				
+				<div id="campaign-tags"></div>
+				
+				<hr />
+				
+				<div class = "display-space">
+					<div id="campaign-body">
+					</div>
+					<div id="campaign-image">
+					</div>
+				</div>
+				
+				<hr />
+				
+				<div class = "label-text">
+					My Status
+					<span id="campaign-follow-status"></span>
+					<span id="campaign-volunteer-status"></span>
+				</div>
+			</div>
+			
+			<hr />
+			<!--
+				Comment HTML comes here
+			-->
+			<div class = "campaign-comments-arena">
+				<!--
+					The load screen for comments comes here
+				-->
+				<div class = "comment-overlay">
+					<div class = "comment-modal">
+						<img src="images/cube.gif" />
+					</div>
+				</div>
+				
+				<!--
+					Comments come here
+				-->
+				<div id = "comments-finally">
+					<!--
+						User enters his comment here
+					-->
+					<div class = "my-comment campaign-main">
+						<div class="form">
+							<span class = "label-text" >What's your say ?</span>
+							<div class = "comment-box">
+								<textarea id="comment-text" rows = "4"></textarea>
+								<br />
+								<br />
+								<button onclick= "submitComment()" class = "btn-panel">Send</button>
+								<br>
+							</div>
+						</div>
+					</div>
+					
+					<hr />
+					
+					<!--
+						Ran out of names. Phew.
+					-->
+					<span class = "label-text">Comments</span><br />
+					<div id="display-comments">
+						<div id="mlacomments">
+						</div>
+						<div id="comments">
+						</div>
+						<div class ="clear:both"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+<script src="js/jquery.js"></script>
+<script src="js/d3.min.js"></script>
+<script type="text/javascript">
+	
+	$('#toggle-menu').css("visibility","visible");
+	
+	var uid =0 ;//user_id
+	var campaign_id=location.search.substring("1").split("=")[1];
+	var loaderContainer, circles, gAppend, textarena;
+	var circleRadii = [window.innerHeight/4];
+	
+	$(document).ready(function(){
+		$("#overlay-load").show();
+		show_modal_comment();
+		//SVG append begins
+		loaderContainer = d3.select("#overlay-load").append("svg")
+		.attr("width",window.innerWidth)
+		.attr("height",window.innerHeight);
+		
+		gAppend = loaderContainer.append("g");
+		
+		circles = gAppend.selectAll("circle")
+		.data(circleRadii).enter()
+		.append("circle");
+		
+		textarena = gAppend.append("text");
+		//SVG append ends
+		var obj={uid:uid};
+		$.post('/laravel/public/user_id',
+		function(data){
+			if(data){
+				data=JSON.parse(data);
+				uid=data['user_id'];
+				$('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
+				$("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+uid+'">'+data.name+'</a>');
+				$('#toggle-menu').css("visibility","visible");
+				campaign();
+			}
+			else{
+				//Do Nothing
+				campaign();
+			}
+		});
+	});
+	
+	function campaign(){
+		var campaign_id=location.search.substring("1").split("=")[1];
+		var campaign_obj = {campaign_id:campaign_id, uid:uid};
+		$.ajax({
+			xhr: function()
+			{
+				var xhr = new window.XMLHttpRequest();
+				//Download progress
+				xhr.addEventListener("progress", function(evt){
+					if (evt.lengthComputable) {
+						var percentComplete = evt.loaded / evt.total;
+						//Do something with download progress
+						//multiply this with 100 to get percent
+						value = percentComplete;
+						var circleAttributes = circles.attr("cx",window.innerWidth/2)
+						.attr("cy",window.innerHeight/2)
+						.style("fill","#b71c1c")
+						.attr("r","0")
+						.transition()
+						.attr("r",function(d){
+							return value*d;
+						})
+						
+						var textLabels = gAppend.selectAll("text")
+						.attr("x", function() { return window.innerWidth/2; })
+						.attr("y", function() { return window.innerHeight/2; })
+						.text("Loading")
+						.attr("text-anchor","middle")
+						.attr("font-family", "sans-serif")
+						.attr("font-size", "20px")
+						.attr("fill", "white");
+					}
+				}, false);
+				return xhr;
+			},
+			url:"/laravel/public/get_campaign",
+			data:campaign_obj,
+			type:"POST",
+			success:function(data)
+			{
+				data= JSON.parse(data);
+				/*
+					This section fills the appropriate data
+					in their respective blocks
+				*/
+				
+				/*
+				*/
+				$("#campaign-title").html(data.name);
+				$("#campaign-category").html('<i class = "fa fa-sitemap label-text" ></i><span class="label-text">category</span>'+returnCategLink(data.category));
+				$("#campaign-constituency").html('<i class = "fa fa-map-marker label-text"></i><span class="label-text">constituency</span>'+returnConstLink(data.constituency));
+				$("#campaign-body").html(data.campaign_text);
+				$("#campaign-date").html('<i class = "fa fa-clock-o label-text" ></i><span class="label-text">Created By</span><a href="/BeingCitizen/profile_display.html?profile_id='+data.started_by+'">'+data.start_date+'</a>');
+				/*
+					This AJAX deals with the retrieval of the user name of the one who created campaign
+				*/
+				var created_by_obj = {uid:data.started_by};
+				$.post('/laravel/public/user', //LARAVEL route
+				created_by_obj, //Object
+				function(data)
+				{
+                              console.log(data);//users data 
+					if(data)
+					{
+						$("#campaign-date").html('<i class = "fa fa-clock-o label-text" ></i><span class="label-text">Created By</span><a href="/BeingCitizen/profile_display.html?user_id='+data.user_id+'">'+data.name+'</a>');
+					}
+				});
+				$("#campaign-status").html('<i class = "fa fa-caret-right label-text"></i><span class="label-text">status</span><i class = "fa fa-circle label-text '+color_status(data.status)+'" title="'+status_desc(data.status)+'"></i>');
+				/*
+					The below AJAX call is intended to retrieve all the
+					tags associated with a particular campaign
+				*/
+				$.post("/laravel/public/fetch_tags",
+				campaign_obj,
+				function(tags)
+				{
+					tags = JSON.parse(tags);
+					var tag_arena =document.getElementById("campaign-tags");
+					tag_arena.innerHTML='<i class = "fa fa-tags label-text" ></i><span class="label-text">tags</span>';
+					if(tags.length==0){tag_arena.innerHTML+="No Tags";}
+					else{
+						for(var i = 0;tags[i];i++){
+							tag_arena.innerHTML+="<i>"+returnTagLink(tags[i].department)+"</i>";
+							if(i<tags.length-1)tag_arena.innerHTML+=", &nbsp";
+						}
+					}
+				});
+				/*
+					This code spec is used to verify whether an image could be used in the campaign or not.
+					The if condition checks for the same.
+				*/
+				if(data.image){
+					var a = document.createElement("img");
+					a.src = "/laravel/public/"+data.image;
+					a.height = 400;
+					a.width = 400;
+					$("#campaign-image").html(a);
+				}
+				
+				/*
+					These two code snippets deal with the FOLLOW
+					and the VOLUNTEER button / options display
+				*/
+				if(data.followers=='true'){
+					$.post("/laravel/public/follow_unfollow",
+					campaign_obj,
+					function(like_unlike)
+					{
+						like_unlike= JSON.parse(like_unlike);
+						if(!like_unlike){
+							$("#campaign-follow-status").append('<button onclick="follow();" class="follow-false"><i class = "fa fa-eye"></i></button>');
+						}
+						else {
+							$("#campaign-follow-status").append('<button onclick="unfollow();" class="follow-true"><i class = "fa fa-eye"></i></button>');
+						}
+					});
+				}
+				
+				/*
+					This code snippet deals with the VOLUNTEER button.
+				*/
+				
+				if(data.volunteers=='true'){
+					$.post("/laravel/public/set_volunteer",
+					campaign_obj,
+					function(like_unlike)
+					{
+						like_unlike= JSON.parse(like_unlike);
+						if(!like_unlike){
+							$("#campaign-volunteer-status").append('<button onclick="volunteer();" class="volunteer-false"><i class = "fa fa-hand-o-up "></i></button>');
+						}
+						else{
+							$("#campaign-volunteer-status").append('<button onclick="not_volunteer();" class="volunteer-true"><i class = "fa fa-hand-o-up"></i></button>');
+						}
+					});
+				}
+				
+				/*
+					Now we call to functions to populate comments.
+					populateMLAComments populates comments made by MLAs and shows them first.
+					popluateComments popluates them with the rest of the comments on the basis of upvotes.
+				*/
+				populateMLAComments();
+				populateComments();
+			}
+		});
+	}
+	
+	function status_desc(status){
+		/*
+			This function is used to return a tooltip to the
+			Status to be shown prior to the Debate
+		*/
+		switch(status){
+			case 1: return 'No action taken';
+			case 2: return 'Cannot take an action';
+			case 3: return 'Action taken';
+		}
+	}
+	
+	function color_status(status){
+		/*
+			This function is used to return a color to the
+			Status to be shown prior to the Debate
+		*/
+		switch(status){
+			case 1: return 'no-action';
+			case 2: return 'cant-take-action';
+			case 3: return 'taken-action';
+		}
+	}
+	
+	function returnCategLink(name)
+	{
+		var string = '<a href="/BeingCitizen/campaign_redirect.html?type=category&name='+name+'">'+name+'</a>';
+		return string;
+	}
+	
+	function returnTagLink(name)
+	{
+	var string = '<a href="/BeingCitizen/campaign_redirect.html?type=tags&name='+name+'">'+name+'</a>';
+		return string;
+	}
+	
+	function returnConstLink(name)
+	{
+	var string = '<a href="/BeingCitizen/campaign_redirect.html?type=const&name='+name+'">'+name+'</a>';
+		return string;
+	}
+	/*
+		This code snippet deals with the follow and the unfollow functions for the website.
+	*/
+	function follow()
+	{
+		var cid={campaign_id:campaign_id, uid:uid};
+		$.post("/laravel/public/camp_follow", cid,
+		function(data)
+		{
+			alert("You have successfully followed this campaign!");
+			$(".follow-false").attr("onclick","unfollow();");
+			$(".follow-false").removeClass("follow-false").addClass("follow-true");
+		});
+	}
+	
+	function unfollow()
+	{
+		var cid={campaign_id:campaign_id, uid:uid};
+		$.post("/laravel/public/camp_unfollow", cid,
+		function(data)
+		{
+			alert("You have successfully un-followed this campaign!");
+			$(".follow-true").attr("onclick","follow();");
+			$(".follow-true").removeClass("follow-true").addClass("follow-false");
+		});
+	}
+	
+	function volunteer()
+	{
+		var cid={campaign_id:campaign_id, uid:uid};
+		$.post("/laravel/public/volunteer", cid,
+		function(data)
+		{
+			alert("You have successfully volunteered for this campaign!");
+			$(".volunteer-false").attr("onclick","not_volunteer();");
+			$(".volunteer-false").removeClass("volunteer-false").addClass("volunteer-true");
+		});
+	}
+	
+	function not_volunteer()
+	{
+		var cid={campaign_id:campaign_id, uid:uid};
+		$.post("/laravel/public/not_volunteer", cid,
+		function(data)
+		{
+			alert("You have successfully un-volunteered for this campaign!");
+			$(".volunteer-true").attr("onclick","volunteer();");
+			$(".volunteer-true").removeClass("volunteer-true").addClass("volunteer-false");
+		});
+	}
+	
+	/*
+		The entire code snippet below performs the comment-based
+		functionalities : Prohibiting a user from posting comments,
+		populating comments using AJAX calls and stuff.
+	*/
+	
+	function submitComment()
+	{
+		/*This function is invoked by
+			1. The button click of the user while commenting
+		*/
+		
+		if(uid==0){
+			alert('Log In First!');
+			window.location='/BeingCitizen/login.html';
+		}
+		var allowed_to_comment = true;//set to true initially
+		var user={uid:uid};
+		/*
+			This approach has been used since asynchrounous functions don't often work
+			in a synchronous way as often expected.
+		*/
+		$.post("/laravel/public/get_user", user,
+		function(data)
+		{
+			data= JSON.parse(data);
+			// alert(data['residence']);
+			if(data['residence']== 'Outside')
+			{
+				allowed_to_comment = false;
+			}
+			if(allowed_to_comment == false){
+				return (commentFail());
+			}
+			//if we made this far, then we go for the success one
+			return (commentSuccess());
+		});
+	}
+	
+	function commentFail()
+	{
+		alert('Sorry! People outisde Delhi are not allowed to comment at the moment!');
+	}
+	
+	function commentSuccess()
+	{
+		var comment = $("#comment-text").val();
+		
+		if(comment.trim()=="")
+		{
+			alert("Please enter a comment!");
+			return;
+		}
+		
+		var obj={comment:comment,
+			campaign_id:campaign_id,
+			follow:false,
+			unfollow:true,
+			uid:uid
+		};
+		
+		$('input:checkbox[name=action]').each(function()
+		{
+			if($(this).is(':checked'))
+			obj[$(this).val().toString()] = true;
+		});
+		
+		show_modal_comment();
+		
+		$.post("/laravel/public/setcampaign_comment",
+		obj,
+		function(data)
+		{
+			populateComments();
+		}
+		);
+	}
+	
+	function populateComments()
+	{
+		document.getElementById("comments").innerHTML =" ";
+		var comment_info={campaign_id:campaign_id};
+		show_modal_comment();
+		
+		$.post("/laravel/public/campaign_comments",
+		comment_info,
+		function(data)
+		{
+			
+			data= JSON.parse(data);
+			if(data.length == 0){
+				//then do nothing
+				return ( hideModals() );
+			}
+			//if we made this far, then time for populating comments finally
+			return (populateCommentsFinal(data) );
+		}
+		);
+	}
+	
+	function hideModals()
+	{
+		hide_modal_comment();
+	}
+	
+	function populateCommentsFinal(data)
+	{
+		var i=0;
+		data = data.reverse();
+		for (;data[i];i++){
+			var id={comment_id:data[i].comment_id};
+			var message = data[i].comment_id;
+			/*Making of a comment*/
+			var comment_string = '<div class="comment-body">';
+			//First we insert the username and the images
+			comment_string += '<div class="user-info label-text inline-show">';
+			comment_string += data[i].name;
+			comment_string += '<br /><img src="'+data[i].pic_link+'" height=50 width=50/>';
+			comment_string += '</div>';
+			//Now we insert the comments
+			comment_string += '<div class="comment-indiv resource'+data[i].comment_id+' inline-show">';
+			comment_string += data[i].content;
+			comment_string += '<span class = "upvote-count">&nbsp;&#43;'+data[i].likes+'</span>';
+			comment_string += '<div class="btn-panel"></div></div>'
+			$("#comments").append(comment_string);
+		}
+		
+		for(i = 0;data[i];i++)
+		{
+			var id = {comment_id:data[i].comment_id};
+			add_likes(id);
+		}
+		
+		for(i = 0;data[i];i++)
+		{
+			var id = {comment_id:data[i].comment_id};
+			mark_spam(id);
+		}
+		
+		for(var i=0; data[i];i++)
+		{
+			var id = {comment_id:data[i].comment_id, user_id:data[i].user_id};
+			if(data[i].user_id==uid){
+				var delete_string = '<button class="btn-transparent" title="Delete" onclick="delete_comment('+id.comment_id+');" >';
+				delete_string += '<i class="fa fa-trash"></i>';
+				delete_string += '</button>';
+				$(".comment-indiv.resource"+id['comment_id']+" .btn-panel").append(delete_string);
+			}
+		}
+	}
+	
+	function delete_comment(id)
+	{
+		obj={comment_id:id, uid:uid};
+		show_modal_comment();
+		$.post("/laravel/public/campaign_deleteComment",
+		obj,
+		function(data)
+		{
+			alert("Comment deleted successfully!");
+			populateComments();
+		});
+	}
+	
+	function string_generator(title,f_name,comment_id,class_icon,class_state){
+		/*
+			The five arguments work as follows
+			1. title refers to the tooltip text
+			2. f_name refers to the function name that shall be invoked
+			3. comment_id is the argument passed to the respective functions
+			4. class_icon is either a thumbs up icon or a flag icon
+			5. class_state icons shows a pressed or an unpressed state
+		*/
+		var string = '<button class="btn-transparent" title="'+title+'" onclick="'+f_name+'('+comment_id+')" >';
+		string += '<i class = "fa '+class_icon+' '+class_state+'"></i>';
+		string += '</button>';
+		return string;
+	}
+	
+	function add_likes(id)
+	{
+		obj={comment_id:id, uid:uid};
+		show_modal_comment();
+		$.post("/laravel/public/like_unlike",
+		obj,
+		function(like_unlike)
+		{
+			like_unlike= JSON.parse(like_unlike);
+			if(!like_unlike || like_unlike['upvote']==0){
+				var like_string = string_generator("Upvote","like",id.comment_id,"fa-thumbs-up","unpressed");
+				$(".comment-indiv.resource"+id['comment_id']+" .btn-panel").append(like_string);
+			}
+			else{
+				var like_string = string_generator("Upvoted","unlike",id.comment_id,"fa-thumbs-up","pressed");
+				$(".comment-indiv.resource"+id['comment_id']+" .btn-panel").append(like_string);
+			}
+			color_likes($(".comment-indiv.resource"+id['comment_id']+" .btn-panel .fa-thumbs-up"));
+		});
+	}
+	
+	function mark_spam(id)
+	{
+		obj={comment_id:id, uid:uid};
+		$.post("/laravel/public/downvote",
+		obj,
+		function(downvote)
+		{
+			downvote= JSON.parse(downvote);
+			if(!downvote || downvote['downvote']==0){
+				var spam_marker = string_generator("Mark as spam","set_downvote",id.comment_id,"fa-flag","unpressed");
+				$(".comment-indiv.resource"+id['comment_id']+" .btn-panel").append(spam_marker);
+			}
+			else{
+				var spam_marker = string_generator("Marked as spam","unset_downvote",id.comment_id,"fa-flag","pressed");
+				$(".comment-indiv.resource"+id['comment_id']+" .btn-panel").append(spam_marker);
+			}
+			color_spam($(".comment-indiv.resource"+id['comment_id']+" .btn-panel .fa-flag"));
+			hide_modal_comment();
+		});
+	}
+	
+	function color_likes(obj)
+	{
+		obj = $(obj).parent();
+		if(obj.attr("title").toLowerCase()=="upvote")
+		{
+			(obj).removeClass("pressed").addClass("unpressed");
+		}
+		else if(obj.attr("title").toLowerCase()=="upvoted")
+		{
+			(obj).removeClass("unpressed").addClass("pressed");
+			obj.parent().parent().parent().css("background","#81C784");
+		}
+	}
+	
+	function color_spam(obj)
+	{
+		obj = $(obj).parent();
+		if(obj.attr("title").trim().toLowerCase()=="mark as spam")
+		{
+			(obj).removeClass("pressed").addClass("unpressed");
+		}
+		else if(obj.attr("title").trim().toLowerCase()==="marked as spam")
+		{
+			(obj).removeClass("unpressed").addClass("pressed");
+			obj.parent().parent().parent().css("background","#ef5350");
+		}
+	}
+	
+	function like(comment_id){
+		var obj={cid:comment_id, uid:uid};
+		$.post("/laravel/public/like",
+		obj,function(data){
+			populateComments();
+		}
+		);
+	}
+	
+	function set_downvote(comment_id){
+		var obj={cid:comment_id, uid:uid};
+		$.post("/laravel/public/set_downvote",
+		obj,function(data){
+			populateComments();
+		}
+		);
+	}
+	
+	function unlike(comment_id){
+		var obj={cid:comment_id, uid:uid};
+		$.post("/laravel/public/unlike",
+		obj,function(data){
+			populateComments();
+		}
+		);
+	}
+	
+	function unset_downvote(comment_id){
+		var obj={cid:comment_id, uid:uid};
+		$.post("/laravel/public/unset_downvote",
+		obj,function(data){
+			populateComments();
+		}
+		);
+	}
+	function populateMLAComments()
+	{
+		document.getElementById("comments").innerHTML =" ";
+		var comment_info={campaign_id:campaign_id};
+		show_modal_comment();
+		$.post("/laravel/public/campaign_mla_comments",
+		comment_info,
+		function(data)
+		{
+			data= JSON.parse(data);
+			if(data.length == 0){
+				//then do nothing
+				return ( hideModals() );
+			}
+			//if we made this far, then time for populating comments finally
+			for (var i=0;data[i];i++){
+				var id={comment_id:data[i].comment_id};
+				$("#mlacomments").append("<div class=\"comment-body\"><div class=\"user-info\">"+data[i].name+"<br /><img src="+data[i].pic_link+" height=50 width=50/></div><div class=\"comment-indiv resource"+data[i].comment_id+"\">"+data[i].content+"<div class=\"buttons\"></div></div>");
+			}
+		}
+		);
+	}
+	
+	function show_modal_comment()
+	{
+		$(".comment-overlay").show();
+	}
+	
+	function hide_modal_comment()
+	{
+		$("#overlay-load").hide();
+		$(".comment-overlay").hide();
+	}
+</script>
+</body>
+</html>

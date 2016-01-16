@@ -1,0 +1,392 @@
+<html>
+	<head>
+		<link href="css/profile.css" rel="stylesheet" />
+		<link href="fonts/stylesheet.css" rel="stylesheet" />
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+		<link href = "css/profile_feed.css" rel = "stylesheet" />
+		<script src="js/jquery.js"></script>
+		<style>
+			#overlay-load{
+			position:absolute;
+			z-index:10;
+			height:100%;
+			width:100%;
+			top:0;
+			left:0;
+			background:rgb(33,33,33);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="header">
+			<script>
+				$("#header").load('menu.html');
+			</script>
+		</div>
+		<div id = "overlay-load">
+		</div>
+		<div class = "backdrop">
+			<div class = "profile-screen">
+				<!--
+					Contains the entire profile here
+				-->
+				<div class = "column-big">
+					<div class = "profile-specs">
+						<div class = "profile-header">
+							<div class="profile-pic">
+								<img id = "profile-img" /><!--Profile Image loads here-->
+							</div>
+							<div class ="profile-info">
+								<!--Rest of the user information loads here-->
+								<div id="tall" class="tall"></div>
+								<div class="small">
+									RESIDENCE
+									<img id="icon-residence" /> <!--A small icon about user location loads here-->
+									<span id = "user-residence" class="smaller"></span>
+									<span id = "state" class="smaller"></span>
+									<span id = "delhi-neighbourhood" class="smaller"></span>
+								</div>
+								<div class="small">
+									ABOUT ME
+									<span id ="user-about" class="smaller"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="u-follow">
+						<div id="users_follow"></div>
+					</div>
+					
+					
+					<div class = "campaigns-created">
+						<div class ="small contains-banner">
+							Campaigns created by user
+							<span class = "create-banner tiny-link">
+								<a href = "campaign_start.html">
+									Create your own campaign
+								</a>
+							</span>
+						</div>
+						<div id="campaign_created"></div>
+					</div>
+					
+					<div class = "campaigns-followed">
+						<div class ="small">Campaigns followed by user</div>
+						<div id="campaign_follow"></div>
+					</div>
+				</div>
+				
+				<div class = "column-small">
+					<div class = "small">FEED</div>
+					<div class = "smaller" id = "tweets">No feeds composed!</div>
+				</div>
+				
+			</div>
+		</div>		
+	</div>
+</div>
+
+<script src="js/d3.min.js"></script>
+<script type="text/javascript">
+	var uid =0 ;
+	
+	//Loader variables begin
+	var loaderContainer, circles, gAppend, textarena;
+	var circleRadii = [window.innerHeight/4];
+	//Loader variables end
+	
+	var user_id=location.search.substring("1").split("=")[1]; //user whose profile we are visiting
+	
+	var thisName = '';
+	var display_pic=null;
+	
+	$(document).ready(function(){
+		var obj={uid:uid};
+		$.post('/laravel/public/user_id',obj,
+		function(data){
+			if(data){
+				data=JSON.parse(data);
+				uid=data['user_id'];
+                        console.log(data.name);//it is displaying name of logged in user here but not in the menu :/
+                        console.log(uid); //logged in user
+				$('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
+				$("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+uid+'">'+data.name+'</a>');
+				$('#toggle-menu').css("visibility","visible");
+				user();
+			}
+			else{
+				window.location='/BeingCitizen/login.html';
+			}
+		});
+	});
+	
+	function user(){
+		var user={uid:uid};
+		loaderContainer = d3.select("#overlay-load").append("svg")
+		.attr("width",window.innerWidth)
+		.attr("height",window.innerHeight);
+		
+		gAppend = loaderContainer.append("g");
+		
+		circles = gAppend.selectAll("circle")
+		.data(circleRadii).enter()
+		.append("circle");
+		
+		textarena = gAppend.append("text");
+		
+		//Loader percentages calculated here
+		$.ajax({
+			xhr: function()
+			{
+				var xhr = new window.XMLHttpRequest();
+				//Download progress
+				xhr.addEventListener("progress", function(evt){
+					if (evt.lengthComputable) {
+						var percentComplete = evt.loaded / evt.total;
+						//Do something with download progress
+						//multiply this with 100 to get percent
+						value = percentComplete;
+						var circleAttributes = circles.attr("cx",window.innerWidth/2)
+						.attr("cy",window.innerHeight/2)
+						.style("fill","#b71c1c")
+						.attr("r","0")
+						.transition()
+						.attr("r",function(d){
+							return value*d;
+						})
+						
+						var textLabels = gAppend.selectAll("text")
+						.attr("x", function() { return window.innerWidth/2; })
+						.attr("y", function() { return window.innerHeight/2; })
+						.text("Loading")
+						.attr("text-anchor","middle")
+						.attr("font-family", "sans-serif")
+						.attr("font-size", "20px")
+						.attr("fill", "white");
+						
+					}
+				}, false);
+				return xhr;
+			},
+			url:"/laravel/public/user",
+			data:user,
+			type:"POST",
+			success:function(data){
+				if(data){
+					data=JSON.parse(data);
+					thisName = data.name;
+					display_pic = data.pic_link;
+					$("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+user_id+'">'+data.name+'</a>');
+					$("#profile-img").attr("src",data.pic_link);//loads USER pic_link
+					$("#tall").text(data.name);
+					if(data.residence=='Delhi'){
+						$("#icon-residence").attr("src","../images/delhi.jpg");
+						$("#user-residence").html("Delhi");
+						$("#delhi-neighbourhood").html(data.neighbourhood);
+					}
+					else{
+						$("#icon-residence").attr("src","../images/delhi.jpg");
+						$("#user-residence").html(data.state.split("_").join(" "));
+					}
+					
+					if(data.about_user.trim()==""){
+						$("#user-about").html("Nothing as of yet!");
+					}
+					else{
+						$("#user-about").html(data.about_user);
+					}
+					
+					user_campaigns();
+					
+					if(data['residence']=='Delhi' && uid==user_id)
+					{
+						user_follow();
+					}
+				}
+			}
+		});
+	}
+	function user_campaigns()
+	{
+		var i;
+		var obj={uid:user_id};
+		$.post('/laravel/public/user_profile',obj,
+		function(data){
+			if(data){
+				data=JSON.parse(data);
+				if(data.length==0){
+					$("#campaign_created").html('<i>No campaigns created by this user</i>');
+				}
+				else{
+					for (i = data.length-1;i>=0;i--){
+						var campaign_HTML;
+						if(!data[i].image)
+						data[i].image='/public/uploads/null/null.jpg';
+						campaign_HTML = '<div class="campaign-object">';
+						campaign_HTML += '<img src = "/laravel/public/'+data[i].image+'" class="thumbnail"/><br />';
+						campaign_HTML += '<a href="campaign_display.html?campaign_id='+data[i].campaign_id+'" class="'+class_action(data[i].status)+'">'+data[i].name+'</a>';
+						campaign_HTML += '</div>';
+						$("#campaign_created").append(campaign_HTML);
+					}
+				}
+				campaigns_following();
+				user_hashtags()
+			}
+		});
+	}
+	function user_hashtags()
+	{
+		var i;
+		var obj={uid:user_id};
+		$.post('/laravel/public/user_hashtags',obj,
+		function(data){
+			if(data){
+				$("#tweets").html("");
+				data=JSON.parse(data);
+				for(var i = 0;data[i];i++)
+				{
+					$("#tweets").append(feedMixer(data[i]));	
+				}
+			}
+		});
+	}
+	
+	function feedMixer(feedElement)
+	{
+		//has two components, the content and the user id
+		var feedComp = '<div class = "feedElementBox"><div class = "imgBox"></div><div class = "msgMix"><div class = "hashName"></div><div class = "hashMsg"></div></div></div>';
+		var withContent = feedFiller(feedComp,feedElement);
+		$(withContent).children('.msgMix').children('.hashMsg').children('#tagged').removeAttr('id');
+		$('span.close-tag',withContent).remove();
+		return withContent;
+	}
+	
+	function feedFiller(feedComp,content)
+	{
+		var element = $(feedComp);
+		var img = '/BeingCitizen/images/female.gif';
+		img = display_pic;
+		element.children(".imgBox").append('<img src="'+img+'" />'); //append images
+		element.children(".msgMix").children(".hashName").html(thisName);
+		element.children(".msgMix").children(".hashMsg").html(content.content);
+		var listOfTags = element.children(".msgMix").children(".hashMsg").children("span").children(".lbl-tag");
+		for(var i = 0;i<listOfTags.length;i++)
+		{
+			//these are the divs
+			var tagIndiv = $(listOfTags[i]).text();
+			$(listOfTags[i]).html(returnURLLoc(tagIndiv));
+		}
+		return element;
+	}
+	
+	function returnURLLoc(hashtag)
+	{
+		var string = '<a href="/BeingCitizen/feed.html?tags=true&tagname='+hashtag+'">'+hashtag+'</a>';
+		return string;
+	}
+	
+	function class_action(status){
+		if(status==1)return "no-action";
+		if(status==2)return "cant-take-action";
+		if(status==3)return "taken-action";
+	}
+	
+	function campaigns_following()
+	{
+		var i;
+		var obj={uid:user_id};
+		$.post('/laravel/public/user_camp_follow',obj,
+		function(data){
+			if(data){
+				data=JSON.parse(data);
+				if(data.length==0){
+					document.getElementById("campaign_follow").innerHTML+="<i>No campaigns followed by this user</i>";
+				}
+				else{
+					for (i = data.length-1;i>=0;i--){
+						var campaign_HTML;
+						if(!data[i].image){
+							data[i].image='/public/uploads/null/null.jpg';
+						}
+						campaign_HTML = '<div class="campaign-object">';
+						campaign_HTML += '<img src = "/laravel/public/'+data[i].image+'" class="thumbnail"/><br />';
+						campaign_HTML += '<a href="campaign_display.html?campaign_id='+data[i].campaign_id+'" class="'+class_action(data[i].status)+'">'+data[i].name+'</a>';
+						campaign_HTML += '</div>';
+						document.getElementById("campaign_follow").innerHTML+=campaign_HTML;
+					}
+				}
+			}
+		});
+		$("#overlay-load").hide();
+	}
+	
+	function user_follow()
+	{
+		var i=0;
+		var obj={uid:user_id};
+		$.post('/laravel/public/users_follow',obj,
+		function(data){
+			if(data){
+				data=JSON.parse(data);
+				var i=0;
+				if(data.length>0){
+					//users to be followed exist
+					var followString = '<br /><div class="small"> Other users from same constituency </div>';
+					followString += '<div id = "follow-strip-suggestions"></div>';
+					$("#users_follow").append(followString);
+				}
+				for (;data[i];i++){
+					var userProfile = '<div><a class="tiny-link" href="profile_display.html?user_id='+data[i].user_id+'">';
+					userProfile += '<img src = "'+data[i].pic_link+'" height="50" width="50" />'
+					userProfile += '<div>'+data[i].name+'</div>';
+					userProfile += '</a>';
+					userProfile += '<div class="follow-btn"></div></div>'
+					$("#follow-strip-suggestions").append(userProfile);
+				}
+				for(var i = 0;data[i];i++)
+				{
+					var id = {user_id:data[i].user_id};
+					add_follow(i,id);
+				}
+			}
+		});
+	}
+	function add_follow(i,id)
+	{
+		obj={user_id:id, follower_id:uid};
+		$.post("/laravel/public/check_follow",
+		obj,
+		function(like_unlike)
+		{
+			like_unlike= JSON.parse(like_unlike);
+			if(like_unlike==null){
+				$(".follow-btn:eq("+i+")").html('<button title="Follow" onclick="follow('+id['user_id']+');">Follow</button>');
+			}
+			else{
+				$(".follow-btn:eq("+i+")").html('<button title="Following" onclick="unfollow('+id['user_id']+');">Following</button>');
+			}
+			
+		});
+	}
+	function follow(user_id)
+	{
+		var id={user_id:user_id, follower_id:uid};
+		$.post("/laravel/public/follow_people", id,
+		function(data)
+		{
+			//do nothing
+		});
+		
+	}
+	function unfollow(user_id)
+	{
+		var id={user_id:user_id, follower_id:uid};
+		$.post("/laravel/public/unfollow_people", id,
+		function(data)
+		{
+			//do nothing
+		});
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+﻿
+<?php $__env->startSection('content'); ?>
+<h1>Edit Product <?php echo $product->pname; ?> Details</h1>
+<hr/>
+
+<?php echo Form::model($product,['method'=>'PATCH','url' => 'products/'.$product->id]); ?>
+
+
+<div class="form-group">
+<?php echo Form::label('pname','Product name:'); ?>
+
+<?php echo Form::text('pname',null,['class' => 'form-control']); ?>
+
+</div>
+<br><br>
+
+<div class="form-group">
+<?php echo Form::label('price','Product price:'); ?>
+
+<?php echo Form::text('price',null,['class' => 'form-control']); ?>
+
+</div>
+<br><br>
+<div class="form-group">
+<?php echo Form::label('quantity','Product quantity:'); ?>
+
+<?php echo Form::text('quantity',null,['class' => 'form-control']); ?>
+
+</div>
+<br><br>
+<div class="form-group">
+<?php echo Form::submit('Add product'); ?>
+
+
+</div>
+<?php echo Form::close(); ?>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('app1', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

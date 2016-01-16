@@ -1,0 +1,16 @@
+<html>
+	<head>
+		<title>Logging Out</title>
+	</head>
+	<body>
+		<script src="js/jquery.js"></script>
+		<script type="text/javascript">
+			$.post('/laravel/public/logout',
+			function(data){
+				//on success
+				window.location = '/BeingCitizen/login.html';
+			}
+			);
+		</script>
+	</body>
+</html>

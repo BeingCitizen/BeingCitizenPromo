@@ -1,0 +1,11 @@
+﻿<br/>
+<br/>
+<?php echo Form::label('username','User name:'); ?>
+
+<?php echo Form::text('username',null,['class' => 'form-control']); ?><br/><br/>
+<?php echo Form::label('password','Password:'); ?>
+
+<?php echo Form::text('password',null,['class' => 'form-control']); ?><br/><br/>
+<?php echo Form::submit(); ?>
+
+<?php echo Form::close(); ?>

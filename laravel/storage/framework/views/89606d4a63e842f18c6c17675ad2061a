@@ -1,0 +1,29 @@
+﻿<html>
+<head>
+<h2>form</h2>
+<body>
+<h4>Campaign id: <?php echo e($id); ?></h4>
+<?php echo Form::open(array('action'=>'HomeController@index', 'files'=>true)); ?>
+
+	       
+      <?php echo Form::label('campaign_id'); ?>
+
+             <?php echo Form::text('campaign_id', $id, 
+        array('required', 
+              'class'=>'form-control', 
+              'placeholder'=>'campaign_id')); ?>
+
+ 
+      <?php echo Form::label('image', 'Upload Image'); ?>
+
+	<?php echo Form::file('image'); ?>
+
+      
+
+	<?php echo Form::submit('Submit'); ?>
+
+   	<?php echo Form::close(); ?>
+
+     
+</body>
+</html>

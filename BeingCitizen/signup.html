@@ -1,0 +1,498 @@
+<html>
+<head>
+	<link href="fonts/stylesheet.css" rel="stylesheet" />
+	<link href="css/login_signup.css" rel="stylesheet" />
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<link href="css/font-awesome.min.css" rel="stylesheet" />
+</head>
+<body>
+
+	<!--
+	Script to run FaceBook and Google login.
+	Begins here
+-->
+
+<!--
+Google Init
+-->
+
+<script>
+(function() {
+	var po = document.createElement('script');
+	po.type = 'text/javascript';
+	po.async = true;
+	po.src = 'https://apis.google.com/js/client.js?onload=onLoadCallback';
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(po, s);
+})();
+function onLoadCallback()
+{
+	gapi.client.setApiKey('AIzaSyA185Q1oBLk5CDflC7ocXTYcj6RovAViaQ'); //set your API KEY
+	gapi.client.load('plus', 'v1',function(){});//Load Google + API
+}
+</script>
+
+
+<!--
+FaceBook Init
+-->
+
+<script>
+window.fbAsyncInit = function() {
+	FB.init({
+		appId      : '1467677160210062',
+		xfbml      : true,
+		version    : 'v2.3'
+	});
+};
+
+(function(d, s, id){
+	var js, fjs = d.getElementsByTagName(s)[0];
+	if (d.getElementById(id)) {return;}
+	js = d.createElement(s); js.id = id;
+	js.src = "//connect.facebook.net/en_US/sdk.js";
+	fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+</script>
+
+<!--
+Script to run FaceBook and Google login.
+Ends here
+-->
+
+<div class="backdrop">
+	<div class="canopy">
+		<div class = "logo"><img src = "../BeingCitizen/images/logo.png" /></div>
+		<div class="big">Being Citizen</div>
+		<div class="small">Democracy, the way you like it</div>
+		<form id="signup_form" type="POST">
+			<table>
+				<tr>
+					<td colspan="2">
+						<input type="text" id="username" required placeholder="Username"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="password" id="password-first" placeholder="Password" required/>
+					</td>
+					<td>
+						<input type="password" id="password-second" placeholder="Confirm Password" required/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="radio"  name="res-place" value="Delhi" checked />Delhi
+					</td>
+					<td rowspan="3">
+						<div id = "delhi-neigh">
+							<select  id = "delhi-neigh-list">
+								<option value="Adarsh Nagar">Adarsh Nagar</option>
+								<option value="Ambedkar Nagar">Ambedkar Nagar</option>
+								<option value="Angpura">Angpura</option>
+								<option value="Babarpur">Babarpur</option>
+								<option value="Badarpur">Badarpur</option>
+								<option value="Badli">Badli</option>
+								<option value="Ballimaran">Ballimaran</option>
+								<option value="Bawana">Bawana</option>
+								<option value="Bijwasan">Bijwasan</option>
+								<option value="Burari">Burari</option>
+								<option value="Chandni Chowk">Chandni Chowk</option>
+								<option value="Chhatarpur">Chhatarpur</option>
+								<option value="Delhi Cantt">Delhi Cantt</option>
+								<option value="Deoli">Deoli</option>
+								<option value="Dwarka">Dwarka</option>
+								<option value="Gandhi Nagar">Gandhi Nagar</option>
+								<option value="Ghonda">Ghonda</option>
+								<option value="Gokalpur">Gokalpur</option>
+								<option value="Greater Kailash">Greater Kailash</option>
+								<option value="Hari Nagar">Hari Nagar</option>
+								<option value="Janakpuri">Janakpuri</option>
+								<option value="Kalkaji">Kalkaji</option>
+								<option value="Karawal Nagar">Karawal Nagar</option>
+								<option value="Karol Bagh">Karol Bagh</option>
+								<option value="Kasturba Nagar">Kasturba Nagar</option>
+								<option value="Kirari">Kirari</option>
+								<option value="Kondli">Kondli</option>
+								<option value="Krishna Nagar">Krishna Nagar</option>
+								<option value="Laxmi Nagar">Laxmi Nagar</option>
+								<option value="Madipur">Madipur</option>
+								<option value="Malviya Nagar">Malviya Nagar</option>
+								<option value="Matia Mahal">Matia Mahal</option>
+								<option value="Matiala">Matiala</option>
+								<option value="Mehrauli">Mehrauli</option>
+								<option value="Model Town">Model Town</option>
+								<option value="Moti Nagar">Moti Nagar</option>
+								<option value="Mundka">Mundka</option>
+								<option value="Mustafabad">Mustafabad</option>
+								<option value="Najafgarh">Najafgarh</option>
+								<option value="Nangloi Jat">Nangloi Jat</option>
+								<option value="Nerela">Nerela</option>
+								<option value="New Delhi">New Delhi</option>
+								<option value="Okhla">Okhla</option>
+								<option value="Palam">Palam</option>
+								<option value="Patel Nagar">Patel Nagar</option>
+								<option value="Patparganj">Patparganj</option>
+								<option value="R.K. Puram">R.K. Puram</option>
+								<option value="Rajinder Nagar">Rajinder Nagar</option>
+								<option value="Rajouri Garden">Rajouri Garden</option>
+								<option value="Rithala">Rithala</option>
+								<option value="Rohini">Rohini</option>
+								<option value="Rohtas Nagar">Rohtas Nagar</option>
+								<option value="Sadar Bazar">Sadar Bazar</option>
+								<option value="Sangam Vihar">Sangam Vihar</option>
+								<option value="Seelam Pur">Seelam Pur</option>
+								<option value="Seemapuri">Seemapuri</option>
+								<option value="Shahdara">Shahdara</option>
+								<option value="Shakur Basti">Shakur Basti</option>
+								<option value="Shalimar Bagh">Shalimar Bagh</option>
+								<option value="Sultan Pur Majra">Sultan Pur Majra</option>
+								<option value="Tilak Nagar">Tilak Nagar</option>
+								<option value="Timarpur">Timarpur</option>
+								<option value="Tri Nagar">Tri Nagar</option>
+								<option value="Trilokpuri">Trilokpuri</option>
+								<option value="Tughlakabad">Tughlakabad</option>
+								<option value="Uttam Nagar">Uttam Nagar</option>
+								<option value="Vikaspuri">Vikaspuri</option>
+								<option value="Vishwas Nagar">Vishwas Nagar</option>
+								<option value="Wazirpur">Wazirpur</option>
+							</select>
+							<br />
+							<a href="#" class = "tiny-link" onclick = 'window.open("constituency_details.html", "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=50, left=50, width=800, height=750")'>What's my constituency?</a>
+						</div>
+						<select id="state" >
+							<option value="Andaman_and_Nicobar_Islands" selected>Andaman and Nicobar Islands</option>
+							<option value="Andhra_Pradesh">Andhra Pradesh</option>
+							<option value="Arunachal_Pradesh">Arunachal Pradesh</option>
+							<option value="Assam">Assam</option>
+							<option value="Bihar">Bihar</option>
+							<option value="Chandigarh">Chandigarh</option>
+							<option value="Chattisgarh">Chattisgarh</option>
+							<option value="Dadra_and_Nagar_Haveli">Dadra and Nagar Haveli</option>
+							<option value="Daman_and_Diu">Daman and Diu</option>
+							<option value="Goa">Goa</option>
+							<option value="Gujarat">Gujarat</option>
+							<option value="Haryana">Haryana</option>
+							<option value="Himachal_Pradesh">Himachal Pradesh</option>
+							<option value="Jammu_and_Kashmir">Jammu and Kashmir</option>
+							<option value="Jharkhand">Jharkhand</option>
+							<option value="Karnataka">Karnataka</option>
+							<option value="Kerala">Kerala</option>
+							<option value="Lakshadweep">Lakshadweep</option>
+							<option value="Madhya_Pradesh">Madhya Pradesh</option>
+							<option value="Maharashtra">Maharashtra</option>
+							<option value="Manipur">Manipur</option>
+							<option value="Meghalaya">Meghalaya</option>
+							<option value="Mizoram">Mizoram</option>
+							<option value="Nagaland">Nagaland</option>
+							<option value="Orissa">Orissa</option>
+							<option value="Pondicherry">Pondicherry</option>
+							<option value="Punjab">Punjab</option>
+							<option value="Rajasthan">Rajasthan</option>
+							<option value="Sikkim">Sikkim</option>
+							<option value="Tamil_Nadu">Tamil Nadu</option>
+							<option value="Telangana">Telangana</option>
+							<option value="Tripura">Tripura</option>
+							<option value="Uttaranchal">Uttaranchal</option>
+							<option value="Uttar_Pradesh">Uttar Pradesh</option>
+							<option value="West_Bengal">West Bengal</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type = "radio" name="res-place" value="Outside" />Outside Delhi
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type = "radio" name="res-place" value = "MLA" id="MLA" />MLA
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="radio" name="gender-select" value = "Female" id="gender-f" ><i title="Female" class = "fa fa-mars"></i>
+						<input type="radio" name="gender-select" value = "Male" id="gender-m"><i title="Male" class = "fa fa-venus"></i>
+						<input type="radio" name="gender-select" value = "Other" id="gender-o"><i  title="Other" class = "fa fa-transgender rainbow"></i>
+					</td>
+					<td>
+						<input type="text" onfocus="this.type='number';" placholder="Contact Number" id = "phone"/><br />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<button onclick="submit_data()">Go</button>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<button type="button">Sign in using <i class="fa fa-facebook-official"></i></button>
+					</td>
+					<td>
+						<button type="button">Sign in using <i class="fa fa-google-plus"></i></button>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<button type="button" onclick="login_redirect();window.location='/BeingCitizen/login.html';" class="smaller">Already a member? Login here</button>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+<script src="js/jquery.js"></script>
+
+<!--
+Script to manage the Radio buttons
+-->
+
+<script>
+$(document).ready(function()
+{
+	$("input:radio[name=res-place]").each(function()
+	{
+		if($(this).is(":checked")==true)
+		{
+			if($(this).val()=="Delhi")
+			{
+				$("#state").hide();
+				$("#delhi-neigh").show();
+			}
+			else if($(this).val()=="Outside")
+			{
+				$("#state").show();
+				$("#delhi-neigh").hide();
+			}
+		}
+	});
+
+	$("input:radio[name=res-place]").click(function()
+	{
+		if($(this).val()=="Delhi")
+		{
+			$("#state").hide();
+			$("#delhi-neigh").show();
+		}
+		else if($(this).val()=="Outside")
+		{
+			$("#state").show();
+			$("#delhi-neigh").hide();
+		}
+	});
+});
+
+$('#signup_form').submit(function(e){
+	e.preventDefault();
+	e.stopImmediatePropagation();
+	submit_data();
+	return false;
+});
+
+function login_redirect(){
+	window.location="login.html";
+}
+
+/*
+Script to manage the Signup using FaceBook,
+Google and the POST request
+*/
+
+var user_gender = "male";//stores the gender of the user
+var user_about = null;//stores user's bio
+var user_display = null;//stores the user's display
+
+function signUpFB()
+{
+	FB.getLoginStatus(function(response) {
+		if (response.status === 'connected') {
+			console.log('Logged in.');
+			testAPI();
+		}
+		else FB.login(function(response) {
+			if (response.status === 'connected') {
+				testAPI();
+			}
+		},{scope:'user_hometown, user_location, user_photos, user_about_me, email, publish_actions, public_profile'});
+	});
+}
+
+function testAPI() {
+	console.log('Welcome!  Fetching your information.... ');
+	FB.api('/me',function(response) {
+		$("#username").text(response.first_name+" "+response.last_name);
+		user_gender = response.gender;
+		var hometown = response.hometown.name;
+		var location = response.location.name;
+
+		fillGender(user_gender);
+
+		if(hometown.toLowerCase().indexOf("delhi")>=0||location.toLowerCase().indexOf("delhi")>=0)
+		{
+			$("input:radio[name=place]").each(function(){
+				var value = $(this).val();
+				if(value=="Delhi"){
+					$(this).prop('checked',true);
+				}
+				else if(value=="Outside"){
+					$(this).prop('checked',false);
+				}
+			});
+		}
+
+		else
+		{
+			$("input:radio[name=res-place]").each(function(){
+				var value = $(this).val();
+				if(value=="Delhi"){
+					$(this).prop('checked',false);
+				}
+				else if(value=="Outside"){
+					$(this).prop('checked',true);
+				}
+			});
+		}
+
+		user_about = response.bio;
+
+		radioScreenFiller();
+	});
+
+	FB.api('/me/picture',function(response){
+		user_display = response['data']['url'];
+	});
+}
+
+function radioScreenFiller()
+{
+	//THIS function is used to SHOW/HIDE the Textboxes
+	$("input:radio[name=res-place]").each(function(){
+		var selected_val = $(this).val();
+		if($(this).val()=="Delhi"){
+			$("#delhi-neigh").show();
+			$("#state").hide();
+		}
+		else{
+			$("#delhi-neigh").hide();
+			$("#state").show();
+		}
+	});
+}
+
+function signUpGoogle()
+{
+	var myParams = {
+		'clientid' : '461450685366-s354q669up76283ftvb35g7jipfnabol.apps.googleusercontent.com', //You need to set client id
+		'cookiepolicy' : 'single_host_origin',
+		'callback' : 'loginGoogle', //callback function
+		'approvalprompt':'force',
+		'scope' : 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read'
+	};
+	gapi.auth.signIn(myParams);
+}
+
+function loginGoogle(result)
+{
+	if(result['status']['signed_in'])
+	{
+	}
+	var request = gapi.client.plus.people.get(
+		{
+			'userId': 'me'
+		});
+		request.execute(function (resp)
+		{
+			$("#username").text(resp.name.givenName+" "+resp.name.familyName);
+			user_display = resp.image.url;
+			user_about = resp.aboutMe;
+			user_gender = resp.gender;
+			radioScreenFiller();
+			fillGender(user_gender);
+		});
+	}
+
+	function fillGender(gender)
+	{
+		$("input:radio[name=gender-select]").each(function(){
+			if($(this).val.toLowerCase==gender){
+				$(this).prop('checked',true);
+			}
+			else{
+				$(this).prop('checked',false);
+			}
+		});
+	}
+
+	$("#signup_form").submit(function(){
+		submit_data();
+	});
+
+	function submit_data()
+	{
+		if($("#username").val()==""){
+			alert("The username cannot be left blank!");
+			return;
+		}
+
+		if($("#password-second").val()!=$("#password-first").val() || $("#password-second").val()=="")
+		{
+			alert("The passwords do not match!");
+			return;
+		}
+		var user_info ={
+			user_name : $("#username").val(),
+			gender : user_gender,
+			password : $("#password-first").val(),
+			picture_link:user_display,//null for now
+			contact: $("#phone").val(), //is NULLable as well
+			residence: "Delhi", // a sham value to be replaced later on
+			state: "Delhi", //another sham value to be replaced later on
+			neighbourhood: null,//not applicable if not in Delhi
+			about_user: user_about
+		};
+
+		user_info.gender = $("input:radio[name=gender-select]:checked","#signup_form").val().toLowerCase();
+
+		var selected_place = $("input:radio[name=res-place]:checked","#signup_form").val().toLowerCase();
+
+		if(selected_place == "delhi" || selected_place == "mla")
+		{
+			user_info.neighbourhood = $("#delhi-neigh-list").val();
+		}
+		else
+		{
+			user_info.residence = "Outside";
+			user_info.state = $("#state").val();
+		}
+
+		if(document.getElementById('MLA').checked) {
+			$.post('/laravel/public/mla_signup',
+			user_info,
+			function(data){
+				data=JSON.parse(data);
+				console.log(data);
+				if(data){
+					window.location='/BeingCitizen/profile_mla.html?mla_id='+data['user_id'];
+				}
+			}
+		);
+	}
+	else { //regular user
+		$.post('/laravel/public/user_signup',
+		user_info,
+		function(data){
+			data=JSON.parse(data);
+			if(data){
+				window.location='/BeingCitizen/profile_display.html?user_id='+data;
+			}
+			else
+			{
+				window.location='/BeingCitizen/profile_display.html?user_id='+data;
+			}
+		}
+	)
+}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,409 @@
+<html>
+	<head>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+		<script src="js/jquery.js"></script>
+		<!--For the editor's text-->
+		<link href = "css/bootstrap.min.css" rel="stylesheet" />
+		<link href = "css/debate.css" rel = "stylesheet" />
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<script src="js/d3.min.js"></script>
+	</head>
+	<body>
+		<div id = "overlay-load">
+			<!--
+				This space is reserved for the overlay
+			-->
+			<script type="text/javascript">
+				$("#overlay-load").show();
+				//show_modal_comment();
+				//SVG append begins
+				var loaderContainer, circles, gAppend, textarena;
+				var circleRadii = [window.innerHeight/4];
+				loaderContainer = d3.select("#overlay-load").append("svg")
+				.attr("width",window.innerWidth)
+				.attr("height",window.innerHeight);
+
+				gAppend = loaderContainer.append("g");
+
+				circles = gAppend.selectAll("circle")
+				.data(circleRadii).enter()
+				.append("circle");
+
+				textarena = gAppend.append("text");
+			</script>
+		</div>
+		<div id="header">
+			<script>
+				$("#header").load('menu.html');
+			</script>
+		</div>
+
+
+		<div class ="campaign-screen">
+			<!--
+				This block deals with the debate content
+			-->
+
+			<div id="debate-title" class="title"></div>
+
+			<hr />
+
+			<div class = "inline-band">
+				<div id="debate-category"></div>
+				<div id="debate-date"></div>
+			</div>
+
+			<hr />
+
+			<div id="debate-body"></div>
+
+			<div id="debate-image"></div>
+
+			<hr />
+
+			<!--
+				Space for my comment
+			-->
+
+			<div class = "my-comment campaign-main">
+				<div class="form">
+					<div class = "label-text" >What's your say ?</div>
+					<div class = "comment-box">
+						<textarea id="comment-text" rows = "4"></textarea>
+						<br />
+						<input type="radio" name="opinion" value="yes" checked>I agree</input>
+						<input type="radio" name="opinion" value="no">I disagree</input>
+						<br />
+						<button onclick= "Comment()">Send</button>
+					</div>
+				</div>
+			</div>
+
+			<hr />
+
+			<div class = "debate-comment-arena">
+				<div class="label-text">Comments</div>
+				<div id="debate-comments">
+					<div id="comments-agree" class="inline-show">
+					</div>
+					<div id="comments-disagree" class="inline-show">
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+</div>
+<script type="text/javascript">
+	var uid=0;
+	var debate_id=location.search.substring("1").split("=")[1];
+	$(document).ready(function(){
+		$(".screen").show();
+		var obj={uid:uid};
+		$.post('/laravel/public/user_id',
+		function(data){
+			if(data){
+				data=JSON.parse(data);
+				uid=data['user_id'];
+				$('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
+				$('#toggle-menu').css("visibility","visible");
+				$("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+uid+'">'+data.name+'</a>');
+			}
+			else{
+				//Do nothing
+				//Imply this check during the commenting action
+			}
+		});
+
+		var debate_obj = {debate_id:debate_id}
+
+		$.ajax({
+			xhr: function()
+			{
+				var xhr = new window.XMLHttpRequest();
+				//Download progress
+				xhr.addEventListener("progress", function(evt){
+					if (evt.lengthComputable) {
+						var percentComplete = evt.loaded / evt.total;
+						//Do something with download progress
+						//multiply this with 100 to get percent
+						value = percentComplete;
+						var circleAttributes = circles.attr("cx",window.innerWidth/2)
+						.attr("cy",window.innerHeight/2)
+						.style("fill","#b71c1c")
+						.attr("r","0")
+						.transition()
+						.attr("r",function(d){
+							return value*d;
+						});
+
+						var textLabels = gAppend.selectAll("text")
+						.attr("x", function() { return window.innerWidth/2; })
+						.attr("y", function() { return window.innerHeight/2; })
+						.text("Loading")
+						.attr("text-anchor","middle")
+						.attr("font-family", "sans-serif")
+						.attr("font-size", "20px")
+						.attr("fill", "white");
+					}
+				}, false);
+				return xhr;
+			},
+			url:"/laravel/public/get_debate",
+			data:debate_obj,
+			type:"POST",
+			success:function(data){
+				data= JSON.parse(data);
+				$("#debate-title").html(data.name);
+				$("#debate-category").html('<i class = "fa fa-sitemap label-text" ></i><span class="label-text">category</span>'+data.category);
+				$("#debate-date").html('<i class = "fa fa-clock-o label-text" ></i><span class="label-text">Created On</span>'+data.start_date);
+				$("#debate-body").html(data.debate_text);
+				if(data.image){
+					var a = document.createElement("img");
+					a.src = "/laravel/public/"+data.image;
+					a.height = 400;
+					a.width = 400;
+					$("#debate-image").html(a);
+				}
+				populateComments();
+			}
+		});
+	});
+
+	function Comment()
+	{
+		if(uid==0){
+			alert('Log in First!');
+			window.location='/BeingCitizen/login.html';
+		}
+		var allowed_to_comment = true;//set to true initially
+		var user={uid:uid};
+
+		$.post("/laravel/public/get_user", user,
+		function(data)
+		{
+			data= JSON.parse(data);
+			if(data['residence']== 'Outside')
+			{
+				allowed_to_comment = false;
+			}
+			if(allowed_to_comment == false){
+				return (commentFail());
+			}
+			//if we made this far, then we go for the success one
+			return (commentSuccess());
+		});
+	}
+	function commentSuccess()
+	{
+
+		var comment=document.getElementById("comment-text").value.toString();
+		if(comment=="")
+		{
+			alert("Please enter a comment!");
+			return;
+		}
+		var obj={comment:comment,
+			debate_id:debate_id,
+			opinion:'yes',
+		uid:uid};
+		$('input:radio[name=opinion]').each(function()
+		{
+			if($(this).is(':checked'))
+			obj['opinion'] = $(this).val();
+		});
+		$.post("/laravel/public/set_comment",
+		obj,
+		function(data)
+		{
+			populateComments();
+		}
+		);
+	}
+	function commentFail()
+	{
+		alert('Sorry! People outisde Delhi are not allowed to comment at the moment!');
+	}
+
+
+	function populateComments()
+	{
+		$("#comments-agree").html("");
+		$("#comments-disagree").html("");
+		var debate_info={debate_id:debate_id,uid:uid};
+		$.post("/laravel/public/comments",
+		debate_info,
+		function(data)
+		{
+			data= JSON.parse(data);
+			var i=0;
+			var yes = 0;
+			var no = 0;
+			if(data.length==0){
+				$("#comments-agree").html('<span class="label-text">No comments! Be the first one to comment!</span>');
+				$("#overlay-load").hide();
+				return;
+			}
+			data = data.reverse();
+			for (;data[i];i++){
+				if(data[i].yes_no=="yes")
+				{
+					var comment_string = '<div class="comment-body yes">';
+					//First we insert the username and the images
+					comment_string += '<div class="user-info label-text inline-show dp-align">';
+					comment_string += data[i].name;
+					comment_string += '<br /><img src="'+data[i].pic_link+'" height=50 width=50/>';
+					comment_string += '</div>';
+					//Now we insert the comments
+					comment_string += '<div class="comment-indiv resource'+data[i].comment_id+' inline-show comment-width">';
+					comment_string += data[i].content;
+					comment_string += '<span class = "upvote-count">&nbsp;&#43;'+data[i].likes+'</span>';
+					comment_string += '<div class="btn-panel"></div></div></div>'
+					$("#comments-agree").append(comment_string);
+					++yes;
+				}
+				else
+				{
+					var comment_string = '<div class="comment-body no">';
+					//First we insert the username and the images
+					comment_string += '<div class="user-info label-text inline-show dp-align">';
+					comment_string += data[i].name;
+					comment_string += '<br /><img src="'+data[i].pic_link+'" height=50 width=50/>';
+					comment_string += '</div>';
+					//Now we insert the comments
+					comment_string += '<div class="comment-indiv resource'+data[i].comment_id+' inline-show comment-width">';
+					comment_string += data[i].content;
+					comment_string += '<span class = "upvote-count">&nbsp;&#43;'+data[i].likes+'</span>';
+					comment_string += '<div class="btn-panel"></div></div></div>'
+					$("#comments-disagree").append(comment_string);
+					++no;
+				}
+			}
+
+			for(var i = 0;data[i];i++)
+			{
+				var id = {comment_id:data[i].comment_id,uid:uid};
+				add_likes(id);
+			}
+
+			for(var i = 0;data[i];i++)
+			{
+				var id = {comment_id:data[i].comment_id, uid:uid};
+				mark_spam(id);
+			}
+			for(var i=0; data[i];i++)
+			{
+				var id = {comment_id:data[i].comment_id, user_id:data[i].user_id};
+				if(data[i].user_id==uid){
+					var delete_string = '<button class="btn-transparent" title="Delete" onclick="delete_comment('+id.comment_id+');" >';
+					delete_string += '<i class="fa fa-trash"></i>';
+					delete_string += '</button>';
+					$(".comment-indiv.resource"+id['comment_id']+" .btn-panel").append(delete_string);
+				}
+			}
+
+			$(".yes-bar").css("width",(yes)/(yes+no) * parseInt($(".bar").css("width")));
+			$(".no-bar").css("width",(no)/(yes+no) * parseInt($(".bar").css("width")));
+			$("#overlay-load").hide();
+		}
+		);
+	}
+	function delete_comment(id)
+	{
+		obj={comment_id:id, uid:uid};
+		$.post("/laravel/public/debate_deleteComment",
+		obj,
+		function(data)
+		{
+			alert("Comment deleted");
+			populateComments();
+		});
+	}
+
+	function string_generator(title,f_name,comment_id,class_icon,class_state){
+		/*
+			The five arguments work as follows
+			1. title refers to the tooltip text
+			2. f_name refers to the function name that shall be invoked
+			3. comment_id is the argument passed to the respective functions
+			4. class_icon is either a thumbs up icon or a flag icon
+			5. class_state icons shows a pressed or an unpressed state
+		*/
+		var string = '<button class="btn-transparent" title="'+title+'" onclick="'+f_name+'('+comment_id+')" >';
+		string += '<i class = "fa '+class_icon+' '+class_state+'"></i>';
+		string += '</button>';
+		return string;
+	}
+
+	function add_likes(id)
+	{
+		$.post("/laravel/public/debate_like_unlike",
+		id,
+		function(like_unlike)
+		{
+			like_unlike= JSON.parse(like_unlike);
+			if(!like_unlike || like_unlike['upvote']==0){
+				var like_string = string_generator("Upvote","like",id.comment_id,"fa-thumbs-up","unpressed");
+				$(".comment-indiv.resource"+id['comment_id']+" .btn-panel").append(like_string);
+			}
+			else{
+				var like_string = string_generator("Upvoted","unlike",id.comment_id,"fa-thumbs-up","pressed");
+				$(".comment-indiv.resource"+id['comment_id']+" .btn-panel").append(like_string);
+			}
+		});
+	}
+
+	function mark_spam(id)
+	{
+		$.post("/laravel/public/debate_downvote",
+		id,
+		function(downvote)
+		{
+			downvote= JSON.parse(downvote);
+			if(!downvote || downvote['downvote']==0){
+				var spam_marker = string_generator("Mark as spam","set_downvote",id.comment_id,"fa-flag","unpressed");
+				$(".comment-indiv.resource"+id['comment_id']+" .btn-panel").append(spam_marker);
+			}
+			else{
+				var spam_marker = string_generator("Marked as spam","unset_downvote",id.comment_id,"fa-flag","pressed");
+				$(".comment-indiv.resource"+id['comment_id']+" .btn-panel").append(spam_marker);
+			}
+		});
+	}
+
+	function like(comment_id){
+		var obj={cid:comment_id, uid:uid};
+		$.post("/laravel/public/debate_like",
+		obj,function(data){
+			populateComments();
+		}
+		);
+	}
+	function set_downvote(comment_id){
+		var obj={cid:comment_id, uid:uid};
+		$.post("/laravel/public/debate_set_downvote",
+		obj,function(data){
+			populateComments();
+		}
+		);
+	}
+	function unlike(comment_id){
+		var obj={cid:comment_id, uid:uid};
+		$.post("/laravel/public/debate_unlike",
+		obj,function(data){
+			populateComments();
+		}
+		);
+	}
+	function unset_downvote(comment_id){
+		var obj={cid:comment_id, uid:uid};
+		$.post("/laravel/public/debate_unset_downvote",
+		obj,function(data){
+			populateComments();
+		}
+		);
+	}
+</script>
+</body>
+</html>

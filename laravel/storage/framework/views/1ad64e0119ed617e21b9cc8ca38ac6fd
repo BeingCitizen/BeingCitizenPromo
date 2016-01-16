@@ -1,0 +1,29 @@
+<html>
+<head>
+<h2>form</h2>
+<body>
+<h4>Debate id: <?php echo e($id); ?></h4>
+<?php echo Form::open(array('action'=>'HomeController@debate_upload', 'files'=>true)); ?>
+
+	       
+      <?php echo Form::label('debate_id'); ?>
+
+             <?php echo Form::text('debate_id', $id, 
+        array('required', 
+              'class'=>'form-control', 
+              'placeholder'=>'debate_id')); ?>
+
+ 
+      <?php echo Form::label('image', 'Upload Image'); ?>
+
+	<?php echo Form::file('image'); ?>
+
+      
+
+	<?php echo Form::submit('Submit'); ?>
+
+   	<?php echo Form::close(); ?>
+
+     
+</body>
+</html>

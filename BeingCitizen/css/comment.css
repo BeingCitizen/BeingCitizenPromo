@@ -1,0 +1,78 @@
+.comment-indiv{
+  width:60%;
+  font-family:'district_prothin';
+  font-size: 16px !important;
+  font-weight: bold;
+}
+.form>div{
+  display:inline-block;
+  vertical-align: middle;
+}
+.comment-box{
+  /*The textbox where the user enters his information*/
+  width:75%;
+}
+#comment-text{
+  width:100%;
+  resize:none;
+  border-radius:6px;
+}
+.btn-send{
+  position:relative;
+  cursor:pointer;
+}
+.inline-show{
+  /*Used for the components of the comment*/
+  display: inline-block;
+  position:relative;
+}
+.comment-body{
+  margin:0.5%;
+  padding:0.5%;
+}
+.user-info{
+  vertical-align: top;
+}
+.comment-indiv::before{
+  content:' ';
+  position:absolute;
+  width: 0;
+	height: 0;
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent;
+	border-right:10px solid #B2EBF2;
+  left:-10px;/*Same as the size of arrow*/
+}
+.like::before{
+  content:' ';
+  position:absolute;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right:10px solid #81C784;
+  left:-10px;
+}
+.like{
+  background:#81C784 !important;
+}
+.spam::before{
+  content:' ';
+  position:absolute;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right:10px solid #ef5350;
+  left:-10px;
+}
+.spam{
+  background:#ef5350 !important;
+}
+.comment-indiv{
+  background:#B2EBF2;
+  padding:6px;
+  margin:1px;
+  border-radius: 4px;
+  width:90%;
+}

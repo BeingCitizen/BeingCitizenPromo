@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Geocoding service</title>
+	<link href = "css/know_cons.css" rel="stylesheet">
+  </head>
+  <body>
+    
+	<div class = "screen">
+		
+		<div id="google_canvas"></div>
+	
+		<div class = "panel">
+			<input type="textbox" id="city" onkeydown="javascript: if(event.keyCode==13) locate()" placeholder="Enter city here"></input>
+			<button onclick="locate()">Go</button>
+			<div id = "infobox"></div>
+		</div>
+		
+		<div class = "infobox hidden">
+			<div class = "info-panel">
+				<table>
+					<tr>
+						<td class = "panel-comp">Candidate Name </div></td>
+						<td><div id = "cand_name"></div></td>
+					</td>
+					<tr>
+						<td class = "panel-comp">Constituency </div></td>
+						<td><div id = "const_name"></div></td>
+					</td>
+					<tr>
+						<td class = "panel-comp">Education</td>
+						<td><div id = "education"></div></td>
+					</td>
+					<tr>
+						<td class = "panel-comp">Profession</td>
+						<td><div id = "profession"></div></td>
+					</td>
+					<tr>
+						<td class = "panel-comp">Assets</td>
+						<td><div id = "assets"></div></td>
+					</td>
+					<tr>
+						<td class = "panel-comp">Liabilities</td>
+						<td><div id = "liabilities"></div></td>
+					</td>
+					<tr>
+						<td class = "panel-comp">Household Income</td>
+						<td><div id = "h_income"></div></td>
+					</td>
+					<tr>
+						<td class = "panel-comp">Criminal Cases</td>
+						<td><div id = "criminal_cases"></div></td>
+					</td>
+					<tr>
+						<td class = "panel-comp">Localities</td>
+						<td><div id = "localities"></div></td>
+					</td>
+				</table>
+			</div>
+		</div>
+		
+	</div>
+	
+	<script src="http://maps.googleapis.com/maps/api/js"></script>
+	<script src="js/jquery-1.11.3.js"></script>
+	
+	<script>
+		var map;
+	    	
+		    	var mapOptions = {
+		    		zoom: 15,
+		    		mapTypeId: google.maps.MapTypeId.ROADMAP,
+					center:new google.maps.LatLng(28.631451,77.216667)
+		    	};
+		    	
+		map = new google.maps.Map(document.getElementById("google_canvas"), mapOptions);
+		var desc = document.getElementById("infobox");
+		
+		function locate()
+		{
+			var geocoder = new google.maps.Geocoder();
+			var city = document.getElementById("city").value.toString();
+			desc.innerHTML =" ";
+			geocoder.geocode({'address':city},function(result, status){
+                      if(status == google.maps.GeocoderStatus.OK)
+				{
+					var georev = new google.maps.Geocoder();
+					var latlong = new google.maps.LatLng(result[0].geometry.location.A, result[0].geometry.location.F);
+					
+					georev.geocode({'latLng':latlong},function(resultrev, status){
+						if(status == google.maps.GeocoderStatus.OK)
+						{
+							var infobox3 = new google.maps.InfoWindow({
+							map:map,
+							position:new google.maps.LatLng(result[0].geometry.location.A, result[0].geometry.location.F),
+							content:resultrev[0].formatted_address
+							});
+						}
+						var namedesc = resultrev[0];
+						var size = namedesc.address_components.length;
+						desc.innerHTML += " <br />Pin Code : "+namedesc.address_components[size-1].long_name;
+						//now play with the database thingie
+	                              city = city.split(",")[0];
+                                   
+						populateBox(capitalize(city));
+					});
+					//end of reverse geocoding
+				}
+			});
+   
+ 
+
+
+		}
+		
+		function capitalize(s){
+			return s.toLowerCase().replace( /\b./g, function(a){ return a.toUpperCase(); } );
+		};
+		
+		function populateBox(addr)
+		{
+                  
+                   var obj = {address:addr};
+    			  console.log(obj);
+                    $.ajax({
+                           url: "/laravel/public/get_details",
+                           type: "post",
+                           data: obj,
+                            success:function(data){
+                              data= JSON.parse(data);
+                              $("#cand_name").html(data.Name);
+					$("#const_name").html(data.Constituency);
+					$("#education").html(data.Education);
+					$("#profession").html(data.Profession);
+					$("#assets").html(data.Assets);
+					$("#liabilities").html(data.Liabilities);
+					$("#h_income").html(data.Household_Income);
+					$("#criminal_cases").html(data.Criminal_Cases.split(";").join("<br />"));
+					$("#localities").html(data.Localities.split(";").join(" | "));
+					$(".hidden").addClass("active").removeClass("hidden");} , 
+                             error:function(){
+                               console.log('fail');                         
+                               } 
+                            
+                      }); 
+                }
+
+	    (function() {
+	    
+	    	if(!!navigator.geolocation) {
+	    	
+	    		navigator.geolocation.getCurrentPosition(function(position) {
+					
+		    		var geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+										
+					var georev = new google.maps.Geocoder();
+					var latlong = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+					georev.geocode({'latLng':latlong},function(resultrev, status){
+						if(status == google.maps.GeocoderStatus.OK)
+						{
+							var infobox = new google.maps.InfoWindow({
+							map:map,
+							position:latlong,
+							content:resultrev[0].formatted_address
+							});
+							var namedesc = resultrev[0];
+							var size = namedesc.address_components.length;
+							desc.innerHTML += "<br />Current Location's Pin Code : "+namedesc.address_components[size-1].long_name;
+						}
+						
+					});
+					
+		    		map.setCenter(geolocate);
+	    		},function(error){alert(error.message)});
+	    	} else {
+	    		document.getElementById("google_canvas").innerHTML = 'No Geolocation Support.';
+	    	}
+	    	
+	    })();
+	</script>
+  </body>
+</html>

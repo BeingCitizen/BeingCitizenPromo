@@ -1,0 +1,191 @@
+/*Styles for the vertical menu to the side*/
+body,html{
+	margin:0;
+	padding:0;
+}
+/*
+'bebas_neue_regularregular';
+comfortaaregular ONLY for BeingCitizen text and logo
+district_prothin
+aaarghnormal
+*/
+.bebas{
+	font-family:'bebas_neue_regularregular';
+}
+.district{
+	font-family:'district_prothin';
+}
+.horizontal-bar, .vertical-bar{
+	position:fixed;
+	top:0px;
+	left:0px;
+	color:white;
+	background:#212121;
+}
+.horizontal-bar{
+	width:100%;
+	height:50px;
+	z-index:12;
+	padding-left:2%;
+}
+.vertical-bar{
+	height:100%;
+	z-index:10;
+	width:25%;
+	font-family:'district_prothin';
+	display:none;
+}
+.inline-show-block{
+	display:inline-block;
+}
+.horiz-menu-sub-div{
+	width:100%;
+}
+.horiz-menu-sub-div>div{
+	display:inline-block;
+}
+.icon-options{
+	text-transform:uppercase;
+}
+.put-left{
+	text-align:left;
+}
+.put-right{
+	text-align: right;
+}
+.being-citizen-container{
+	display:inline-block;
+	margin-left: 10px;
+}
+.pull-down{
+	margin-top:2%;
+}
+img.pull-down{
+	vertical-align:0% !important
+}
+.fa-lg{
+	vertical-align:0 !important;
+}
+.pull-down-spl{
+	vertical-align: -40%;
+	margin-top:2%;
+}
+.being-citizen{
+	font-family:'comfortaaregular';
+	font-size:20px;
+	text-transform: capitalize;
+}
+#toggle-menu{
+	cursor:pointer;
+}
+.sentinel{
+	height:70px;
+}
+.name-field, .name-field a{
+	text-decoration: none;
+	text-transform: uppercase;
+	font-size:15px;
+	padding:10px;
+	margin:6px;
+	font-weight:bolder;
+}
+.name-field a{
+	cursor:pointer;
+	color:white;
+	font-weight:bolder;
+}
+.option-menu{
+	text-transform: uppercase;
+	font-size:15px;
+	padding:10px;
+	margin:6px;
+	font-weight:bolder;
+	cursor:pointer;
+	transition:background 0.1s ease-in-out;
+	-webkit-transition:background 0.1s ease-in-out;
+	-moz-transition:background 0.1s ease-in-out;
+	-o-transition:background 0.1s ease-in-out;
+}
+.hidden-box{
+	display:none;
+}
+.option-menu:hover{
+	background:#757575;
+}
+.option-menu .fa{
+	margin-right:4px;
+}
+#user-img{
+	width:50px;
+	border-radius:4px;
+	cursor:pointer;
+}
+.img-menu{
+	position:relative;
+}
+.spacer{
+	width:64%;
+	position:relative;
+}
+.user-menu{
+	position:absolute;
+	font-family:'district_prothin';
+	background:#212121;
+	left:0px;
+	/*top:120%;*/
+}
+.user-menu div{
+	padding:5px;
+	margin:3px;
+	cursor:pointer;
+	text-transform: uppercase;
+	background:#212121;
+	transition:background 0.1s ease-in-out;
+	-webkit-transition:background 0.1s ease-in-out;
+	-moz-transition:background 0.1s ease-in-out;
+	-o-transition:background 0.1s ease-in-out;
+	text-align: left;
+	box-sizing:content-box !important;
+	-webkit-box-sizing:content-box !important;
+}
+.user-menu div:hover{
+	background: #757575;
+}
+.option-menu a, .user-menu a{
+	text-decoration: none;
+	color:white;
+	font-weight:bolder;
+}
+.brown-circle{
+	border:2px solid
+}
+.user-menu:first-child{
+	border-top-left-radius:6px;
+	border-top-right-radius:6px;
+}
+.user-menu:last-child{
+	border-bottom-left-radius:6px;
+	border-bottom-right-radius:6px;
+}
+.create-campaign{
+	background:#b71c1c !important;
+	padding:4px;
+	margin:0.5px;
+	font-family:'district_prothin';
+	cursor:pointer;
+	margin-left: 0px !important;
+	border-radius:4px;
+	cursor:pointer;
+	text-transform:uppercase;
+	transition:all 1s ease-in-out;
+	-webkit-transition:all 1s ease-in-out;
+	-moz-transition:all 1s ease-in-out;
+	-o-transition:all 1s ease-in-out;
+}
+.create-campaign:hover{
+	background:#d32f2f !important;
+}
+.pressed{ color:#78909C !important; }
+.unpressed{ color:#263238 !important; }
+.put-center{text-align:center}
+.put-center .fa{font-size:40px !important;}

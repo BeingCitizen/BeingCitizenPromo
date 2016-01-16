@@ -1,0 +1,176 @@
+/*CSS for profiles*/
+body,html{
+  background:#37474F;
+}
+#header{
+  position:fixed;
+  width: 100%;
+  top: 0;
+  left:0;
+  z-index:9;
+  height:50px;/*Same as that of menu-bar class*/
+}
+.one-third, .three-third, .two-third{
+  background:white;
+  border-radius:4px;
+  margin:4px;
+  padding:2px;
+  height:120%;
+}
+.one-third, .three-third{
+  width:25%;
+  display:inline-block;
+  vertical-align: top;
+}
+.two-third{
+  width:46%;
+  vertical-align:top;
+  display:inline-block;
+}
+.one-half{
+  width:45%;
+  display:inline-block;
+  font-weight:bolder;
+  vertical-align: top;
+}
+.one-half span{
+  font-weight:lighter !important;
+}
+.profile-screen{
+  padding:2%;
+  margin:4% 3% 3% 3%;
+  background:rgb(236,239,241);
+}
+.profile-header{
+  font-family:'bebas_neue_regularregular';
+}
+.profile-pic img{
+  margin-right:3%;
+  max-width:100%;
+}
+.tall, .title{
+  font-size:60px;
+}
+.title{
+  font-family:'bebas_neue_regularregular';
+}
+.small{
+  font-size:25px;
+}
+.smaller{
+  font-size:18px;
+}
+.tiny-link, .tiny-link a{
+  text-decoration:none;
+  font-size:15px;
+  font-family:'district_prothin';
+  text-align:center;
+  color:black;
+  text-transform:uppercase;
+}
+.tiny-link a{
+  color:white !important;
+}
+.contains-banner{
+  width:100%;
+  position:relative;
+}
+.create-banner{
+  position:absolute;
+  right:0px;
+  top:0px;
+  padding:5px;
+  background:rgb(231, 76, 60);
+  border-radius:4px;
+}
+/*CSS for campaign thumbnails*/
+.campaign-object{
+  display:inline-block;
+  text-align:center;
+  position: relative;
+  margin:1%;
+}
+.thumbnail{
+  top:0;
+  left:0;
+  height:120px;
+  width:120px;
+  border-width: 5px;
+  border-style: solid;
+  border-radius:50%;
+}
+.campaign-object a{
+  text-decoration:none;
+  width:100%;
+  font-family:'aaarghnormal';
+  font-size:12px;
+  color:black;
+  text-transform:uppercase;
+  color:white;
+  font-weight:bold;
+  padding:10px;
+}
+.no-action{
+  background:rgb(229,57,53);
+  border-color:rgb(229,57,53);
+}
+.cant-take-action{
+  background:rgb(251,192,45);
+  border-color:rgb(251,192,45);
+}
+.taken-action{
+  background:rgb(56,142,60);
+  border-color:rgb(56,142,60);
+}
+/*This CSS is for the follow suggestion strip*/
+#follow-strip-suggestions>div{
+  display:inline-block;
+  margin-left:2px;
+  margin-right:2px;
+  border:1px solid rgb(108, 122, 137);
+  padding:4px;
+  text-align: center;
+  min-width:80px;
+}
+.follow-btn button{
+  border-radius:4px;
+  background:rgb(108, 122, 137);
+  color:rgb(236,236,236);
+  border:none;
+  padding:4px;
+  margin:4px;
+  text-align:center;
+  cursor:pointer;
+}
+#icon-residence{
+  vertical-align:-20%;
+}
+.bold{
+  font-weight: bolder;
+}
+.rightbar{
+  border-right:1px solid gray;
+  padding-right:3px;
+}
+.follow-frame{
+  width:100px;
+  background:#ECEFF1;
+  padding:2px;
+  border-radius:4px;
+  text-align: center;
+  display: inline-block;
+  height:100px;
+  margin:2px;
+  vertical-align: top;
+}
+.heading{
+  margin-top:3%;
+  margin-left:3%;
+}
+.half-header{
+
+}
+.scrollable-camp{
+  height:40%;
+  overflow-y: scroll;
+}

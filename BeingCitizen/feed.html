@@ -1,0 +1,347 @@
+<html>
+	<head>
+		<link href="css/profile.css" rel="stylesheet" />
+		<link href="fonts/stylesheet.css" rel="stylesheet" />
+		<link href="css/hash.css" rel="stylesheet" />
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+		<script src="js/jquery.js"></script>
+		<style>
+			#overlay-load{
+			position:absolute;
+			z-index:10;
+			height:100%;
+			width:100%;
+			top:0;
+			left:0;
+			background:rgb(33,33,33);
+			}
+			#feed a{
+			text-decoration:none;
+			color:black;
+			font-weight:bold;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="header">
+			<script>
+				$("#header").load('menu.html');
+			</script>
+		</div>
+
+		<div class = "backdrop">
+			<div class = "profile-screen">
+				<div class = "title">
+					#MyFeed
+				</div>
+				<!--
+					Upper half deals with the HOWTO and the actual FEED entering area
+				-->
+				<div class = "upper-half">
+
+					<div class = "column-small">
+						<div class = "instructions">
+							MyFeed @BeingCitizen
+							<br />
+							Here's how it works!
+							<br />
+							<ol>
+								<li>Choose our Hashtags to begin with</li>
+								<li>Compose the Feed</li>
+								<li>And publish it!</li>
+							</ol>
+						</div>
+					</div>
+
+					<div class = "column-big bar-left">
+						<div class = "column-small">
+							<div contenteditable="true" placeholder="Start with a #" id="tag"></div>
+							<select name= "display" id="display" multiple="multiple" class="tag-master">
+							</select>
+						</div>
+
+						<div class="column-big">
+							<div contenteditable="true" class="feed-box width-big" id="feed">
+								<span id = "tagged"></span>
+							</div>
+							<button onclick="submit_hash()" class = "submit">Submit</button>
+						</div>
+						<!---END OF FEED COMPOSE AREA-->
+					</div>
+				</div>
+
+				<hr />
+				<!--
+					Lower half deals with the FEED list and the TWITTER feeds
+				-->
+
+				<div class = "lower-half">
+
+					<div class = "column-big bar-right">
+						<div class = "smaller" style="font-style:normal">
+							<i class = "fa fa-comment-o"></i>What others have to say
+						</div>
+						<div id="tweets">
+						</div>
+						<div id = "tagTweets" class = "hidden">
+						</div>
+						<div id = "back" class = "hidden tiny-link">
+							<a href="/BeingCitizen/feed.html?tags=false&tagname=none" class = "tiny-link small">
+								<i class = "fa fa-arrow-left"></i> &nbsp;&nbsp;Back to normal tweets
+							</a>
+						</div>
+					</div>
+
+					<div class = "column-small">
+						<div class = "smaller" style="font-style:normal">
+							<i class = "fa fa-twitter"></i>
+							Follow Being Citizen on twitter!
+						</div>
+						<a class="twitter-timeline" href="https://twitter.com/Being_Citizen" data-widget-id="657274208037134337">Tweets by @Being_Citizen</a>
+						<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+					</div>
+
+				</div>
+			</div>
+
+			<script type="text/javascript">
+				var uid =0 ;
+				var start=/#/ig; // # Match
+				var word=/#(\w+)/ig; //#abc Match
+				var signed = false;
+				var profile=false;
+				tagPopulator();
+				$(document).ready(function(){
+					var obj={uid:uid};
+					$.post('/laravel/public/user_id',obj,
+					function(data){
+						if(data){
+							data=JSON.parse(data);
+							uid=data['user_id'];
+							$("#tag").attr("contenteditable","true");
+							$("#feed").attr("contenteditable","true");
+							$('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
+							$("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+uid+'">'+data.name+'</a>');
+							$('#toggle-menu').css("visibility","visible");
+							signed  = true;
+							profile = "civilian";
+						}
+						else
+						{
+						    $.post('/laravel/public/user_id_mla',obj,
+					        function(data){
+							    if(data){
+										$(".create-campaign").remove();
+										$("#make-invisible").remove();
+									data=JSON.parse(data);
+									uid=data['user_id'];
+									$("#tag").attr("contenteditable","true");
+									$("#feed").attr("contenteditable","true");
+									$('#profile-page').attr('href','/BeingCitizen/profile_mla.html?profile_id='+uid);
+									$("#user-name").html('<a href="/BeingCitizen/profile_mla.html?profile_id='+uid+'">'+data.name+'</a>');
+									$('#toggle-menu').css("visibility","visible");
+									signed  = true;
+									profile = "mla";
+						    }
+						    else{
+								$("#tag").attr("contenteditable","false");
+								$("#feed").attr("contenteditable","false");
+								$("#feed").html('You need to login first. Click <a href = "/BeingCitizen/login.html">here</a> to login!');
+								$(".submit").attr("disabled","true");
+							}
+						    });
+						}
+					});
+				});
+
+
+				function tagPopulator()
+				{
+					var queryString = location.search.substring(1);
+					queryString = queryString.split('&');//gives two strings
+					var isTagSpecific = 'false';
+					if(isTagSpecific)isTagSpecific = queryString[0].split('=')[1];
+					if(isTagSpecific == 'false')
+					{
+						queryString.pop();
+						fetchFeed();
+					}
+					else
+					{
+						if(queryString[1])
+						{
+							tagName = queryString[1].split('=')[1].toString();
+							fetchFeedTag(tagName);
+						}
+					}
+				}
+				$("#tag").on("keyup",function()
+				{
+					var content=$(this).text(); //Content Box Data
+					var go= content.match(start); //Content Matching @
+					var name= content.match(word); //Content Matching @abc
+					var dataString = 'searchword='+ name;
+					$("#display").show();
+					if(go.length>0)
+					{
+						$("#display").slideUp('hide');
+						if(name.length>0)
+						{
+							$.ajax({
+								type: "POST",
+								url: "/laravel/public/hash_tag", // Database name search
+								data: dataString,
+								cache: false,
+								success: function(data)
+								{
+									data= JSON.parse(data)
+									var i=0;
+									var name=""	;
+									var tag = new Array();
+									for (;data[i];i++){
+										tag[i]=data[i].tag;
+									}
+									var select = document.getElementById("display");
+									i=0;
+									$("#display").html(" ");
+									for (i=0;i<tag.length;i++)
+									{
+										$("#display").append('<option value = "'+tag[i]+'">'+tag[i]+'</option>');
+									}
+									$("#display").show();
+								}
+							});
+						}
+					}
+				});
+
+				function submit_hash(){
+					if(signed == false)
+					{
+						alert("You need to login first!");
+						window.location = '/BeingCitizen/login.html';
+						return;
+					}
+
+					var tag_list = $("#feed .lbl-tag");
+					var tag =[];
+					for(var i = 0;i<tag_list.length;i++)
+					{
+						var stripChild = tag_list[i];
+						var tag_str = $(stripChild).text();
+						tag_str = tag_str.substring(0, tag_str.length)
+						tag.push(tag_str);
+					}
+					var feed_obj={
+						user_id:uid,//Get the user ID here, from the current session variable or whatever wizardry you prefer
+						tag:tag,
+						content:$("#feed").html().trim(),
+						profile:profile
+					}
+					if(feed_obj.content== "")
+					{
+						alert("You need to write something!");
+						return;
+					}
+
+					$.post("/laravel/public/hashtag_data",
+					feed_obj,
+					function(data){
+						alert('Fed succesfully to our system!');
+					});
+
+					//now clear everything
+					$("#feed").html("");
+					$("#tag").html("");
+
+					//update the bottom
+					location.reload();
+				}
+
+				function fetchFeed()
+				{
+					$("#tweets").html("");
+					$("#tagTweets").fadeOut().hide();
+					$("#back").fadeOut().hide();
+					$.post("/laravel/public/get_posts",
+					function(data){
+						data = JSON.parse(data);
+						data.reverse();
+						for(var i = 0;data[i];i++)
+						{
+							if(data[i].user_name)$("#tweets").append(feedMixer(data[i]));
+						}
+					});
+				}
+
+				function fetchFeedTag(tagName)
+				{
+					$("#tweets").fadeOut().hide();
+					var object={tag:tagName};
+					$.post("/laravel/public/get_postsWithHash",
+					object,
+					function(data){
+						data = JSON.parse(data);
+						data.reverse();
+						for(var i = 0;data[i];i++)
+						{
+							$("#tagTweets").append(feedMixer(data[i]));
+							console.log(data[i]);
+						}
+					});
+					$("#tagTweets").fadeIn().show();
+					$("#back").fadeIn().show();
+				}
+
+				function feedMixer(feedElement)
+				{
+					//has two components, the content and the user id
+					var feedComp = '<div class = "feedElementBox"><div class = "imgBox"><img width="50" /><div class = "hashName"></div></div><div class = "msgMix"><div class = "hashMsg"></div></div></div>';
+					var withContent = feedFiller(feedComp,feedElement);
+					$(withContent).children('.msgMix').children('.hashMsg').children('#tagged').removeAttr('id');
+					$('span.close-tag',withContent).remove();
+					return withContent;
+				}
+
+				function feedFiller(feedComp,content)
+				{
+					var element = $(feedComp);
+					var img = '/BeingCitizen/images/female.gif';
+					if(content.pic_link)img = content.pic_link;
+					element.children(".imgBox").children("img").attr("src",img); //append images
+					element.children(".imgBox").children(".hashName").html('<a href=/BeingCitizen/profile_display.html?user_id='+content.user_id+'>'+content.name+'</a>');
+					element.children(".msgMix").children(".hashMsg").html(content.content);
+					var listOfTags = element.children(".msgMix").children(".hashMsg").children("span").children(".lbl-tag");
+					for(var i = 0;i<listOfTags.length;i++)
+					{
+						//these are the divs
+						var tagIndiv = $(listOfTags[i]).text();
+						$(listOfTags[i]).html(returnURLLoc(tagIndiv));
+					}
+					return element;
+				}
+
+				function returnURLLoc(hashtag)
+				{
+					var string = '<a href="/BeingCitizen/feed.html?tags=true&tagname='+hashtag+'">'+hashtag+'</a>';
+					return string;
+				}
+
+				$("#display").click(function(){
+					$('#display :selected').each(function(){
+						$("#tagged div:contains("+$(this).val()+")").remove();
+						var tagHTML = $("#tagged").html();
+						$("#tagged").html(" ");
+						$("#tagged").append('<div class="lbl-tag" contenteditable=false>'+$(this).val()+'<span class="close-tag"><i class = "fa fa-close"></i></span></div>');
+						$("#tagged").append(tagHTML);
+					});
+				});
+
+				$(document).on('click','.close-tag',function(){
+					console.log($(this));
+					$(this).parent().remove();
+				});
+
+			</script>
+		</body>
+	</html>

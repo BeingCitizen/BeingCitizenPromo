@@ -1,0 +1,148 @@
+/*CSS for login and signup pages*/
+body,html{
+	margin:0;
+	padding:0;
+	color:white;
+}
+body,html *{
+	font-family:'bebas_neue_regularregular';
+	font-size:25px;
+}
+.backdrop{
+	background-image:url('../images/crowd.jpg');
+	height:100%;
+	width:100%;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+/*
+	Borders eliminated
+	.backdrop:before{
+	position:absolute;
+	content:' ';
+	height:94%;
+	width:94%;
+	border:10px solid #E0E0E0;
+	top:2%;
+	left:2%;
+	}
+*/
+.show_people{
+	display:none;
+}
+.circular_login{
+	width:95%;
+	border:2px solid white;
+	margin:1%;
+	padding:1%;
+}
+.circle{
+	border-radius:50%;
+	height:100px;
+	width:100px;
+	background:rgba(216,27,96,0.5);
+	text-align: center;
+	line-height:100px;
+	display:inline-block;
+	cursor:pointer;
+}
+.canopy
+{
+	position:fixed;
+	top:50%;
+	left:50%;
+	transform:translate(-50%,-50%);
+	-webkit-transform:translate(-50%,-50%);
+	-ms-transform:translate(-50%,-50%);
+	background:rgba(189,189,189,0.6);
+	padding:1%;
+}
+.canopy *{
+	text-align: center;
+}
+.canopy form *{
+	color:rgb(38,50,56);
+}
+::-webkit-input-placeholder {
+	color:rgb(38,50,56);
+}
+:-moz-placeholder {
+	color:rgb(38,50,56);
+}
+::-moz-placeholder {
+	color:rgb(38,50,56);
+}
+:-ms-input-placeholder {
+	color:rgb(38,50,56);
+}
+.canopy input[type='text'], input[type='password'], input[type='number'], button{
+	width:100%;
+	margin:1%;
+	padding:1%;
+	background:rgba(189,189,189,0.4);
+	border:2px solid rgb(38,50,56);
+	/*color:rgb(38,50,56);*/
+}
+.canopy button{
+	cursor: pointer;
+}
+.canopy select{
+	width:238.5px;
+	padding: 0px !important;
+	margin:0px !important;
+}
+form{
+	padding:0;
+	margin:0;
+}
+/*Text CSS*/
+.smaller{
+	font-size:20px;
+}
+.small{
+	font-size:30px;
+}
+.big{
+	font-size:80px;
+	font-family:'comfortaaregular';
+}
+.boldify{
+	color:black;
+}
+table *{
+	margin:0 !important;
+}
+.clearfix{
+	clear:both;
+}
+/*For signup table*/
+table{
+	width:100%;
+}
+#state{
+	display:none;
+}
+.rainbow{
+	background: -webkit-gradient(linear,  left top,  left bottom,
+	color-stop(0%, rgba(255, 0, 0, 1)),
+	color-stop(15%, rgba(255, 255, 0, 1)),
+	color-stop(30%, rgba(0, 255, 0, 1)),
+	color-stop(50%, rgba(0, 255, 255, 1)),
+	color-stop(65%, rgba(0, 0, 255, 1)),
+	color-stop(80%, rgba(255, 0, 255, 1)),
+	color-stop(100%, rgba(255, 0, 0, 1)));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.pressed{ color:#78909C !important; }
+.unpressed{ color:#263238 !important; }
+/*Borrowed from profile.css*/
+.tiny-link{
+  text-decoration:none;
+  font-size:16px;
+	color:rgb(236,236,236) !important;
+  font-family:'bebas_neue_regularregular';
+  text-align:center;
+}

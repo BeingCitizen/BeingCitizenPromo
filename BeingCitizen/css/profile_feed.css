@@ -1,0 +1,80 @@
+.lbl-tag{
+  display:inline-block;
+}
+.feedElementBox
+{
+	position:relative;
+	padding:2px;
+	background:#ECEFF1;
+	margin:2px;
+	border-radius:4px;
+  font-style: normal;
+}
+.feedElementBox .imgBox
+{
+	position:relative;
+	display:inline-block;
+  text-align:center;
+	margin-right:3px;
+  text-transform:uppercase;
+  font-size:15px;
+  width:100px;
+}
+.feedElementBox .imgBox img{
+	width:50px;
+}
+.feedElementBox .msgMix:before
+{
+  content:' ';
+  position:absolute;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right:10px solid #3498db;
+  left:-10px;
+}
+.feedElementBox .msgMix
+{
+	/*has message or feed or tweet*/
+	position: relative;
+	display:inline-block;
+	vertical-align:top;
+  padding:6px;
+  margin:2px;
+  background:#3498db;
+  color:white;
+  width:50%;
+}
+.feedElementBox .imgBox .hashName
+{
+	vertical-align:top;
+	font-family:'district_prothin';
+  font-family:13px;
+}
+.feedElementBox .imgBox .hashName a
+{
+	font-weight:bolder;
+	text-decoration:none;
+	color:black;
+}
+.feedElementBox .msgMix .hashMSG
+{
+	vertical-align:top;
+	font-family:'district_prothin';
+	font-size:15px;
+	word-break:break-all;
+  color:white;
+}
+.feedElementBox .msgMix .hashMSG a
+{
+  color:white;
+}
+.feedElementBox .msgMix .hashMSG .lbl-tag
+{
+	background:none;
+	text-decoration:underline;
+	cursor:pointer;
+	margin-right:2px;
+  color:white;
+}

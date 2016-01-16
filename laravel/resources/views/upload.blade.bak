@@ -1,0 +1,17 @@
+﻿<html>
+<head>
+<h2>form</h2>
+<body>
+<h4>Campaign id: {{$id}}</h4>
+{!! Form::open(array('action'=>'HomeController@index', 'files'=>true)) !!}
+	       
+
+      {!! Form::label('image', 'Upload Image')!!}
+	{!! Form::file('image') !!}
+      
+
+	{!! Form::submit('Submit') !!}
+   	{!! Form::close() !!}
+     
+</body>
+</html>

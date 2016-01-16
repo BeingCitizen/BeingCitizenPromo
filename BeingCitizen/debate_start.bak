@@ -1,0 +1,125 @@
+<html>
+	<head>
+		<link href="fonts/stylesheet.css" rel="stylesheet" />
+		<link href = "css/campaign.css" rel = "stylesheet" />
+		<link href = "css/editor.css" rel = "stylesheet" />
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+		<script src="js/jquery.js"></script>
+	</head>
+	<body>
+		<div id="header">
+			<script>
+				$("#header").load('menu.html');
+			</script>
+		</div>
+		<div class = "campaign-fake">
+			<div class = "title title-underline" id ="debate-title" contenteditable="true" placeholder="Enter a title"></div>
+			<br />
+			<!--
+				Campaign category
+			-->
+			<div class = "bottom-space">
+				<i class = "fa fa-sitemap label-text"></i>Choose a category
+				<select id="debate-category">
+					<option value="Defence and Armed Forces">Defence and Armed Forces</option>
+					<option value="Inter-state Trade and Commerce">Inter-state Trade and Commerce</option>
+					<option value="Foreign Affairs">Foreign Affairs</option>
+					<option value="Citizenship">Citizenship</option>
+					<option value="Railways">Railways</option>
+					<option value="National Highways">National Highways</option>
+					<option value="Public Debt of Union">Public Debt of Union</option>
+					<option value="Stock Exchanges and Futures Market">Stock Exchanges and Futures Market</option>
+					<option value="Petroleum">Petroleum</option>
+					<option value="Industries of Public Interest">Industries of Public Interest</option>
+				</select>
+			</div>
+			<!--
+				The editor comes here, now
+			-->
+			<div id="debate-body"></div>
+			<!--
+				Actions for users : follow or volunteer
+			-->
+			<div>
+				<!--
+					Campaign creation section : create button
+				-->
+				<div>
+					<button onclick="send_debate();">Create</button>
+				</div>
+				<div>
+					<i class="fa fa-image"></i>Upload an Image
+					<div class="image_upload">
+						<button onclick="send_img();">Upload<i class = "flaticon-upload124"></i></button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="js/jquery.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+		<script src="js/editor.js"></script>
+		<script>
+			var uid=0;
+			var did = null;
+			$(document).ready(function(){
+
+				$("#debate-body").Editor();
+
+				$("#msgbox").show();
+
+				$("#display").hide();
+
+				var obj={uid:uid};
+
+				$.post('/laravel/public/user_id',
+				function(data){
+					if(data){
+						data=JSON.parse(data);
+						uid=data['user_id'];
+						$('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
+						$("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+uid+'">'+data.name+'</a>');
+						$('#toggle-menu').css("visibility","visible");
+					}
+					else{
+						window.location="login.html";
+					}
+				});
+			});
+
+			function send_debate()
+			{
+
+				if($("#debate-title").text()=="")
+				{
+					alert("Please provide a title for the debate");
+					return;
+				}
+
+				var debate_material = {title:$("#debate-title").text(),
+					categ:$("#debate-category").val(),
+					body:$(".Editor-editor").html(),
+				};
+                        debate_material.title;
+
+				$.post('/laravel/public/set_debates',
+				debate_material,
+				function(data)
+				{
+					data= JSON.parse(data);
+					alert('Debate created successfully! Now you may upload the image');
+					did=data;
+				});
+			}
+
+			function send_img(){
+				if (did != undefined || did != null ) {
+					window.location = '/laravel/public/debate_upload/'+did;
+				}
+				else
+				alert("Begin a debate to upload an image to!");
+			}
+		</script>
+	</body>
+</html>

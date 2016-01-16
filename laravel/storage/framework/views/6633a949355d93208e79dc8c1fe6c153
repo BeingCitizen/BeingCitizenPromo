@@ -1,0 +1,28 @@
+﻿
+<?php $__env->startSection('content'); ?>
+<br/>
+<br/>
+<hr/>
+<h1>WELCOME</h1>
+<hr/>
+<div class='form'>
+<?php echo Form::open(['url' => 'items']); ?>
+
+<br/>
+<br/>
+<?php echo Form::label('username','User name:'); ?>
+
+<?php echo Form::text('username',null,['class' => 'form-control']); ?><br/><br/>
+<?php echo Form::label('password','Password:'); ?>
+
+<?php echo Form::text('password',null,['class' => 'form-control']); ?><br/><br/>
+<?php echo Form::submit(); ?>
+
+<?php echo Form::close(); ?>
+
+</div>
+<p>If not existing user,<a href=signup>SignUp</a><p>
+<a href=about><h3>About us</h3> </a>
+<a href=contact><h3>Contact us</h3> </a>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('app1', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

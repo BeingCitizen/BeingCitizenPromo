@@ -1,0 +1,54 @@
+`<html>
+	<head>
+		<link href = "css/menu.css" rel="stylesheet"/>
+		<link href = "fonts/flaticon.css" rel = "stylesheet" />
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<link href="fonts/stylesheet.css" rel="stylesheet" />
+	</head>
+	<body>
+		<!--Horizontal menubar-->
+		<div class = "horizontal-bar">
+				<div class = "horiz-menu-sub-div put-left">
+					<i class = "fa fa-align-justify fa-lg" id = "toggle-menu" ></i>
+					<div class = "being-citizen-container inline-show-block">
+						<img src = "/BeingCitizen/images/logo-small.png" class="pull-down" />
+						<span class = "being-citizen pull-down">being citizen</span>
+					</div>
+					<div class = "spacer pull-down">&nbsp;</div>
+					<div class = "img-menu inline-show-block put-right">
+						<img id = "user-img" class = "pull-down-spl"/>
+						<div class = "user-menu hidden-box" id = "menu-down">
+							<div>welcome&nbsp;<span id = "user-menu-name"></span></div>
+							<div class = "create-campaign" onclick='window.location="/BeingCitizen/campaign_display.html"'>
+									create&nbsp;campaign<i class = "flaticon-fist"></i>
+							</div>
+							<div>edit&nbsp;profile</div>
+							<div><a href="/BeingCitizen/logout.html">logout</a></div>
+						</div>
+					</div>
+				</div>
+		</div>
+		<!--Vertical menubar-->
+		<div class = "vertical-bar">
+			<div class = "icon-options">
+				<div class = "sentinel">&nbsp;</div>
+				<div class = "name-field">Hello&nbsp;<span id = "user-name"></span></div>
+				<div class = "option-menu"><i class = "flaticon-iris"></i><a href="/BeingCitizen/campaign_list.html">View&nbsp;Campaigns</a></div>
+				<div class = "option-menu" id = "make-invisible"><i class = "flaticon-fist"></i><a href="/BeingCitizen/campaign_start.html">Create&nbsp;Campaigns</a></div>
+				<div class = "option-menu"><i class = "flaticon-megaphone27"></i><a href="/BeingCitizen/debate_list.html">View&nbsp;Debates</a></div>
+				<div class = "option-menu"><i class = "flaticon-user87"></i><a href="/BeingCitizen/feed.html?tags=false&type=none">Compose&nbsp;feed</a></div>
+			</div>
+		</div>
+	</body>
+	<script src="js/jquery.js"></script>
+	<script src="js/jquery-ui.min.js"></script>
+
+	<script>
+		$("#toggle-menu").click(function(){
+			$(".vertical-bar").toggle('slide',{direction:'left'});
+		});
+		$("#user-img").click(function(){
+			$("#menu-down").slideToggle();
+		});
+	</script>
+</html>

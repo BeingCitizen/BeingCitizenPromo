@@ -1,0 +1,31 @@
+.hidden
+{
+   display:none;
+}
+.form-container
+{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  text-align: center;
+}
+.form-container label
+{
+  font-size:x-large;
+}
+.form-container .err
+{
+  font-size:medium;
+  color:red;
+}
+.form-container input{
+  margin:3px;
+  font-size:x-large;
+  font-family:'bebas_neue_regularregular';
+}
+.form-container button
+{
+  font-size:large;
+   font-family:'bebas_neue_regularregular';
+}

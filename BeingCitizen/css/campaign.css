@@ -1,0 +1,305 @@
+/*Stylesheet for campaigns*/
+#overlay-load{
+  position:absolute;
+  z-index:15;
+  height:100%;
+  width:100%;
+  top:0;
+  left:0;
+  background:rgb(33,33,33);
+}
+/*Borrowed from profile.css*/
+body,html{
+  background:rgb(55,71,79) !important;
+}
+.campaign-screen{
+  width:70%;
+  background:rgb(236,239,241);
+  display:inline-block;
+}
+.sidebar{
+  display:inline-block;
+  vertical-align: top;
+  text-align: center;
+  width:27%;
+  overflow-x: scroll;
+}
+.sidebar label{
+  font-size:20px;
+  padding-left:4px;
+  word-break:break-all;
+}
+#sidebar-campaigns .campaign-object{
+  display:block;
+  margin-bottom:14px;
+}
+#sidebar-campaigns .campaign-object .thumbnail{
+  display:inline-block;
+  padding:0px;
+  margin-bottom:0px;
+}
+.campaign-fake{
+  padding:3%;
+  margin:4% 3% 3% 3%;
+  background:rgb(236,239,241);
+}
+#header{
+  position:fixed;
+  width: 100%;
+  top: 0;
+  left:0;
+  z-index:9;
+  height:50px;/*Same as that of menu-bar class*/
+}
+.no-back{
+  background:none !important;
+}
+.no-action{
+  color:rgb(229,57,53);
+}
+.cant-take-action{
+  color:rgb(251,192,45);
+}
+.taken-action{
+  color:rgb(56,142,60);
+}
+/*Native to this file*/
+.label-text{
+  /*This rule is for the glyphicons and the label that follows them*/
+  font-family:'bebas_neuebold';
+  font-size:18px !important; /*Overrides BootStrap files*/
+  margin-right:4px;
+  margin-left:4px;
+}
+.fa{
+  font-size:23px !important;
+}
+.title{
+  font-family:'bebas_neuebold';
+  font-size:60px !important; /*Overrides BootStrap files*/
+}
+.comment-dp{
+  border-radius:50%;
+  width:50px;
+}
+.inline-show{
+  /*Used for the components of the comment*/
+  display: inline-block;
+  position:relative;
+}
+/*For the comments preloader*/
+.comment-body{
+  margin:0.5%;
+  padding:0.5%;
+}
+.comment-overlay{
+  position: absolute;
+  height:100%;
+  width:100%;
+  background:white;
+  z-index:8;
+}
+.comment-modal{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  -webkit-transform:translate(-50%,-50%);
+  -ms-transform:translate(-50%,-50%);
+  z-index:11;
+}
+/*Now for the comments*/
+.btn-panel{
+  display:inline-block; /*A value fixed for now*/
+  position:absolute;
+  right:0px;
+}
+.campaign-comments-arena{
+  position:relative;
+}
+.pressed{ color:#78909C !important; }
+.unpressed{ color:#263238 !important; }
+/*Status of the campaign*/
+.follow-false, .volunteer-false{
+  /*Put a red background gradient*/
+  border:none;
+  padding:3px;
+  background: #b71c1c; /* Old browsers */
+  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2I3MWMxYyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNlZjUzNTAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+  background: -moz-linear-gradient(top, #b71c1c 0%, #ef5350 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b71c1c), color-stop(100%,#ef5350)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #b71c1c 0%,#ef5350 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #b71c1c 0%,#ef5350 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #b71c1c 0%,#ef5350 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #b71c1c 0%,#ef5350 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b71c1c', endColorstr='#ef5350',GradientType=0 ); /* IE6-8 */
+}
+.follow-true, .volunteer-true{
+  /*Put a green background gradient*/
+  padding:3px;
+  background: #00992d; /* Old browsers */
+  border:none;
+  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzAwOTkyZCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM5Y2NjNjUiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+  background: -moz-linear-gradient(top,  #00992d 0%, #9ccc65 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#00992d), color-stop(100%,#9ccc65)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #00992d 0%,#9ccc65 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #00992d 0%,#9ccc65 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #00992d 0%,#9ccc65 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #00992d 0%,#9ccc65 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00992d', endColorstr='#9ccc65',GradientType=0 ); /* IE6-8 */
+}
+.btn-transparent{
+  background:transparent;
+  border:none;
+}
+hr{
+  clear:both;
+  float:none;
+  width:100%;
+  height:1px;
+  margin 1.4em 0;
+  border:none;
+  background:#ddd;
+  background-image: -webkit-gradient(
+    linear,left-bottom,right-bottom,
+    color-stop(0,rgb(255,255,255)),
+    color-stop(0.1,rgb(221,221,221)),
+    color-stop(0.9,rgb(221,221,221)),
+    color-stop(1,rgb(255,255,255))
+  );
+  background-image: -moz-linear-gradient(
+    left center,
+    rgb(255,255,255) 0%,
+    rgb(221,221,221) 10%,
+    rgb(221,221,221) 90%,
+    rgb(255,255,255) 100%
+  );
+}
+/*Fix for contenteditable-title*/
+[contenteditable=true]:empty:before{
+  content: attr(placeholder);
+  display: block; /* For Firefox */
+  cursor:text;
+}
+.v-align{
+  vertical-align: 50%;
+}
+#status-oval{
+  cursor:pointer;
+}
+#status-box-tooltip{
+  text-transform:capitalize;
+  position:absolute;
+  background:#212121;
+  color:white;
+  left:100%;
+  padding:4px;
+  width:150px;
+  text-align: center;
+  top:0px;
+  font-family:'district_prothin';
+}
+.orig-ttip{
+  transform: translateX(40px);
+  -webkit-transform:translateX(40px);
+  -moz-transform:translateX(40px);
+  -o-transform:translateX(40px);
+  transition:all 1s ease-in-out;
+  -webkit-transition:all 1s ease-in-out;
+  -moz-transition:all 1s ease-in-out;
+  -o-transition:all 1s ease-in-out;
+  opacity: 0;
+}
+.new-ttip{
+  transform: translateX(0px);
+  -webkit-transform:translateX(0px);
+  -moz-transform:translateX(0px);
+  -o-transform:translateX(0px);
+  opacity:1;
+}
+.debate-body, .tthelp{
+  position:relative;
+}
+.tthelp{
+  display:inline-block;
+}
+.title-underline{
+  border-bottom:2px solid rgb(55,71,79);
+}
+.bottom-space{
+  margin-bottom:4px;
+  padding-bottom: 0px;
+}
+.inline-band{
+  font-size:17px !important;
+  font-style: normal;
+  text-transform: capitalize;
+  font-family:'district_prothin';
+}
+.inline-band a
+{
+	font-family:'district_prothin';
+	color:#424242;
+	font-style:italic;
+	word-break:break-all;
+  transition:all .1s ease-in-out;
+  -webkit-transition:all .1s ease-in-out;
+  -moz-transition:all .1s ease-in-out;
+  -o-transition:all .1s ease-in-out;
+  text-decoration: none;
+  font-style: normal;
+  font-weight: bold;
+  text-transform: capitalize;
+  cursor:pointer;
+}
+.inline-band>span:nth-child(n+2)::before{
+  content:'|';
+  margin-left:4px;
+  margin-right:4px;
+}
+.inline-band a:hover{
+  color:#757575;
+  font-weight:bolder;
+}
+#campaign-status{
+  vertical-align: middle;
+}
+/*This style is specific to campaign_create.html*/
+.lbl-tag{
+  display:inline-block;
+  color:white;
+  font-weight: bold;
+  background:#c0392b;/*Pomogrenate color*/
+  font-size:12px;
+  margin:1px;
+  padding:2px;
+  border-radius:3px;
+}
+.close-tag{
+  color:white;
+  cursor:pointer;
+  margin-left:3px;
+  height:10px;
+  width:10px;
+  line-height: 10px;
+  font-size:10px;
+  padding:1px;
+  background:#34495e;/*Wet Asphalt*/
+}
+.tiny-link{
+  text-decoration:none;
+  font-size:16px;
+  color:black;
+  font-family:'bebas_neue_regularregular';
+  text-align:center;
+}
+#campaign-image{
+  float:right;
+}
+#switch-status button{
+  color:black;
+  padding:2px;
+  border:none;
+  margin:1px;
+  font-weight:bold;
+}

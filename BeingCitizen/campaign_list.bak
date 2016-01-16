@@ -1,0 +1,277 @@
+<html>
+	<head>
+		<title>Campaigns: Being Citizen.com</title>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+		<script src="js/jquery.js"></script>
+		<!--For the editor's text-->
+		<link href = "css/campaign.css" rel = "stylesheet" />
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<link rel = "stylesheet" href="css/filter.css" />
+	</head>
+	<body>
+		<!--
+			THe menu bar loader
+		-->
+		<div id="header">
+			<script>
+				$("#header").load('menu.html');
+			</script>
+		</div>
+		<!--
+			Main campaign space
+		-->
+		<div class = "campaign-screen">
+			<div class = "debate-body">
+				<!--Left screen-->
+				<div class = "left-side">
+					<div class = "title">Campaigns</div>
+					<div class = "label-text" id = "banner"></div>
+					<div class = "un-accordion">
+					</div>
+					<div class = "accordion accordion-hidden">
+					Nothing to show here!
+					</div>
+				</div>
+				<div class = "right-side">
+					<div class = "label-text">
+						<i class = "fa fa-filter" id = "filter"></i>
+						<i class = "fa fa-close" id = "close"></i>
+						<script>
+							$("#close").hide();
+						</script>
+					</div>
+					<div class = "label-text" id = "filter-list">
+						FILTERS
+						<div class = "option" onclick="sortDate('desc')">
+							<i class = "fa fa-sort-amount-asc" title = "Date (newest to oldest)"></i>
+							<br />
+							Date (newest to oldest)
+						</div>
+						<div class="option" onclick="sortDate('asc')">
+							<i class = "fa fa-sort-amount-desc" title = "Date (oldest to newest)"></i>
+							<br />
+							Date (oldest to newest)
+						</div>
+						<div class = "option" onclick="sortCategoriesWrapper()">
+							<i class = "fa fa-sitemap" title = "Categories"></i>
+							<br />
+							Categories
+						</div>
+						<div class = "option" onclick="sortConstituencyWrapper()">
+							<i class = "fa fa-map-marker" title = "Constituencies"></i>
+							<br />
+							Constituencies
+						</div>
+						<div class = "option" onclick="sortTagWrapper()">
+							<i class = "fa fa-tags" title = "Tags"></i>
+							<br />
+							Tags
+						</div>
+					</div>
+					<script>
+						$("#filter-list").hide();
+					</script>
+				</div>
+			</div>
+		</div>
+		<script>
+			//Append entries to the accordion
+			var uid = 0;
+			var array = [];
+			var obj={uid:uid};
+			$(document).ready(function(){
+				
+				$.post('/laravel/public/user_id',
+				function(data){
+					if(data){
+						data=JSON.parse(data);
+						uid=data['user_id'];
+						$('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
+						$("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+uid+'">'+data.name+'</a>');
+						$('#toggle-menu').css("visibility","visible");
+					}
+				});	
+				
+				//Campaigns on the basis of dates
+				$.post('/laravel/public/campaigns_dateSorted',obj,function(data){
+					//the data here shall be displayed onto the screen
+					data= JSON.parse(data);
+					for(var i = 0;i<data.length;i++){
+						$(".un-accordion").append(returnLink(data[i]));
+					}
+					$("#banner").html("Sorted by date - Newest to Oldest");
+					$(".accordion").hide().fadeOut();
+					$(".un-accordion").show().fadeIn();					
+				});
+				
+			});
+			
+			function sortDate(order)
+			{
+				$(".accordion").remove();
+				$.post('/laravel/public/campaigns_dateSorted',obj,function(data){
+					//the data here shall be displayed onto the screen
+					data= JSON.parse(data);
+					$(".un-accordion").html("");
+					if(order == "asc")
+					data.reverse();
+					for(var i = 0;i<data.length;i++){
+						$(".un-accordion").append(returnLink(data[i]));
+					}
+					if(order == "asc") $("#banner").html("Sorted by date - Oldest to Newest");
+					else $("#banner").html("Sorted by date - Newest to Oldest");
+					$(".un-accordion").show().fadeIn();
+				});
+			}
+			function class_action(status){
+				if(status==1)return "no-action";
+				if(status==2)return "cant-take-action";
+				if(status==3)return "taken-action";
+			}
+			
+			function returnLink(campaign_info)
+			{
+				if(!campaign_info.image)
+				campaign_info.image = '/public/uploads/null/null.jpg';
+				var string = '<div class="campaign-object">';
+				string += '<img src = "/laravel'+campaign_info.image+'" class="thumbnail"/><br />';
+				string += '<a href="campaign_display.html?campaign_id='+campaign_info.campaign_id+'" class="'+class_action(campaign_info.status)+'">'+campaign_info.name+'</a>';
+				string += '</div>';
+				return string;
+			}
+			
+			function sortCategoriesWrapper()
+			{
+				$(".accordion").remove();
+				$(".left-side").append('<div class = "accordion accordion-hidden"></div>');
+				$("#banner").html("Sorted by categories");
+				$.post('/laravel/public/campaigns',
+				function(data){
+					data= JSON.parse(data);
+					for(var i= 0;data[i];i++)
+					{
+						sortCategories(data[i]['category']);
+					}
+				});
+				$(".un-accordion").hide().fadeOut();
+				$(".accordion").show().fadeIn();
+			}
+			
+			
+			function sortCategories(string){
+				var size;
+				var object = {category:string};
+				$.post('/laravel/public/get_campaignCategory',object,function(data){
+					data= JSON.parse(data);
+					size = data.length;
+					var categoryName = string;
+					$(".accordion").append(divstring(categoryName,size));
+					var categoryNameAttr = categoryName.split(' ').join('-');
+					if(data)$("#"+categoryNameAttr+size).html("");
+					for(var j = 0;data[j];j++)
+					{
+						$("#"+categoryNameAttr+size).append(returnLink(data[j]));
+					}
+				});
+			}
+			
+			function divstring(category,numbers)
+			{
+				categoryAttr = category.split(' ').join('-');
+				var queryj = categoryAttr+numbers;
+				var string = '<div class = "accordion-title title title-smaller" data="'+ queryj +'"><i class = "fa fa-angle-double-right"></i>'+category+' <span class="label-text sticky-right">'+numbers+' campaigns </span></div>';
+				string += '<div class = "accordion-content hidden label-text" id="'+queryj+'"><i>No campaigns in this category !</i></div>';
+				return string;
+			}
+			
+			function sortConstituencyWrapper()
+			{
+				$(".accordion").remove();
+				$(".left-side").append('<div class = "accordion accordion-hidden"></div>');
+				$("#banner").html("Sorted by Constituencies");
+				$.post('/laravel/public/campaigns_constituencies',
+				function(data){
+					data= JSON.parse(data);
+					for(var i= 0;data[i];i++)
+					{
+						sortConstituency(data[i].constituency);
+					}
+				});
+				$(".un-accordion").hide().fadeOut();
+				$(".accordion").show().fadeIn();
+			}
+			
+			function sortConstituency(string){
+				var size;
+				var object = {constituency:string};
+				$.post('/laravel/public/get_campaignConstituency',object,function(data){
+					data= JSON.parse(data);
+					size = data.length;
+					constName = string;
+					$(".accordion").append(divstring(constName,size));
+					var constNameAttr = constName.split(' ').join('-');
+					if(data)$("#"+constNameAttr+size).html("");
+					for(var j = 0;data[j];j++)
+					{
+						$("#"+constNameAttr+size).append(returnLink(data[j]));//campaigns with specified Category
+					}
+				});
+			}
+			
+			function sortTagWrapper()
+			{
+				$(".accordion").remove();
+				$(".left-side").append('<div class = "accordion accordion-hidden"></div>');
+				$("#banner").html("Sorted by Department tagged");
+				$.post('/laravel/public/campaigns_tags',
+				function(data){
+					data= JSON.parse(data);
+					for(var i= 0;data[i];i++)
+					{
+						sortTag(data[i]['department']); //all the tags
+					}
+				});
+				$(".un-accordion").hide().fadeOut();
+				$(".accordion").show().fadeIn();
+			}
+			
+			function sortTag(string){
+				var size;
+				var object = {tag:string};
+				$.post('/laravel/public/get_campaignTag',object,function(data){
+					data= JSON.parse(data);
+					size = data.length;
+					tagName = string;
+					$(".accordion").append(divstring(tagName,size));
+					var tagNameAttr = tagName.split(' ').join('-');
+					if(data)$("#"+tagNameAttr+size).html("");
+					for(var j = 0;data[j];j++)
+					{
+						$("#"+tagNameAttr+size).append(returnLink(data[j]));//campaigns with specified Category
+					}
+				});
+			}
+			
+			$(document).on('click','.accordion-title',function(){
+				var child = $(this).attr("data");
+				child = "#"+child;
+				$(child).slideToggle();
+				console.log(this);
+			});
+			
+			$("#filter").click(function(){
+				$(this).hide();
+				$("#close").fadeIn();
+				$("#filter-list").slideDown();
+			});
+			
+			$("#close").click(function(){
+				$(this).hide();
+				$("#filter").fadeIn();
+				$("#filter-list").slideUp();
+			});
+			
+			
+		</script>
+	</body>
+</html>

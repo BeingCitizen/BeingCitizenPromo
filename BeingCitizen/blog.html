@@ -1,0 +1,106 @@
+<html>
+	<head>
+		<link href="fonts/stylesheet.css" rel="stylesheet" />
+		<link href = "css/campaign.css" rel = "stylesheet" />
+		<link href = "css/editor.css" rel = "stylesheet" />
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+		<script src="js/jquery.js"></script>
+	</head>
+	<body>
+		<div id="header">
+			<script>
+				$("#header").load('menu.html');
+			</script>
+		</div>
+		<div class = "campaign-fake">
+			<div class = "title title-underline" id ="blog-title" contenteditable="true" placeholder="Enter a title"></div>
+			<br />
+			<!--
+				Campaign category
+			-->
+		<!--
+				The editor comes here, now
+			-->
+			<div id="debate-body"></div>
+			<!--
+				Actions for users : follow or volunteer
+			-->
+			<div>
+				<!--
+					Campaign creation section : create button
+				-->
+				<div>
+					<button onclick="send_debate();">Create</button>
+				</div>
+				<div>
+					<i class="fa fa-image"></i>Upload an Image
+					<div class="image_upload">
+						<button onclick="send_img();">Upload<i class = "flaticon-upload124"></i></button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="js/jquery.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+		<script src="js/editor.js"></script>
+		<script>
+			var uid=0;
+			var did = null;
+			$(document).ready(function(){
+
+				$("#debate-body").Editor();
+
+				var obj={uid:uid};
+
+				$.post('/laravel/public/user_id',
+				function(data){
+					if(data){
+						data=JSON.parse(data);
+						uid=data['user_id'];
+						$('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
+						$("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+uid+'">'+data.name+'</a>');
+						$('#toggle-menu').css("visibility","visible");
+					}
+					else{
+						window.location="login.html";
+					}
+				});
+			});
+
+			function send_debate()
+			{
+
+				if($("#blog-title").text()=="")
+				{
+					alert("Please provide a title for the debate");
+					return;
+				}
+
+				var blog_material = {title:$("#blog-title").text(),
+					body:$(".Editor-editor").html(),
+					uid:uid,
+				};
+
+
+				$.post('/laravel/public/set_blogs',
+				blog_material,
+				function(data)
+				{
+					data= JSON.parse(data);
+					alert('Blog created successfully! Now you may upload the image');
+					did=data;
+				});
+			}
+
+			function send_img(){
+				if (did != undefined || did != null ) {
+					window.location = '/laravel/public/blog_upload/'+did;
+				}
+				else
+				alert("Begin a blog to upload an image to!");
+			}
+		</script>
+	</body>
+</html>
