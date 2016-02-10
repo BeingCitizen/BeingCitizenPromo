@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 10, 2016 at 04:03 AM
+-- Generation Time: Feb 10, 2016 at 09:20 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -968,7 +968,10 @@ CREATE TABLE IF NOT EXISTS `poll_count` (
 INSERT INTO `poll_count` (`poll_id`, `yes_count`, `no_count`, `other_count`) VALUES
 (1, 0, 0, 0),
 (2, 0, 0, 0),
-(3, 0, 0, 0);
+(3, 0, 0, 0),
+(4, 0, 0, 0),
+(6, 0, 0, 0),
+(8, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -981,7 +984,7 @@ CREATE TABLE IF NOT EXISTS `poll_details` (
   `poll_title` varchar(200) NOT NULL,
   `poll_description` text,
   PRIMARY KEY (`poll_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `poll_details`
@@ -990,7 +993,10 @@ CREATE TABLE IF NOT EXISTS `poll_details` (
 INSERT INTO `poll_details` (`poll_id`, `poll_title`, `poll_description`) VALUES
 (1, 'trial', 'this is first poll'),
 (2, 'test', 'second poll'),
-(3, 'third', 'third');
+(3, 'third', 'third'),
+(4, 'third1', ''),
+(6, 'check final', 'checking you again'),
+(8, 'checking delete', '');
 
 -- --------------------------------------------------------
 
@@ -1139,6 +1145,20 @@ CREATE TABLE IF NOT EXISTS `user_follow` (
 
 INSERT INTO `user_follow` (`user_id`, `follow_id`) VALUES
 (1, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_pollrecord`
+--
+
+CREATE TABLE IF NOT EXISTS `user_pollrecord` (
+  `user_id` bigint(200) unsigned NOT NULL,
+  `poll_id` bigint(200) unsigned NOT NULL,
+  `choice` varchar(20) NOT NULL,
+  `poll_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`user_id`,`poll_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

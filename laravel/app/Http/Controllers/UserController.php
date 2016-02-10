@@ -296,12 +296,34 @@ class UserController extends Controller {
 
 
       }
+      public function poll_vote(){
+        $poll=Input::all();
+        $uid=$poll['uid'];
+        $poll_id=$poll['poll_id'];
+        $choice=$poll['vote'];
+        DB::table('user_pollRecord')->insert(['poll_id'=>$poll_id, 'user_id'=>$uid, 'choice'=>$choice]);
+      //  if($choice=='yes')
+        //  DB::table('poll_count')->(['poll_id'=>$id]);
+      }
       public function create_poll(){
         $poll=Input::all();
         $title=$poll['title'];
         $descript=$poll['description'];
         $id=DB::table('poll_details')->insertGetId(['poll_title'=>$title, 'poll_description'=>$descript]);
         DB::table('poll_count')->insert(['poll_id'=>$id]);
+      }
+       public function show_poll(){
+        $data=DB::table('poll_details')->leftJoin('poll_count','poll_count.poll_id','=','poll_details.poll_id')->get();
+        if(!empty($data))
+           print_r(json_encode($data));
+      }
+       public function delete_poll(){
+        $poll=Input::all();
+        $id=$poll['poll_id'];
+       // $id=DB::table('poll_details')->where(['poll_title'=>$title])->select('poll_id');
+        DB::table('poll_count')->where(['poll_id'=>$id])->delete();
+        DB::table('poll_details')->where(['poll_id'=>$id])->delete();
+        DB::table('user_pollRecord')->where(['poll_id'=>$id])->delete();
       }
 
                   

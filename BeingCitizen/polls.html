@@ -72,6 +72,7 @@
 			        uid=data['user_id'];
 			        console.log(data);
 			        $("#overlay-load").hide();
+			        show_poll();
      			}
 				else{
 					window.location="adminlogin.html";
@@ -100,7 +101,24 @@
 			$.post('/laravel/public/create-poll',obj,function(data){
 				$("#posting").hide();
 				alert('your poll posted');
+				delete_poll(7);//hard coded for now
 				window.location.reload();
+			});//This ajax posts it to the table
+		}
+		function delete_poll(id)
+		{
+			var obj = {
+				poll_id:id//id of poll to be deleted
+			};
+			$.post('/laravel/public/delete-poll',obj,function(data){
+				
+				window.location.reload();
+			});//This ajax posts it to the table
+		}
+		function show_poll()
+		{
+			$.post('/laravel/public/show-poll',function(data){
+			     console.log(data); 
 			});//This ajax posts it to the table
 		}
 		</script>
