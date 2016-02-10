@@ -1,155 +1,160 @@
 <html>
-	<head>
-		<link href="css/profile.css" rel="stylesheet" />
-		<link href="fonts/stylesheet.css" rel="stylesheet" />
-		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-		<link href = "css/profile_feed.css" rel = "stylesheet" />
-		<script src="js/jquery.js"></script>
-		<link href = "css/polls.css" rel ="stylesheet" />
-		<link href = "css/bootstrap.min.css" rel="stylsheet" />
-		<script src = "js/Chart.min.js"></script>
-		<style>
-			#overlay-load{
-			position:absolute;
-			z-index:100;
-			height:100%;
-			width:100%;
-			top:0;
-			left:0;
-			background:rgb(33,33,33);
-			}
-		</style>
-	</head>
-	<body>
-		<div class = "overlay-load" id ="overlay-load">
-		</div>
-		<div id="header">
-			<script>
-				$("#header").load('menu.html');
-			</script>
-		</div>
-		<!--div id = "overlay-load">
-		</div-->
-		<div class = "backdrop">
-			<div class = "profile-screen">
-				<!--
-					Contains the entire profile here
-				-->
-				<span class = "title">polls</span>
-				<br style="clear:both" />
-				<hr />
-				<div id = "poll-arena">
-				</div>
-			</div>
-		</div>
-
-		<script src="js/d3.min.js"></script>
-		<script src="js/jquery.nicescroll.js"></script>
+<head>
+	<link href="css/profile.css" rel="stylesheet" />
+	<link href="fonts/stylesheet.css" rel="stylesheet" />
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<link href = "css/profile_feed.css" rel = "stylesheet" />
+	<script src="js/jquery.js"></script>
+	<link href = "css/polls.css" rel ="stylesheet" />
+	<link href = "css/bootstrap.min.css" rel="stylsheet" />
+	<script src = "js/Chart.min.js"></script>
+	<style>
+	#overlay-load{
+		position:absolute;
+		z-index:100;
+		height:100%;
+		width:100%;
+		top:0;
+		left:0;
+		background:rgb(33,33,33);
+	}
+	</style>
+</head>
+<body>
+	<div class = "overlay-load" id ="overlay-load">
+	</div>
+	<div id="header">
 		<script>
-		var uid=0;
-		$(document).ready(function(){
-			var obj={uid:uid};
-      $.post('/laravel/public/user_id',obj,
-      function(data){
-        if(data){
-          data=JSON.parse(data);
-          uid=data['user_id'];
-          thisName = data.name;
-          thisID = data.user_id;
-          $("#user-img").attr("src",data.pic_link);
-          $("#polls-admin").remove();
-          $('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
-          $("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
-          $("#user-menu-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
-          $("#overlay-load").hide();
-          show_poll();
-        }
-        else{
-          window.location="/BeingCitizen/login.html";
-        }
-      });
-		});
-		function show_poll()
-		{
-			$.post('/laravel/public/show-poll',function(data){
-			     data = JSON.parse(data);
-					 var i = 0;
-					 for(;data[i];i++)
-					 {
-						 var pollDisplay = pollDresser(data[i]);
-						 $("#poll-arena").append(pollDisplay);
-						 makePieChart(data[i]);
-					 }
-			});
-			vote(3,'No');//checking vote
-		}
-
-		function pollDresser(data)
-		{
-			var pollString = '<div class = "poll-box" id = "poll'+data.poll_id+'" data-id="'+data.poll_id+'">';
-			pollString += '<div class = "poll-third text">'+dataBlock(data.poll_title,data.poll_description)+'</div>';
-			pollString += '<div class = "poll-third pie-chart"><canvas height="100" width="120" id="chart'+data.poll_id+'"></div>';
-			pollString += '<div class = "poll-third btn-panel">';
-        pollString += '<button class = "button btn-clear btn-yes">Yes</button><br />';
-        pollString += '<button class = "button btn-clear btn-no">No</button><br />';
-        pollString += '<button class = "button btn-clear btn-csay">Can\'t Say</button>';
-      pollString += '</div>';
-			pollString += '</div>';
-			return pollString;
-		}
-
-
-		function makePieChart(data)
-		{
-			id = data.poll_id;
-			console.log(data);
-			var data = [
-        {
-            value: data.no_count,
-            color:"#E53935",
-            highlight: "#E57373",
-            label: "No"
-        },
-        {
-            value: data.yes_count,
-            color: "#388E3C",
-            highlight: "#66BB6A",
-            label: "Yes"
-        },
-        {
-            value: data.other_count,
-            color: "#EF6C00",
-            highlight: "#FFD180",
-            label: "Can't Say"
-        }
-			]
-			var ctx = document.getElementById("chart"+id).getContext("2d");
-			var myPieChart = new Chart(ctx).Pie(data);
-		}
-
-		function dataBlock(title, desc)
-		{
-			var textString = '<div class = "poll-text">';
-			textString += '<span class = " bebas poll-title">'+title+'</span>';
-			textString += '<hr />';
-			if(desc.trim()=="")
-			{
-				textString += '<span class = "district poll-desc">No description</span>';
-			}
-			else {
-				textString += '<span class = "district poll-desc">'+desc+'</span>';
-			}
-			textString += '</div>';
-			return textString;
-		}
-		function vote(poll_id,choice){
-			var obj={user_id:uid, poll_id:poll_id,
-			            choice:choice};
-			 $.post('/laravel/public/poll-vote',obj,
-             function(data){
-                if(data){
-
-                }
-            });
-		}
+		$("#header").load('menu.html');
 		</script>
+	</div>
+	<!--div id = "overlay-load">
+</div-->
+<div class = "backdrop">
+	<div class = "profile-screen">
+		<!--
+		Contains the entire profile here
+	-->
+	<span class = "title">polls</span>
+	<br style="clear:both" />
+	<hr />
+	<div id = "poll-arena">
+	</div>
+</div>
+</div>
+
+<script src="js/d3.min.js"></script>
+<script src="js/jquery.nicescroll.js"></script>
+<script>
+var uid=0;
+$(document).ready(function(){
+	var obj={uid:uid};
+	$.post('/laravel/public/user_id',obj,
+	function(data){
+		if(data){
+			data=JSON.parse(data);
+			uid=data['user_id'];
+			thisName = data.name;
+			thisID = data.user_id;
+			$("#user-img").attr("src",data.pic_link);
+			$("#polls-admin").remove();
+			$('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
+			$("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
+			$("#user-menu-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
+			$("#overlay-load").hide();
+			show_poll();
+		}
+		else{
+			window.location="/BeingCitizen/login.html";
+		}
+	});
+});
+function show_poll()
+{
+	$.post('/laravel/public/show-poll',function(data){
+		data = JSON.parse(data);
+		var i = 0;
+		for(;data[i];i++)
+		{
+			var pollDisplay = pollDresser(data[i]);
+			$("#poll-arena").append(pollDisplay);
+			makePieChart(data[i]);
+		}
+	});
+	vote(3,'No');//checking vote
+}
+
+function pollDresser(data)
+{
+	var pollString = '<div class = "poll-box" id = "poll'+data.poll_id+'" data-id="'+data.poll_id+'">';
+	pollString += '<div class = "poll-third text">'+dataBlock(data.poll_title,data.poll_description)+'</div>';
+	pollString += '<div class = "poll-third pie-chart"><canvas height="100" width="120" id="chart'+data.poll_id+'"></div>';
+	pollString += '<div class = "poll-third btn-panel">';
+	pollString += '<button class = "button btn-clear btn-yes">Yes</button><br />';
+	pollString += '<button class = "button btn-clear btn-no">No</button><br />';
+	pollString += '<button class = "button btn-clear btn-csay">Can\'t Say</button>';
+	pollString += '</div>';
+	pollString += '</div>';
+	return pollString;
+}
+
+
+function makePieChart(data)
+{
+	id = data.poll_id;
+	console.log(data);
+	var data = [
+		{
+			value: data.no_count,
+			color:"#E53935",
+			highlight: "#E57373",
+			label: "No"
+		},
+		{
+			value: data.yes_count,
+			color: "#388E3C",
+			highlight: "#66BB6A",
+			label: "Yes"
+		},
+		{
+			value: data.other_count,
+			color: "#EF6C00",
+			highlight: "#FFD180",
+			label: "Can't Say"
+		}
+	]
+	var ctx = document.getElementById("chart"+id).getContext("2d");
+	var myPieChart = new Chart(ctx).Pie(data);
+}
+
+function dataBlock(title, desc)
+{
+	var textString = '<div class = "poll-text">';
+	textString += '<span class = " bebas poll-title">'+title+'</span>';
+	textString += '<hr />';
+	if(desc.trim()=="")
+	{
+		textString += '<span class = "district poll-desc">No description</span>';
+	}
+	else {
+		textString += '<span class = "district poll-desc">'+desc+'</span>';
+	}
+	textString += '</div>';
+	return textString;
+}
+
+function vote(poll_id,choice){
+	var obj={
+		user_id:uid,
+		poll_id:poll_id,
+		choice:choice
+	};
+		$.post('/laravel/public/poll-vote',obj,
+		function(data){
+			if(data){
+
+			}
+		});
+	}
+
+	</script>

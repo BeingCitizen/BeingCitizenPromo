@@ -40,7 +40,7 @@
 					<textarea class="full-width" id = "poll-description" placeholder="Enter the Poll Description"></textarea>
 					<br />
 					<span class = "hidden bebas" id = "posting">Posting..</span>
-					<button onclick="submit_poll()" class="button green">Submit</button>
+					<button onclick="submit_poll()" class="button green" id = "btn-submit">Submit</button>
 				</form>
 			</div>
 		</div>
@@ -85,8 +85,18 @@
 		function showModal()
 		{
 			$("#overlay-create").show();
+			$("#btn-submit").attr("onclick","submit_poll()");
 		}
 		function hideModal()
+		{
+			$("#overlay-create").hide();
+		}
+		function showModalEdit(id)
+		{
+			$("#overlay-create").show();
+			$("#btn-submit").attr("onclick","update_poll("+id+")");
+		}
+		function hideModalEdit()
 		{
 			$("#overlay-create").hide();
 		}
@@ -114,8 +124,32 @@
 			$.post('/laravel/public/delete-poll',obj,function(data){
 				window.location.reload();
 			});
-			edit_poll(3,'edited third','checking you again');//checking edit
 		}
+
+		function edit_poll(id)
+		{
+			showModalEdit(id);
+			var title = $("#poll"+id+" .text .poll-title").text();
+			var desc = $("#poll"+id+" .text .poll-desc").text();
+			$("#poll-title").val(title);
+			$("#poll-description").val(desc);
+			$("#btn-submit").attr("onclick","update_poll("+id+")");
+		}
+
+		function update_poll(id)
+		{
+			var obj={
+				poll_id:id,
+				title:$("#poll-title").val(),
+				description:$("#poll-description").val(),
+				};
+			$.post('/laravel/public/edit-poll', obj, function(data){
+			     window.location.reload();
+			});
+			window.location.reload();
+			hideModalEdit();
+		}
+
 		function show_poll()
 		{
 			$.post('/laravel/public/show-poll',function(data){
@@ -129,21 +163,13 @@
 					 }
 			});
 		}
-		function edit_poll(id,new_title,new_description)
-		{
-			var obj={poll_id:id,title:new_title,description:new_description};
-			$.post('/laravel/public/edit-poll', obj, function(data){
-			     //data = JSON.parse(data);
-				// window.location.reload();	
-			});
-		}
 
 		function pollDresser(data)
 		{
 			var pollString = '<div class = "poll-box" id = "poll'+data.poll_id+'" data-id="'+data.poll_id+'">';
 			pollString += '<div class = "poll-third text">'+dataBlock(data.poll_title,data.poll_description)+'</div>';
 			pollString += '<div class = "poll-third pie-chart"><canvas height="100" width="120" id="chart'+data.poll_id+'"></div>';
-			pollString += '<div class = "poll-third btn-panel"><i class = "fa fa-pencil fa-lg edit"></i><i class="fa fa-times fa-lg" onclick="delete_poll('+data.poll_id+')"></i></div>';
+			pollString += '<div class = "poll-third btn-panel"><i class = "fa fa-pencil fa-lg edit" onclick="edit_poll('+data.poll_id+')"></i><i class="fa fa-times fa-lg" onclick="delete_poll('+data.poll_id+')"></i></div>';
 			pollString += '</div>';
 			return pollString;
 		}

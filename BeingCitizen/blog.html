@@ -60,10 +60,11 @@
 						data=JSON.parse(data);
 						uid=data['user_id'];
 						$("#polls-visible").remove();
-						$('#toggle-menu').css("visibility","visible");
+						$('#user-name').html('<a href="/BeingCitizen/dashboard.html">Admin</a>');
+						$("#overlay-load").hide();
 					}
 					else{
-						//window.location="adminlogin.html";
+						window.location="adminlogin.html";
 					}
 				});
 			});
