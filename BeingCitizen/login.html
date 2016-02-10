@@ -38,7 +38,6 @@
 				$.post('/laravel/public/login',
 				user_info,
 				function(data){
-				console.log(data);
 					data = JSON.parse(data);
 					if(data){
 						window.location='/BeingCitizen/profile_display.html?user_id='+data['user_id'];

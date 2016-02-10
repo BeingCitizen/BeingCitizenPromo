@@ -10,6 +10,7 @@
 				<div class="big">Being Citizen</div>
 				<div class="small">Democracy, the way you like it</div>
 				<form onsubmit="return false;" id="login_form" type="POST">
+					<label class = "hidden err">Oops! Seems like the credentials don't match!</label>
 					<input type="text" placeholder="Username" id="username" required/><br />
 					<input type="password" placeholder="Password" id="password" required/><br />
 					<button onclick="user_submit()">Log Me In</button>
@@ -33,9 +34,10 @@
 				function(data){
 					data = JSON.parse(data);
 					if(data){
-						window.location='/BeingCitizen/profile_mla.html?constituency='+data['constituency'];
+						window.location='/BeingCitizen/profile_mla.html?constituency='+data['user_id'];
 					}
 					else{
+						$(".err").show();
 						window.location.reload();
 					}
 				}

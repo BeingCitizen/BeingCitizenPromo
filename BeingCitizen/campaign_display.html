@@ -175,7 +175,6 @@
 						$(".create-campaign").remove();
 						$("#make-invisible").remove();
 						data=JSON.parse(data);
-						console.log(data);
 						uid=data['user_id'];
 						$('#profile-page').attr('href','/BeingCitizen/profile_mla.html?profile_id='+uid);
 						$("#user-name").html('<a href="/BeingCitizen/profile_mla.html?profile_id='+uid+'">'+data.name+'</a>');
@@ -183,7 +182,7 @@
 						signed  = true;
 						profile = "mla";
 						campaign();
-						
+
 					}
 					else{
 						$("#switch-status").remove();
@@ -238,9 +237,6 @@
 				/*
 					This section fills the appropriate data
 					in their respective blocks
-				*/
-
-				/*
 				*/
 				$("#campaign-title").html(data.name);
 				$("#campaign-category").html(returnCategLink(data.category));
@@ -344,7 +340,6 @@
 				*/
 				populateMLAComments();
 				populateComments();
-				set_status(2);//just for checking
 			}
 		});
 	}
@@ -352,12 +347,11 @@
 	function set_status(value)
 	{
 		var obj = {status:value, campaign_id:campaign_id};
-		console.log(obj);
 		$.post('/laravel/public/status',obj,function(data){
-			alert("Status changed successfully");
-
+			location.reload();
 		})
 	}
+
 	function sortConstituency(string){
 		/*
 		Shows campaigns based on the current constituencies

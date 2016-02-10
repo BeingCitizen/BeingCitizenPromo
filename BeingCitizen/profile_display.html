@@ -100,7 +100,7 @@
 		</div>
 
 		<script src="js/d3.min.js"></script>
-
+		<script src="js/jquery.nicescroll.js"></script>
 		<script type="text/javascript">
 			var uid =0 ;
 
@@ -117,6 +117,9 @@
 			var showName = '';//refers to the display name of the user being viewed
 
 			$(document).ready(function(){
+
+				$(".scrollable-camp").niceScroll();
+
 				//$(".scrollable-camp").mCustomScrollbar({'setWidth':'80%','setHeight':'40%'});
 				var obj={uid:uid};
 				$.post('/laravel/public/user_id',obj,

@@ -61,6 +61,8 @@ hr{
   font-family:'aaarghnormal';
   font-size:15px;
   padding:1px;
+  border-radius:4px;
+  border:1px solid #DDDDDD;
 }
 .tag-master{
   width:100%;

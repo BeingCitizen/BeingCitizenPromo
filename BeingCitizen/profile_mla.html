@@ -14,7 +14,6 @@
 			top:0;
 			left:0;
 			background:rgb(33,33,33);
-			display:none;
 			}
 		</style>
 	</head>
@@ -38,18 +37,18 @@
 							<div class="profile-pic">
 								<img id = "profile-img" width = "300px"/><!--Profile Image loads here-->
 							</div>
-							<div class = "one-half district">
-									Name: <span id = "mla-name">NIL</span><br />
-									Profession : <span id = "mla-profession">NIL</span><br/>
-									Assets : <span id = "mla-assets">NIL</span><br />
-									Constituency : <span id = "mla-constituency">NIL</span><br />
-									Criminal Cases : <span id = "mla-criminal_cases">NIL</span><br />
-									Education : <span id = "mla-education">NIL</span><br />
-									Household Income : <span id = "mla-household_income">NIL</span><br />
-									Liabilities : <span id = "mla-liabilties">NIL</span><br />
-									Localities : <span id = "mla-localities">NIL</span><br />
+							<div class = "one-half district factsheet">
+								<div><div class = "fact-key">Name</div> <div class = "fact-data" id = "mla-name">NIL</div></div>
+								<div><div class = "fact-key">Profession</div><div class = "fact-data" id = "mla-profession">NIL</div></div>
+								<div><div class = "fact-key">Assets</div><div class = "fact-data" id = "mla-assets">NIL</div></div>
+								<div><div class = "fact-key">Constituency</div><div class = "fact-data" id = "mla-constituency">NIL</div></div>
+								<div><div class = "fact-key">Criminal Cases</div><div class = "fact-data" id = "mla-criminal_cases">NIL</div></div>
+								<div><div class = "fact-key">Education</div><div class = "fact-data" id = "mla-education">NIL</div></div>
+								<div><div class = "fact-key">Household Income</div><div class = "fact-data" id = "mla-household_income">NIL</div></div>
+								<div><div class = "fact-key">Liabilities</div><div class = "fact-data" id = "mla-liabilties">NIL</div></div>
+								<div><div class = "fact-key">Localities</div><div class = "fact-data" id = "mla-localities">NIL</div></div>
 							</div>
-							<div class = "one-half">
+							<div class = "one-half vertical-mid">
 							<!--Insert SVG here-->
 							<!--Start of SVG-->
 
@@ -911,6 +910,7 @@
 								<text xmlns="http://www.w3.org/2000/svg" class="tooltip_text" id="tooltip_text" x="303" y="68" visibility="hidden">Right box</text>
 							</g>
 							</svg>
+							<div id = "const-name-box"></div>
 						</div>
 							<!--End of SVG-->
 							<!--Rest of the user information loads here-->
@@ -934,7 +934,9 @@
 						<div class ="small contains-banner">
 							<div class = "bebas heading">Campaigns in <span id = "conti-name-here"></span></div>
 						</div>
-						<div id="campaign-of-cons" class = "scrollable-camp"></div>
+						<div id="campaign-of-cons" class = "scrollable-camp">
+
+						</div>
 					</div>
 
 					<hr />
@@ -964,7 +966,7 @@
 		</div>
 
 		<script src="js/d3.min.js"></script>
-
+		<script src="js/jquery.nicescroll.js"></script>
 		<script type="text/javascript">
 			var uid =0 ;
 
@@ -974,19 +976,19 @@
 			//Loader variables end
 
 			var user_id=location.search.substring("1").split("=")[1]; //user whose profile we are visiting
-			console.log(user_id);
 			var thisName = '';
 			var thisID=1;
 			var display_pic=null;
 			var showName = '';//refers to the display name of the user being viewed
 
 			$(document).ready(function(){
+				$(".scrollable-camp").niceScroll();
+				$(".fact-data").niceScroll();
 				var obj={uid:uid};
 				//if mla
 				$.post('/laravel/public/user_id_mla',obj,
 				function(data){
 					if(data){
-						console.log(data);
 						data=JSON.parse(data);
 						uid=data['user_id'];
 						thisName = data.name;
@@ -1005,9 +1007,12 @@
 
 					$("#"+(consti.split(' ').join('-'))).attr("fill","rgb(255,152,0)");
 					loadLeaders(consti);
+					user();
 					$("#conti-name-here").html(consti);
+					$("#const-name-box").html(consti);
 					campaign_constituency();
 					user_hashtags();
+					$("#overlay-load").hide();
 				});
 			});
 
@@ -1084,21 +1089,22 @@
 						if(data){
 							data=JSON.parse(data);
 							display_pic = data.pic_link;
-							console.log(data);
+							consti = data.constituency;
+							loadLeaders(data.constituency);
+							$("#conti-name-here").html(consti);
+							$("#const-name-box").html(consti);
 							showName = data.name;
-							$("#profile-img").attr("src",data.pic_link);//loads USER pic_link
-							$("#tall").text(data.name);
+							campaign_constituency();
+							user_hashtags();
+							//$("#profile-img").attr("src",data.pic_link);//loads USER pic_link
+							//$("#tall").text(data.name);
 							if(data.about_user.trim()==""){
-								$("#user-about").html("No biography available!");
+								//$("#user-about").html("No biography available!");
 							}
 							else{
-								$("#user-about").html(data.about_user);
+								//$("#user-about").html(data.about_user);
 							}
 
-							/*if(data['residence']=='Delhi' && uid==user_id)
-							{
-								user_follow();
-							}*/
 						}
 					}
 				});
@@ -1183,12 +1189,16 @@
 									data[i].image='/public/uploads/null/null.jpg';
 								}
 								campaign_HTML = '<div class="campaign-object">';
-								campaign_HTML += '<img src = "/laravel/public/'+data[i].image+'" class="thumbnail"/><br />';
+								campaign_HTML += '<img src = "/laravel/public'+data[i].image+'" class="thumbnail"/><br />';
 								campaign_HTML += '<a href="campaign_display.html?campaign_id='+data[i].campaign_id+'" class="'+class_action(data[i].status)+'">'+data[i].name+'</a>';
 								campaign_HTML += '</div>';
 								$("#campaign-of-cons").append(campaign_HTML);
 							}
 						}
+					}
+					else
+					{
+						//$("#campaign-of-cons").html('<i>No campaigns from this constituency</i>').addClass("heading");
 					}
 				});
 				$("#overlay-load").hide();

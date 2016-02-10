@@ -1,0 +1,65 @@
+<html>
+	<head>
+		<link href="css/profile.css" rel="stylesheet" />
+		<link href="fonts/stylesheet.css" rel="stylesheet" />
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+		<link href = "css/profile_feed.css" rel = "stylesheet" />
+		<script src="js/jquery.js"></script>
+		<style>
+			#overlay-load{
+			position:absolute;
+			z-index:100;
+			height:100%;
+			width:100%;
+			top:0;
+			left:0;
+			background:rgb(33,33,33);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="header">
+			<script>
+				$("#header").load('menu.html');
+			</script>
+		</div>
+		<!--div id = "overlay-load">
+		</div-->
+		<div class = "backdrop">
+			<div class = "profile-screen">
+				<!--
+					Contains the entire profile here
+				-->
+        <a href = "polls.html">POLLS</a><br />
+        <a href="debate_start.html">DEBATES</a><br />
+        <a href="blog.html">BLOGS</a><br />
+			</div>
+		</div>
+
+		<script src="js/d3.min.js"></script>
+		<script src="js/jquery.nicescroll.js"></script>
+    <script>
+    $(document).ready(function(){
+
+      $(".scrollable-camp").niceScroll();
+
+      //$(".scrollable-camp").mCustomScrollbar({'setWidth':'80%','setHeight':'40%'});
+      var obj={uid:uid};
+      $.post('/laravel/public/user_id',obj,
+      function(data){
+        if(data){
+          data=JSON.parse(data);
+          uid=data['user_id'];
+          thisName = data.name;
+          thisID = data.user_id;
+          $("#user-img").attr("src",data.pic_link);
+          $('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
+          $("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
+          $("#user-menu-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
+        }
+        else{
+          window.location='/BeingCitizen/login.html';
+        }
+      });
+    });
+    </script>

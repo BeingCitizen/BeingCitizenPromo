@@ -174,3 +174,37 @@ body,html{
   height:40%;
   overflow-y: scroll;
 }
+.factsheet{
+  width:52%;
+}
+.factsheet>div{
+  background:#fff;
+  width:170px;
+  height:170px;
+  vertical-align: top;
+  display:inline-block;
+  margin:4px;
+  border-radius:4px;
+  text-align: center;
+  border:1px solid #3F737D;
+}
+.factsheet .fact-data{
+  height:100%;
+}
+.factsheet .fact-key{
+  background:#145764;
+  color:white;
+  font-weight:bolder;
+  padding:2px;
+  text-align:center;
+}
+.vertical-mid{
+  vertical-align: middle !important;
+  text-align: center;
+  width:30%;
+}
+#const-name-box{
+  width:100%;
+  text-align: center;
+  font-size:40px;
+}

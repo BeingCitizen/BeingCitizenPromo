@@ -29,6 +29,9 @@
 			</script>
 		</div>
 
+		<div id = "overlay-load">
+		</div>
+
 		<div class = "backdrop">
 			<div class = "profile-screen">
 				<div class = "title">
@@ -79,7 +82,8 @@
 
 					<div class = "column-big bar-right">
 						<div class = "smaller" style="font-style:normal">
-							<i class = "fa fa-comment-o"></i>What others have to say
+							<i class = "fa fa-comment-o"></i>
+							<span class = "district">What others have to say</span>
 						</div>
 						<div id="tweets">
 						</div>
@@ -95,7 +99,7 @@
 					<div class = "column-small">
 						<div class = "smaller" style="font-style:normal">
 							<i class = "fa fa-twitter"></i>
-							Follow Being Citizen on twitter!
+							<span class = "district">Follow Being Citizen on twitter!</span>
 						</div>
 						<a class="twitter-timeline" href="https://twitter.com/Being_Citizen" data-widget-id="657274208037134337">Tweets by @Being_Citizen</a>
 						<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
@@ -104,14 +108,16 @@
 				</div>
 			</div>
 
+			<script src="js/jquery.nicescroll.js"></script>
 			<script type="text/javascript">
 				var uid =0 ;
 				var start=/#/ig; // # Match
 				var word=/#(\w+)/ig; //#abc Match
 				var signed = false;
 				var profile=false;
-				tagPopulator();
 				$(document).ready(function(){
+					$("#display").niceScroll();
+					$("#feed").niceScroll();
 					var obj={uid:uid};
 					$.post('/laravel/public/user_id',obj,
 					function(data){
@@ -128,18 +134,20 @@
 						}
 						else
 						{
-						    $.post('/laravel/public/user_id_mla',obj,
-					        function(data){
-							    if(data){
-										$(".create-campaign").remove();
-										$("#make-invisible").remove();
+							$.post('/laravel/public/user_id_mla',obj,
+							function(data){
+								if(data){
 									data=JSON.parse(data);
 									uid=data['user_id'];
-									$("#tag").attr("contenteditable","true");
-									$("#feed").attr("contenteditable","true");
+									thisName = data.name;
+									thisID = data.user_id;
+									consti = data.constituency;
+									$(".create-campaign").remove();
+									$("#make-invisible").remove();
+									$("#user-img").attr("src",data.pic_link);
 									$('#profile-page').attr('href','/BeingCitizen/profile_mla.html?profile_id='+uid);
-									$("#user-name").html('<a href="/BeingCitizen/profile_mla.html?profile_id='+uid+'">'+data.name+'</a>');
-									$('#toggle-menu').css("visibility","visible");
+									$("#user-name").html('<a href="/BeingCitizen/profile_mla.html?profile_id='+thisID+'">'+thisName+'</a>');
+									$("#user-menu-name").html('<a href="/BeingCitizen/profile_mla.html?profile_id='+thisID+'">'+thisName+'</a>');
 									signed  = true;
 									profile = "mla";
 						    }
@@ -149,8 +157,10 @@
 								$("#feed").html('You need to login first. Click <a href = "/BeingCitizen/login.html">here</a> to login!');
 								$(".submit").attr("disabled","true");
 							}
-						    });
+						  });
 						}
+						tagPopulator();
+						$("#overlay-load").hide();
 					});
 				});
 
@@ -165,13 +175,16 @@
 					{
 						queryString.pop();
 						fetchFeed();
+						fetchFeedMLA();
 					}
 					else
 					{
 						if(queryString[1])
 						{
 							tagName = queryString[1].split('=')[1].toString();
+							console.log(tagName);
 							fetchFeedTag(tagName);
+							fetchFeedTagMLA(tagName);
 						}
 					}
 				}
@@ -238,6 +251,7 @@
 						content:$("#feed").html().trim(),
 						profile:profile
 					}
+
 					if(feed_obj.content== "")
 					{
 						alert("You need to write something!");
@@ -269,7 +283,37 @@
 						data.reverse();
 						for(var i = 0;data[i];i++)
 						{
-							if(data[i].user_name)$("#tweets").append(feedMixer(data[i]));
+							if(data[i].content == null)
+							{
+								continue;
+							}
+							if(data[i].name || data[i].content.trim()!="")
+								{
+									$("#tweets").append(feedMixer(data[i]));
+								}
+						}
+					});
+				}
+
+				function fetchFeedMLA()
+				{
+					$("#tweets").html("");
+					$("#tagTweets").fadeOut().hide();
+					$("#back").fadeOut().hide();
+					$.post("/laravel/public/get_posts_mla",
+					function(data){
+						data = JSON.parse(data);
+						data.reverse();
+						for(var i = 0;data[i];i++)
+						{
+							if(data[i].content == null)
+							{
+								continue;
+							}
+							if(data[i].name || data[i].content.trim()!="")
+								{
+									$("#tweets").append(feedMixer(data[i]));
+								}
 						}
 					});
 				}
@@ -277,6 +321,7 @@
 				function fetchFeedTag(tagName)
 				{
 					$("#tweets").fadeOut().hide();
+					$("#tweets").html("");
 					var object={tag:tagName};
 					$.post("/laravel/public/get_postsWithHash",
 					object,
@@ -285,11 +330,42 @@
 						data.reverse();
 						for(var i = 0;data[i];i++)
 						{
-							$("#tagTweets").append(feedMixer(data[i]));
-							console.log(data[i]);
+							if(!data[i].content)
+							{
+								continue;
+							}
+							if(data[i].name || data[i].content.trim()!="")
+							{
+								$("#tweets").append(feedMixer(data[i]));
+							}
 						}
 					});
-					$("#tagTweets").fadeIn().show();
+					$("#tweets").fadeIn().show();
+					$("#back").fadeIn().show();
+				}
+				function fetchFeedTagMLA(tagName)
+				{
+					$("#tweets").html("");
+					$("#tweets").fadeOut().hide();
+					var object={tag:tagName};
+					$.post("/laravel/public/get_postsWithHash_mla",
+					object,
+					function(data){
+						data = JSON.parse(data);
+						data.reverse();
+						for(var i = 0;data[i];i++)
+						{
+							if(!data[i].content)
+							{
+								continue;
+							}
+							if(data[i].name || data[i].content.trim()!="")
+							{
+								$("#tweets").append(feedMixer(data[i]));
+							}
+						}
+					});
+					$("#tweets").fadeIn().show();
 					$("#back").fadeIn().show();
 				}
 

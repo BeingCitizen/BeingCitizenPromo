@@ -35,13 +35,13 @@
           //if validated send to dashboard
           //otherwise just reloop it here with an error message
 		  if(data){
-		    console.log(data) ;
-			window.location='/BeingCitizen/debate_start.html';
+        console.log(data) ;
+			  window.location='/BeingCitizen/dashboard.html';
 		  }
 		  else{
-		    window.location.reload(); 
+        $(".err").show();
+		    //window.location.reload();
 		  }
-			  		  
       });
     }
   </script>

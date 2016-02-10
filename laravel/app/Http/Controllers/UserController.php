@@ -37,7 +37,7 @@ class UserController extends Controller {
            }
            else {
            $id=DB::table('users')->insertgetId(['name'=>$name, 'gender'=>$gender, 'password'=>$password, 'contact_no'=>$contact, 'residence'=>$residence, 'state'=>$state, 'constituency'=>$neighbour, 'pic_link'=>$image, 'about_user'=>$about, 'start_date'=>date('Y-m-d H:i:s'), 'created_at'=>\Carbon\Carbon::now()->toDateTimeString(), 'updated_at'=>\Carbon\Carbon::now()->toDateTimeString()]);
-           $data= DB::table('users')->where(['name' =>$name,'password'=>$password])->first(); 
+           $data= DB::table('users')->where(['name' =>$name,'password'=>$password])->select('user_id','name', 'gender', 'contact_no', 'residence', 'state', 'constituency', 'pic_link', 'about_user', 'start_date', 'created_at', 'updated_at')->first();
            session()->regenerate();
            Session::put('user_id', $data);
            print_r(json_encode($id));   
@@ -86,7 +86,7 @@ class UserController extends Controller {
            else {
            DB::table('mla_details')->insert(['name'=>$name, 'gender'=>$gender, 'password'=>$password, 'contact_no'=>$contact, 'residence'=>$residence, 'state'=>$state, 'constituency'=>$neighbour, 'pic_link'=>$image, 'about_user'=>$about, 'start_date'=>date('Y-m-d H:i:s'), 'created_at'=>\Carbon\Carbon::now()->toDateTimeString(), 'updated_at'=>\Carbon\Carbon::now()->toDateTimeString()]);
             }
-           $id=DB::table('mla_details')->orderBy('created_at','desc')->first();
+           $id=DB::table('mla_details')->orderBy('created_at','desc')->select('user_id','name', 'gender', 'contact_no', 'residence', 'state', 'constituency', 'pic_link', 'about_user', 'start_date', 'created_at', 'updated_at')->first();
            session()->regenerate();
            Session::put('mla_id', $id);
            //print_r(json_encode($data));
@@ -98,7 +98,7 @@ class UserController extends Controller {
         $user = Input::all();
         $uname=$user['user_name'];
         $passwd=$user['password'];
-        $data= DB::table('users')->where(['name' =>$uname,'password'=>$passwd])->first(); 
+        $data= DB::table('users')->where(['name' =>$uname,'password'=>$passwd])->select('user_id','name', 'gender', 'contact_no', 'residence', 'state', 'constituency', 'pic_link', 'about_user', 'start_date', 'created_at', 'updated_at')->first(); 
         if($data) 
         { 
         session()->regenerate();
@@ -111,7 +111,7 @@ class UserController extends Controller {
         $user = Input::all();
         $uname=$user['username'];
         $passwd=$user['password'];
-        $data= DB::table('admin')->where(['name' =>$uname,'passward'=>$passwd])->first(); 
+        $data= DB::table('admin')->where(['name' =>$uname,'passward'=>$passwd])->select('admin_id','name','start_time')->first(); 
         if($data) 
         { 
         session()->regenerate();
@@ -134,7 +134,7 @@ class UserController extends Controller {
         $user = Input::all();
         $uname=$user['user_name'];
         $passwd=$user['password'];
-        $data= DB::table('mla_details')->where(['name' =>$uname,'password'=>$passwd])->first(); 
+        $data= DB::table('mla_details')->where(['name' =>$uname,'password'=>$passwd])->select('user_id','name', 'gender', 'contact_no', 'residence', 'state', 'constituency', 'pic_link', 'about_user', 'start_date', 'created_at', 'updated_at')->first(); 
         if($data) 
         { 
         session()->regenerate();
@@ -186,7 +186,7 @@ class UserController extends Controller {
 	{ 
          $user = Input::all();
          $uid=$user['uid'];
-         $data= DB::table('users')->where('user_id',$uid)->first(); 
+         $data= DB::table('users')->where('user_id',$uid)->select('user_id','name', 'gender', 'contact_no', 'residence', 'state', 'constituency', 'pic_link', 'about_user', 'start_date', 'created_at', 'updated_at')->first(); 
          if($data)
          print_r(json_encode($data));
       }    
@@ -194,7 +194,7 @@ class UserController extends Controller {
 	{ 
          $user = Input::all();
          $uid=$user['uid'];
-         $data= DB::table('mla_details')->where('user_id',$uid)->first(); 
+         $data= DB::table('mla_details')->where('user_id',$uid)->select('user_id','name', 'gender', 'contact_no', 'residence', 'state', 'constituency', 'pic_link', 'about_user', 'start_date', 'created_at', 'updated_at')->first(); 
          if($data)
          print_r(json_encode($data));
       }    
@@ -295,6 +295,13 @@ class UserController extends Controller {
            
 
 
+      }
+      public function create_poll(){
+        $poll=Input::all();
+        $title=$poll['title'];
+        $descript=$poll['description'];
+        $id=DB::table('poll_details')->insertGetId(['poll_title'=>$title, 'poll_description'=>$descript]);
+        DB::table('poll_count')->insert(['poll_id'=>$id]);
       }
 
                   

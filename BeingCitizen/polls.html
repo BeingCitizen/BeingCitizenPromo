@@ -1,0 +1,106 @@
+<html>
+	<head>
+		<link href="css/profile.css" rel="stylesheet" />
+		<link href="fonts/stylesheet.css" rel="stylesheet" />
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+		<link href = "css/profile_feed.css" rel = "stylesheet" />
+		<script src="js/jquery.js"></script>
+		<link href = "css/polls.css" rel ="stylesheet" />
+		<link href = "css/bootstrap.min.css" rel="stylsheet" />
+		<style>
+			#overlay-load{
+			position:absolute;
+			z-index:100;
+			height:100%;
+			width:100%;
+			top:0;
+			left:0;
+			background:rgb(33,33,33);
+			}
+		</style>
+	</head>
+	<body>
+		<div class = "overlay-load" id ="overlay-load">
+		</div>
+		<div id="header">
+			<script>
+				$("#header").load('menu.html');
+			</script>
+		</div>
+		<div id = "overlay-create" class = "overlay-create">
+			<div class = "create-poll">
+				<span class = "bebas create-poll-header">Create your poll</span>
+				<span class = "right" onclick="hideModal()">&times;</span>
+				<br />
+				<hr />
+				<form onsubmit="return false;" id="poll_form" type="POST">
+					<input class="full-width" id = "poll-title" type = "text" placeholder="Enter the Poll Title" required></input>
+					<br />
+					<textarea class="full-width" id = "poll-description" placeholder="Enter the Poll Description"></textarea>
+					<br />
+					<span class = "hidden bebas" id = "posting">Posting..</span>
+					<button onclick="submit_poll()" class="button green">Submit</button>
+				</form>
+			</div>
+		</div>
+		<!--div id = "overlay-load">
+		</div-->
+		<div class = "backdrop">
+			<div class = "profile-screen">
+				<!--
+					Contains the entire profile here
+				-->
+				<span class = "title">polls</span>
+				<button onclick="showModal()" class="button red">Create Poll</button>
+				<br style="clear:both" />
+				<hr />
+			</div>
+		</div>
+
+		<script src="js/d3.min.js"></script>
+		<script src="js/jquery.nicescroll.js"></script>
+		<script>
+		var uid=0;
+		var did = null;
+		$(document).ready(function(){
+
+			var obj={uid:uid};
+			$.post('/laravel/public/admin_id',
+			function(data){
+			    if(data){
+			        data=JSON.parse(data);
+			        uid=data['user_id'];
+			        console.log(data);
+			        $("#overlay-load").hide();
+     			}
+				else{
+					window.location="adminlogin.html";
+				}
+			});
+		});
+		function showModal()
+		{
+			$("#overlay-create").show();
+		}
+		function hideModal()
+		{
+			$("#overlay-create").hide();
+		}
+		function submit_poll()
+		{
+			if($("#poll-title").val().trim()=="")
+			{
+				return;
+			}
+			$("#posting").show();
+			var obj = {
+				title:$("#poll-title").val(),
+				description:$("#poll-description").val(),
+			};
+			$.post('/laravel/public/create-poll',obj,function(data){
+				$("#posting").hide();
+				alert('your poll posted');
+				window.location.reload();
+			});//This ajax posts it to the table
+		}
+		</script>
