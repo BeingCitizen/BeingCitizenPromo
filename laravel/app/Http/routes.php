@@ -90,6 +90,7 @@ Route::post('mla','UserController@mla');
 Route::post('show-poll','UserController@show_poll');
 Route::post('poll-vote','UserController@poll_vote');
 Route::post('edit-poll','UserController@edit_poll');
+Route::post('check-vote','UserController@check_vote');
 Route::post('delete-poll','UserController@delete_poll');
 Route::post('create-poll','UserController@create_poll');
 Route::get('/debate_upload/{id}', 'DebateController@upload');
