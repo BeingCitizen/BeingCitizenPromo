@@ -271,7 +271,18 @@ class UserController extends Controller {
         print_r(json_encode($data)); 
       
      }
+
+        public function check_vote()
+      {
        
+        $poll=Input::all(); 
+        $id=$poll['poll_id'];
+        $uid=$poll['user_id'];  
+        $data=DB::table('user_pollrecord')->where(['user_id'=> $uid,'poll_id'=>$id])->first();
+        if($data)
+        print_r(json_encode($data)); 
+      
+     }
        public function follow()
       {
           
