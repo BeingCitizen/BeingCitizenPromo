@@ -100,12 +100,14 @@
 	var debate_id=location.search.substring("1").split("=")[1];
 	$(document).ready(function(){
 		$(".screen").show();
+		$("#polls-admin").remove();
 		var obj={uid:uid};
 		$.post('/laravel/public/user_id',
 		function(data){
 			if(data){
 				data=JSON.parse(data);
 				uid=data['user_id'];
+				$("#polls-admin").remove();
 				$('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
 				$('#toggle-menu').css("visibility","visible");
 				$("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+uid+'">'+data.name+'</a>');

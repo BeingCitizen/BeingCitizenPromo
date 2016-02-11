@@ -124,20 +124,38 @@ hr{
 .debate-box{
   display:inline-flex;
   margin:2px;
-  padding:2px;
-  text-align:center;
-  border:1px solid gray;
-  border-radius:4px;
-  width:250px;
+  background:white;
+  color:white;
   word-break:break-all;
+  width:350px;
+  height:150px;
+}
+.debate-box a>div{
+  display:inline-block;
+}
+.debate-desc, .debate-title{
+  display:block;
+  margin-left:3px;
+}
+.debate-title{
+  font-size:20px;
+  text-transform:capitalize;
+  color:#2C3F52;
+  font-weight:bolder;
+}
+.debate-desc{
+  font-size:15px;
+  color:#ED4E6E;
+  font-weight:bolder;
+  width:100%;
 }
 .debate-thumbnail {
   position: relative;
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   overflow: hidden;
   text-align: center;
-  display:inline-flex;
+  display:inline-block;
 }
 .debate-thumbnail img {
   position: absolute;
@@ -160,10 +178,10 @@ hr{
   text-decoration:none;
 }
 .fixed-size{
-  display:inline-flex;
   vertical-align:top;
   word-break:break-all;
-  max-width:150px;
+  width:195px;
+  height:100%;
   -webkit-hyphens:auto;
    -moz-hyphens: auto;
         hyphens: auto;

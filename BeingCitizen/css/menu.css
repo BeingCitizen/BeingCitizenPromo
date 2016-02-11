@@ -56,6 +56,7 @@ aaarghnormal
 .being-citizen-container{
 	display:inline-block;
 	margin-left: 10px;
+	vertical-align: super !important;
 }
 .pull-down{
 	margin-top:2%;
@@ -64,7 +65,7 @@ img.pull-down{
 	vertical-align:0% !important
 }
 .fa-lg{
-	vertical-align:0 !important;
+	vertical-align:super !important;
 }
 .pull-down-spl{
 	vertical-align: -40%;
@@ -117,6 +118,7 @@ img.pull-down{
 }
 #user-img{
 	width:50px;
+	height:50px;
 	border-radius:4px;
 	cursor:pointer;
 }

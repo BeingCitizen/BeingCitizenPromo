@@ -119,7 +119,7 @@
 			$(document).ready(function(){
 
 				$(".scrollable-camp").niceScroll();
-
+				$("#polls-admin").remove();
 				//$(".scrollable-camp").mCustomScrollbar({'setWidth':'80%','setHeight':'40%'});
 				var obj={uid:uid};
 				$.post('/laravel/public/user_id',obj,
@@ -129,6 +129,7 @@
 						uid=data['user_id'];
 						thisName = data.name;
 						thisID = data.user_id;
+						$("#polls-admin").remove();
 						$("#user-img").attr("src",data.pic_link);
 						$('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
 						$("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');

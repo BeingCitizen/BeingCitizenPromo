@@ -91,8 +91,8 @@
 			var uid = 0;
 			var array = [];
 			var obj={uid:uid};
+			$("#polls-admin").remove();
 			$(document).ready(function(){
-
 				$.post('/laravel/public/user_id',
 				function(data){
 					if(data){

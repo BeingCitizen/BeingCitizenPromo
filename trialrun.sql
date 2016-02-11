@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 12, 2016 at 04:59 AM
+-- Generation Time: Feb 11, 2016 at 09:10 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -479,7 +479,7 @@ CREATE TABLE IF NOT EXISTS `debates` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`debate_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `debates`
@@ -488,9 +488,7 @@ CREATE TABLE IF NOT EXISTS `debates` (
 INSERT INTO `debates` (`debate_id`, `name`, `debate_text`, `category`, `image`, `start_date`, `created_at`, `updated_at`) VALUES
 (1, 'first', '', 'Foreign Affairs', NULL, '2015-10-21', '2015-10-21 11:35:45', '2015-10-21 11:35:45'),
 (2, 'duplicate', '', 'Foreign Affairs', 'public/debate_uploads/129331545-IMG_20141207_172159342_HDR.jpg', '2015-10-23', '2015-10-21 11:36:01', '2015-10-21 11:36:01'),
-(4, '', '', 'Defence and Armed Forces', 'public/debate_uploads/89772796-6-4315-4-Funny-Minion-Quotes-Of-The-Day-270.jpg', '2015-10-21', '2015-10-21 12:04:42', '2015-10-21 12:04:42'),
-(5, '', '', 'Defence and Armed Forces', NULL, '2015-10-21', '2015-10-21 12:07:23', '2015-10-21 12:07:23'),
-(6, 'trial', '', 'Citizenship', NULL, '2015-12-16', '2015-12-16 14:02:53', '2015-12-16 14:02:53');
+(7, 'test debate', '<div><br></div><div>This is some formatted text.</div><div><span style="color: rgb(0, 255, 0); font-size: x-large;">This is some formatted text.</span></div><h2><span style="font-family: ''comic sans ms'', sans-serif;">This is some formatted text.</span></h2><div><span style="font-weight: bold; font-style: italic; text-decoration: underline;">This is some formatted text.</span></div><div>This is some formatted text.</div>', 'Defence and Armed Forces', 'public/debate_uploads/232805218-001.jpg', '2016-02-11', '2016-02-11 13:41:44', '2016-02-11 13:41:44');
 
 -- --------------------------------------------------------
 
@@ -968,7 +966,7 @@ CREATE TABLE IF NOT EXISTS `poll_count` (
 INSERT INTO `poll_count` (`poll_id`, `yes_count`, `no_count`, `other_count`) VALUES
 (1, 0, 0, 0),
 (2, 0, 0, 0),
-(3, 5, 4, 0),
+(3, 6, 4, 0),
 (9, 0, 0, 0);
 
 -- --------------------------------------------------------
@@ -1160,6 +1158,7 @@ CREATE TABLE IF NOT EXISTS `user_pollrecord` (
 --
 
 INSERT INTO `user_pollrecord` (`user_id`, `poll_id`, `choice`, `poll_date`) VALUES
+('1', 3, 1, '2016-02-11 18:24:03'),
 ('3', 3, 1, '2016-02-12 02:42:45');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

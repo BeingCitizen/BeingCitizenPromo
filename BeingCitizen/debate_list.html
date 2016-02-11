@@ -1,215 +1,229 @@
 <html>
-  <head>
-    <title>Campaigns: Being Citizen.com</title>
-    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-		<script src="js/jquery.js"></script>
-		<!--For the editor's text-->
-		<link href = "css/debate.css" rel = "stylesheet" />
-		<link rel="stylesheet" href="css/font-awesome.min.css" />
-    <link rel = "stylesheet" href="css/filter.css" />
-  </head>
-  <body>
-    <!--
-      THe menu bar loader
-    -->
-    <div id="header">
-      <script>
-        $("#header").load('menu.html');
-      </script>
-    </div>
-    <!--
-      Main campaign space
-    -->
-    <div class = "campaign-screen">
-      <div class = "debate-body">
-        <!--Left screen-->
-        <div class = "left-side">
-          <div class = "title">Debates</div>
-          <div class = "un-accordion show">
-          </div>
-          <div class = "accordion accordion-hidden">
-          </div>
-        </div>
-        <div class = "right-side">
-          <div class = "label-text">
-            <i class = "fa fa-sort" id = "sort"></i>
-            <i class = "fa fa-close" id = "close-s"></i>
-            <i class = "fa fa-filter" id = "filter"></i>
-            <i class = "fa fa-close" id = "close-f"></i>
-            <script>
-              $("#close-s").hide();
-              $("#close-f").hide();
-            </script>
-          </div>
-          <div class = "label-text" id = "sort-list">
-            SORT
-            <div class = "option" onclick="sortBasic()">
-              <i class = "fa fa-sort-amount-asc" title = "Date (newest to oldest)" ></i>
-              <br />
-              Date (newest to oldest)
-            </div>
-            <div class="option" onclick="sortReverse()">
-              <i class = "fa fa-sort-amount-desc" title = "Date (oldest to newest)"></i>
-              <br />
-              Date (oldest to newest)
-            </div>
-          </div>
-          <div class = "label-text" id = "filter-list">
-            FILTERS
-            <div class = "option" onclick="sortCategory()">
-              <i class = "fa fa-sitemap" title = "Categories"></i>
-              <br />
-              Categories
-            </div>
-          </div>
-          <script>
-            $("#filter-list").hide();
-            $("#sort-list").hide();
-          </script>
-        </div>
+<head>
+  <title>Campaigns: Being Citizen.com</title>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+  <script src="js/jquery.js"></script>
+  <!--For the editor's text-->
+  <link href = "css/debate.css" rel = "stylesheet" />
+  <link rel="stylesheet" href="css/font-awesome.min.css" />
+  <link rel = "stylesheet" href="css/filter.css" />
+</head>
+<body>
+  <!--
+  THe menu bar loader
+-->
+<div id="header">
+  <script>
+  $("#header").load('menu.html');
+  </script>
+</div>
+<!--
+Main campaign space
+-->
+<div class = "campaign-screen">
+  <div class = "debate-body">
+    <!--Left screen-->
+    <div class = "left-side">
+      <div class = "title">Debates</div>
+      <div class = "un-accordion show">
+      </div>
+      <div class = "accordion accordion-hidden">
       </div>
     </div>
-    <script>
-    //Append entries to the accordion
-    var uid = 0;
-    var obj;
-    $(document).ready(function(){
+    <div class = "right-side">
+      <div class = "label-text">
+        <i class = "fa fa-sort" id = "sort"></i>
+        <i class = "fa fa-close" id = "close-s"></i>
+        <i class = "fa fa-filter" id = "filter"></i>
+        <i class = "fa fa-close" id = "close-f"></i>
+        <script>
+        $("#close-s").hide();
+        $("#close-f").hide();
+        </script>
+      </div>
+      <div class = "label-text" id = "sort-list">
+        SORT
+        <div class = "option" onclick="sortBasic()">
+          <i class = "fa fa-sort-amount-asc" title = "Date (newest to oldest)" ></i>
+          <br />
+          Date (newest to oldest)
+        </div>
+        <div class="option" onclick="sortReverse()">
+          <i class = "fa fa-sort-amount-desc" title = "Date (oldest to newest)"></i>
+          <br />
+          Date (oldest to newest)
+        </div>
+      </div>
+      <div class = "label-text" id = "filter-list">
+        FILTERS
+        <div class = "option" onclick="sortCategory()">
+          <i class = "fa fa-sitemap" title = "Categories"></i>
+          <br />
+          Categories
+        </div>
+      </div>
+      <script>
+      $("#filter-list").hide();
+      $("#sort-list").hide();
+      </script>
+    </div>
+  </div>
+</div>
+<script>
+//Append entries to the accordion
+var uid = 0;
+var obj;
 
-      obj={uid:uid};
-  		$.post('/laravel/public/user_id',
-  		function(data){
-  			if(data){
-  				data=JSON.parse(data);
-  				uid=data['user_id'];
-  				$('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
-  				$("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+uid+'">'+data.name+'</a>');
-  				$('#toggle-menu').css("visibility","visible");
-  			}
-      });
-    });
+$(document).ready(function(){
+  $("#polls-admin").remove();
+  obj={uid:uid};
+  $.post('/laravel/public/user_id',
+  function(data){
+    if(data){
+      data=JSON.parse(data);
+      uid=data['user_id'];
+      $('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
+      $("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+uid+'">'+data.name+'</a>');
+      $('#toggle-menu').css("visibility","visible");
+    }
+  });
+});
 
-      function returnLink(debate_info)
-      {
-        var string = '<div class = "debate-box">';
-          string+='<a href="/BeingCitizen/debate_display.html?debate_id='+debate_info.debate_id+'">'
-            string+='<div class = "debate-thumbnail">';
-              string+='<img src = "/laravel/public/'+debate_info.image+'" class = "portrait"/>';
-            string+='</div>';
-            string+='<div class = "fixed-size">';
-              string+='<div class = "debate-box-heading district">';
-                string+=debate_info.name;
-              string+='</div>';
-            string+='</div>';
-          string+='<a/>'
+function returnLink(debate_info,text)
+{
+  var result = text.match( /[^\.!\?]+[\.!\?]+/g );
+  if(result)text = result[0];
+  var string = '<div class = "debate-box">';
+    string+='<a href="/BeingCitizen/debate_display.html?debate_id='+debate_info.debate_id+'">'
+      string+='<div class = "debate-thumbnail">';
+      string+='<img src = "/laravel/public/'+debate_info.image+'" class = "portrait"/>';
+      string+='</div>';
+      string+='<div class = "fixed-size">';
+        string+='<div class = "debate-title district">';
+        string+=debate_info.name;
         string+='</div>';
-        return string;
-      }
+        string+='<div class = "debate-desc district">'+text+'</div>';
+      string+='</div>';
+    string+='</a>'
+  string+='</div>';
+  return string;
+}
 
-      //Debates on the basis of dates
-      $.post('/laravel/public/debates_dateSorted',obj,function(data){
-        //the data here shall be displayed onto the screen
-        data= JSON.parse(data);
-        for(var i = 0;i<data.length;i++){
-         $(".un-accordion").append(returnLink(data[i]));
-        }
-      });
+//Debates on the basis of dates
+$.post('/laravel/public/debates_dateSorted',obj,function(data){
+  //the data here shall be displayed onto the screen
+  data= JSON.parse(data);
+  for(var i = 0;i<data.length;i++){
+    var div = document.createElement("div");
+    div.innerHTML = data[i].debate_text;
+    var text = div.textContent || div.innerText || "";
+    $(".un-accordion").append(returnLink(data[i],text));
+  }
+});
 
-       function sortBasic()
-       {
-         $(".accordion").hide();
-         $(".un-accordion").show().html("")
-         $.post('/laravel/public/debates_dateSorted',obj,function(data){
-           //the data here shall be displayed onto the screen
-           data= JSON.parse(data);
-           for(var i = 0;i<data.length;i++){
-            $(".un-accordion").append(returnLink(data[i]));
-           }
-         });
-       }
-
-       function sortReverse()
-       {
-         $(".accordion").hide();
-         $(".un-accordion").show().html("")
-         $.post('/laravel/public/debates_dateSorted',obj,function(data){
-           //the data here shall be displayed onto the screen
-           data= JSON.parse(data);
-           data = data.reverse();
-           for(var i = 0;i<data.length;i++){
-            $(".un-accordion").append(returnLink(data[i]));
-           }
-         });
-
-       }
-
-    function divstring(category,numbers)
-    {
-      var queryj = category.split(' ').join('-');
-      var string = '<div class = "accordion-title title title-smaller" data="'+ queryj +'"><i class = "fa fa-plus"></i>'+category+' <span class="label-text sticky-right">'+numbers+' campaigns </span></div>';
-      string += '<div class = "accordion-content hidden label-text" id="'+queryj+'"><i>No debates in this category !</i></div>';
-      return string;
+function sortBasic()
+{
+  $(".accordion").hide();
+  $(".un-accordion").show().html("")
+  $.post('/laravel/public/debates_dateSorted',obj,function(data){
+    //the data here shall be displayed onto the screen
+    data= JSON.parse(data);
+    for(var i = 0;i<data.length;i++){
+      var div = document.createElement("div");
+      div.innerHTML = data[i].debate_text;
+      var text = div.textContent || div.innerText || "";
+      $(".un-accordion").append(returnLink(data[i],text));
     }
+  });
+}
 
-    $(document).on('click','.accordion-title',function(){
-      var child = $(this).attr("data");
-      child = "#"+child;
-      $(child).slideToggle();
-    });
-
-    $("#filter").click(function(){
-      $(this).hide();
-      $("#close-f").fadeIn();
-      $("#filter-list").slideDown();
-    });
-
-    $("#close-f").click(function(){
-      $(this).hide();
-      $("#filter").fadeIn();
-      $("#filter-list").slideUp();
-    });
-
-    $("#sort").click(function(){
-      $(this).hide();
-      $("#close-s").fadeIn();
-      $("#sort-list").slideDown();
-    });
-
-    $("#close-s").click(function(){
-      $(this).hide();
-      $("#sort").fadeIn();
-      $("#sort-list").slideUp();
-    });
-
-    function sortCategory()
-    {
-      $.post('/laravel/public/debates',
-      function(data){
-         data= JSON.parse(data);
-          for(var i= 0;data[i];i++)
-          {
-                var obj = {category:data[i].category};
-                console.log(obj);
-				sortFinal(obj);
-                
-          }
-       });
-       //Now populate values from the array
-       $(".un-accordion").hide();
-       $(".accordion").show();
+function sortReverse()
+{
+  $(".accordion").hide();
+  $(".un-accordion").show().html("")
+  $.post('/laravel/public/debates_dateSorted',obj,function(data){
+    //the data here shall be displayed onto the screen
+    data= JSON.parse(data);
+    data = data.reverse();
+    for(var i = 0;i<data.length;i++){
+      var div = document.createElement("div");
+      div.innerHTML = data[i].debate_text;
+      var text = div.textContent || div.innerText || "";
+      $(".un-accordion").append(returnLink(data[i],text));
     }
-	function sortFinal(obj){
-	         $.post('/laravel/public/get_debateCategory',obj,function(loadData){
-                  console.log(obj);
-                  loadData= JSON.parse(loadData);
-                  var dataName = obj.category;
-                  $(".accordion").append(divstring(dataName,loadData.length));
-                  $('#'+dataName.split(' ').join('-')).html("");
-                  for(var j = 0;loadData[j];j++)
-                  {
-                    $('#'+dataName.split(' ').join('-')).append(returnLink(loadData[j]));
-                  }
-              });
-	}
-    </script>
-  </body>
+  });
+
+}
+
+function divstring(category,numbers)
+{
+  var queryj = category.split(' ').join('-');
+  var string = '<div class = "accordion-title title title-smaller" data="'+ queryj +'"><i class = "fa fa-plus"></i>'+category+' <span class="label-text sticky-right">'+numbers+' campaigns </span></div>';
+  string += '<div class = "accordion-content hidden label-text" id="'+queryj+'"><i>No debates in this category !</i></div>';
+  return string;
+}
+
+$(document).on('click','.accordion-title',function(){
+  var child = $(this).attr("data");
+  child = "#"+child;
+  $(child).slideToggle();
+});
+
+$("#filter").click(function(){
+  $(this).hide();
+  $("#close-f").fadeIn();
+  $("#filter-list").slideDown();
+});
+
+$("#close-f").click(function(){
+  $(this).hide();
+  $("#filter").fadeIn();
+  $("#filter-list").slideUp();
+});
+
+$("#sort").click(function(){
+  $(this).hide();
+  $("#close-s").fadeIn();
+  $("#sort-list").slideDown();
+});
+
+$("#close-s").click(function(){
+  $(this).hide();
+  $("#sort").fadeIn();
+  $("#sort-list").slideUp();
+});
+
+function sortCategory()
+{
+  $.post('/laravel/public/debates',
+  function(data){
+    data= JSON.parse(data);
+    for(var i= 0;data[i];i++)
+    {
+      var obj = {category:data[i].category};
+      sortFinal(obj);
+    }
+  });
+  //Now populate values from the array
+  $(".un-accordion").hide();
+  $(".accordion").show();
+}
+function sortFinal(obj){
+  $.post('/laravel/public/get_debateCategory',obj,function(loadData){
+    console.log(obj);
+    loadData= JSON.parse(loadData);
+    var dataName = obj.category;
+    $(".accordion").append(divstring(dataName,loadData.length));
+    $('#'+dataName.split(' ').join('-')).html("");
+    for(var j = 0;loadData[j];j++)
+    {
+      var div = document.createElement("div");
+      div.innerHTML = loadData[j].debate_text;
+      var text = div.textContent || div.innerText || "";
+      $('#'+dataName.split(' ').join('-')).append(returnLink(loadData[j],text));
+    }
+  });
+}
+</script>
+</body>
 </html>
