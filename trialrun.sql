@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 12, 2016 at 03:44 AM
+-- Generation Time: Feb 12, 2016 at 04:59 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -968,7 +968,7 @@ CREATE TABLE IF NOT EXISTS `poll_count` (
 INSERT INTO `poll_count` (`poll_id`, `yes_count`, `no_count`, `other_count`) VALUES
 (1, 0, 0, 0),
 (2, 0, 0, 0),
-(3, 3, 4, 0),
+(3, 5, 4, 0),
 (9, 0, 0, 0);
 
 -- --------------------------------------------------------
@@ -1148,7 +1148,7 @@ INSERT INTO `user_follow` (`user_id`, `follow_id`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `user_pollrecord` (
-  `user_id` bigint(200) unsigned NOT NULL,
+  `user_id` varchar(767) NOT NULL,
   `poll_id` bigint(200) unsigned NOT NULL,
   `choice` int(20) unsigned NOT NULL,
   `poll_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -1160,7 +1160,7 @@ CREATE TABLE IF NOT EXISTS `user_pollrecord` (
 --
 
 INSERT INTO `user_pollrecord` (`user_id`, `poll_id`, `choice`, `poll_date`) VALUES
-(3, 3, 1, '2016-02-12 02:42:45');
+('3', 3, 1, '2016-02-12 02:42:45');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
