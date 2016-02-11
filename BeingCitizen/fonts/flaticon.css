@@ -12,22 +12,46 @@
 [class^="flaticon-"]:after, [class*=" flaticon-"]:after {   
 	font-family: Flaticon;
         font-size: 20px;
-font-style: normal;margin-right:10px !important;
-}.flaticon-fist:before {
+font-style: normal;margin-right:20px;
+}.flaticon-books8:before {
 	content: "\e000";
 }
-.flaticon-iris:before {
+.flaticon-entrepreneur:before {
 	content: "\e001";
 }
-.flaticon-man286:before {
+.flaticon-fist:before {
 	content: "\e002";
 }
-.flaticon-megaphone27:before {
+.flaticon-handcuffs:before {
 	content: "\e003";
 }
-.flaticon-promise:before {
+.flaticon-home220:before {
 	content: "\e004";
 }
-.flaticon-user87:before {
+.flaticon-id17:before {
 	content: "\e005";
+}
+.flaticon-iris:before {
+	content: "\e006";
+}
+.flaticon-man286:before {
+	content: "\e007";
+}
+.flaticon-map-pointer7:before {
+	content: "\e008";
+}
+.flaticon-map35:before {
+	content: "\e009";
+}
+.flaticon-megaphone27:before {
+	content: "\e00a";
+}
+.flaticon-promise:before {
+	content: "\e00b";
+}
+.flaticon-rupee1:before {
+	content: "\e00c";
+}
+.flaticon-user87:before {
+	content: "\e00d";
 }

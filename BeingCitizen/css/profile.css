@@ -178,25 +178,47 @@ body,html{
   width:52%;
 }
 .factsheet>div{
-  background:#fff;
-  width:170px;
-  height:170px;
-  vertical-align: top;
-  display:inline-block;
-  margin:4px;
-  border-radius:4px;
-  text-align: center;
-  border:1px solid #3F737D;
+  margin:10px;
+  height:30px;
 }
-.factsheet .fact-data{
+.factsheet>.more-height{
+  height:80px;
+}
+.factsheet i{
+  color:white;
+  padding-left:5px;
+  padding-top:5px;
+}
+.factsheet .fact-icon{
+  width:5%;
   height:100%;
+  background:#b71c1c;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  display:inline-block;
+  vertical-align: top;
+}
+.factsheet .more-height .fact-key{
+  height:95%;
 }
 .factsheet .fact-key{
-  background:#145764;
+  height:88%;
+  background:#212121;
   color:white;
   font-weight:bolder;
   padding:2px;
-  text-align:center;
+  display:inline-block;
+  width:20%;
+  vertical-align: top;
+}
+.factsheet .fact-data{
+  display:inline-block;
+  width:65%;
+  height:100%;
+  background:white;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius:4px;
+  overflow-y:scroll;
 }
 .vertical-mid{
   vertical-align: middle !important;
