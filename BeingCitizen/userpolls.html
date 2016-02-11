@@ -76,6 +76,13 @@ function show_poll()
 		var i = 0;
 		for(;data[i];i++)
 		{
+			var obj={poll_id:data[i].poll_id, user_id:uid};
+			$.post('/laravel/public/check-vote', obj, function(data){
+				if(data){
+		    data = JSON.parse(data);
+		    console.log(data);//if user has voted
+		       }
+		    });
 			var pollDisplay = pollDresser(data[i]);
 			$("#poll-arena").append(pollDisplay);
 			makePieChart(data[i]);
