@@ -81,7 +81,7 @@ function show_poll()
 			makePieChart(data[i]);
 		}
 	});
-	vote(3,'No');//checking vote
+	vote(3,1);//0->no, 1->yes, 2->can't say
 }
 
 function pollDresser(data)
@@ -152,7 +152,7 @@ function vote(poll_id,choice){
 		$.post('/laravel/public/poll-vote',obj,
 		function(data){
 			if(data){
-
+               alert("your vote recorded");
 			}
 		});
 	}
