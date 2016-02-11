@@ -6,9 +6,16 @@
   background:rgba(0,0,0,0.5);
   top:0;
   left:0;
+  display:none;
 }
 .create-poll-header{
   font-size:30px;
+}
+.poll-title{
+  font-size:22px;
+}
+.poll-desc{
+  font-size:18px;
 }
 .create-poll{
   position:fixed;
@@ -64,4 +71,41 @@ hr{
   float:right;
   cursor:pointer;
   font-weight:bolder;
+}
+.pie-chart{
+  text-align: center;
+}
+.poll-box{
+  background: white;
+  padding:3px;
+  margin:3px;
+}
+.poll-third{
+  width:32%;
+  display:inline-block;
+  vertical-align: top;
+}
+.btn-panel{
+  vertical-align: top;
+  text-align: center;
+}
+.btn-panel i{
+  cursor:pointer;
+  padding:4px;
+  margin:4px;
+  padding-top:50%;
+  display:table-cell;
+}
+.btn-clear{
+  float:none;
+  width:30%;
+}
+.btn-yes{
+  background:#388E3C;
+}
+.btn-no{
+  background:#E53935;
+}
+.btn-csay{
+  background:#EF6C00;
 }

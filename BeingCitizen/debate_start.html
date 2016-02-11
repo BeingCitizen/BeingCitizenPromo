@@ -72,14 +72,14 @@
 				$("#display").hide();
 
 				var obj={uid:uid};
-                $.post('/laravel/public/admin_id',
+        $.post('/laravel/public/admin_id',
 				function(data){
 					if(data){
 						data=JSON.parse(data);
 						uid=data['admin_id'];
-						//$('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
-						$//("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+uid+'">'+data.name+'</a>');
+						$("#polls-visible").remove();
 						$('#toggle-menu').css("visibility","visible");
+						$('#user-name').html('<a href="/BeingCitizen/dashboard.html">Admin</a>');
 					}
 					else{
 						window.location="adminlogin.html";

@@ -7,6 +7,7 @@
 		<script src="js/jquery.js"></script>
 		<link href = "css/polls.css" rel ="stylesheet" />
 		<link href = "css/bootstrap.min.css" rel="stylsheet" />
+		<script src = "js/Chart.min.js"></script>
 		<style>
 			#overlay-load{
 			position:absolute;
@@ -54,6 +55,8 @@
 				<button onclick="showModal()" class="button red">Create Poll</button>
 				<br style="clear:both" />
 				<hr />
+				<div id = "poll-arena">
+				</div>
 			</div>
 		</div>
 
@@ -63,19 +66,19 @@
 		var uid=0;
 		var did = null;
 		$(document).ready(function(){
-
 			var obj={uid:uid};
-			$.post('/laravel/public/admin_id',
+			$.post('/laravel/public/admin_id',obj,
 			function(data){
 			    if(data){
 			        data=JSON.parse(data);
 			        uid=data['user_id'];
-			        console.log(data);
+							$("#polls-visible").remove();
+							$('#user-name').html('<a href="/BeingCitizen/dashboard.html">Admin</a>');
 			        $("#overlay-load").hide();
 			        show_poll();
      			}
 				else{
-					window.location="adminlogin.html";
+					window.location="/BeingCitizen/adminlogin.html";
 				}
 			});
 		});
@@ -100,8 +103,6 @@
 			};
 			$.post('/laravel/public/create-poll',obj,function(data){
 				$("#posting").hide();
-				alert('your poll posted');
-				delete_poll(7);//hard coded for now
 				window.location.reload();
 			});//This ajax posts it to the table
 		}
@@ -111,14 +112,82 @@
 				poll_id:id//id of poll to be deleted
 			};
 			$.post('/laravel/public/delete-poll',obj,function(data){
-				
 				window.location.reload();
-			});//This ajax posts it to the table
+			});
+			edit_poll(3,'edited third','checking you again');//checking edit
 		}
 		function show_poll()
 		{
 			$.post('/laravel/public/show-poll',function(data){
-			     console.log(data); 
-			});//This ajax posts it to the table
+			     data = JSON.parse(data);
+					 var i = 0;
+					 for(;data[i];i++)
+					 {
+						 var pollDisplay = pollDresser(data[i]);
+						 $("#poll-arena").append(pollDisplay);
+						 makePieChart(data[i]);
+					 }
+			});
+		}
+		function edit_poll(id,new_title,new_description)
+		{
+			var obj={poll_id:id,title:new_title,description:new_description};
+			$.post('/laravel/public/edit-poll', obj, function(data){
+			     //data = JSON.parse(data);
+				// window.location.reload();	
+			});
+		}
+
+		function pollDresser(data)
+		{
+			var pollString = '<div class = "poll-box" id = "poll'+data.poll_id+'" data-id="'+data.poll_id+'">';
+			pollString += '<div class = "poll-third text">'+dataBlock(data.poll_title,data.poll_description)+'</div>';
+			pollString += '<div class = "poll-third pie-chart"><canvas height="100" width="120" id="chart'+data.poll_id+'"></div>';
+			pollString += '<div class = "poll-third btn-panel"><i class = "fa fa-pencil fa-lg edit"></i><i class="fa fa-times fa-lg" onclick="delete_poll('+data.poll_id+')"></i></div>';
+			pollString += '</div>';
+			return pollString;
+		}
+
+		function makePieChart(data)
+		{
+			id = data.poll_id;
+			var data = [
+			    {
+			        value: data.no_count,
+			        color:"#E53935",
+			        highlight: "#E57373",
+			        label: "No"
+			    },
+			    {
+			        value: data.yes_count,
+			        color: "#388E3C",
+			        highlight: "#66BB6A",
+			        label: "Yes"
+			    },
+			    {
+			        value: data.other_count,
+			        color: "#EF6C00",
+			        highlight: "#FFD180",
+			        label: "Can't Say"
+			    }
+			]
+			var ctx = document.getElementById("chart"+id).getContext("2d");
+			var myPieChart = new Chart(ctx).Pie(data);
+		}
+
+		function dataBlock(title, desc)
+		{
+			var textString = '<div class = "poll-text">';
+			textString += '<span class = " bebas poll-title">'+title+'</span>';
+			textString += '<hr />';
+			if(desc.trim()=="")
+			{
+				textString += '<span class = "district poll-desc">No description</span>';
+			}
+			else {
+				textString += '<span class = "district poll-desc">'+desc+'</span>';
+			}
+			textString += '</div>';
+			return textString;
 		}
 		</script>

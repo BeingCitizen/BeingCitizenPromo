@@ -298,18 +298,54 @@ class UserController extends Controller {
       }
       public function poll_vote(){
         $poll=Input::all();
-        $uid=$poll['uid'];
+        $uid=$poll['user_id'];
         $poll_id=$poll['poll_id'];
-        $choice=$poll['vote'];
+        $choice=$poll['choice'];
+        $check=DB::table('user_pollRecord')->where(['poll_id'=>$poll_id, 'user_id'=>$uid, 'choice'=>$choice]);
+        if(!$check){//if user hasn't voted yet
         DB::table('user_pollRecord')->insert(['poll_id'=>$poll_id, 'user_id'=>$uid, 'choice'=>$choice]);
-      //  if($choice=='yes')
-        //  DB::table('poll_count')->(['poll_id'=>$id]);
+               if($choice=='Yes'){
+         DB::table('poll_count')->where(['poll_id'=>$poll_id])->increment('yes_count');
+       }
+        else if($choice=='No'){
+         DB::table('poll_count')->where(['poll_id'=>$poll_id])->increment('no_count');
+       }
+        else if($choice=='Can\'t Say'){
+         DB::table('poll_count')->where(['poll_id'=>$poll_id])->increment('other_count');
       }
+    }
+     //if user has already voted
+        else{
+        //  $prechoice=DB::table('user_pollRecord')->where(['poll_id'=>$poll_id, 'user_id'=>$uid, 'choice'=>$choice])->first();
+          DB::table('user_pollRecord')->where(['poll_id'=>$poll_id, 'user_id'=>$uid, 'choice'=>$choice])->update(['choice'=>$choice]);
+        if($choice=='Yes'){
+        // DB::table('poll_count')->where(['poll_id'=>$poll_id])->decrement($prechoice['choice']);
+         DB::table('poll_count')->where(['poll_id'=>$poll_id])->increment('yes_count');
+       }
+        else if($choice=='No'){
+          //DB::table('poll_count')->where(['poll_id'=>$poll_id])->decrement($prechoice['choice']);
+         DB::table('poll_count')->where(['poll_id'=>$poll_id])->increment('no_count');
+       }
+        else if($choice=='Can\'t Say'){
+          //DB::table('poll_count')->where(['poll_id'=>$poll_id])->decrement($prechoice['choice']);
+         DB::table('poll_count')->where(['poll_id'=>$poll_id])->increment('other_count');
+      }
+    }
+        }
+    
       public function create_poll(){
         $poll=Input::all();
         $title=$poll['title'];
         $descript=$poll['description'];
         $id=DB::table('poll_details')->insertGetId(['poll_title'=>$title, 'poll_description'=>$descript]);
+        DB::table('poll_count')->insert(['poll_id'=>$id]);
+      }
+      public function edit_poll(){
+        $poll=Input::all();
+        $id=$poll['poll_id'];
+        $title=$poll['title'];
+        $poll_description=$poll['description'];
+        $id=DB::table('poll_details')->where(['poll_id'=>$id])->update(array('poll_title' =>$title ,'poll_description'=>$poll_description ));
         DB::table('poll_count')->insert(['poll_id'=>$id]);
       }
        public function show_poll(){

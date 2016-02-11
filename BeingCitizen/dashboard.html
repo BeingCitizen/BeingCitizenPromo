@@ -31,35 +31,34 @@
 					Contains the entire profile here
 				-->
         <a href = "polls.html">POLLS</a><br />
-        <a href="debate_start.html">DEBATES</a><br />
-        <a href="blog.html">BLOGS</a><br />
+        <a href= "debate_start.html">DEBATES</a><br />
+        <a href= "blog.html">BLOGS</a><br />
 			</div>
 		</div>
 
 		<script src="js/d3.min.js"></script>
 		<script src="js/jquery.nicescroll.js"></script>
     <script>
+		var uid=0;
+		var did = null;
     $(document).ready(function(){
 
       $(".scrollable-camp").niceScroll();
 
       //$(".scrollable-camp").mCustomScrollbar({'setWidth':'80%','setHeight':'40%'});
       var obj={uid:uid};
-      $.post('/laravel/public/user_id',obj,
-      function(data){
-        if(data){
-          data=JSON.parse(data);
-          uid=data['user_id'];
-          thisName = data.name;
-          thisID = data.user_id;
-          $("#user-img").attr("src",data.pic_link);
-          $('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
-          $("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
-          $("#user-menu-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
-        }
-        else{
-          window.location='/BeingCitizen/login.html';
-        }
-      });
-    });
+			$.post('/laravel/public/admin_id',obj,
+			function(data){
+			    if(data){
+			        data=JSON.parse(data);
+			        uid=data['user_id'];
+							$('#user-name').html('<a href="/BeingCitizen/dashboard.html">Admin</a>');
+							$("#polls-visible").remove();
+			        $("#overlay-load").hide();
+	    			}
+				else{
+					window.location="/BeingCitizen/adminlogin.html";
+				}
+			});
+		});
     </script>

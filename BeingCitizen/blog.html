@@ -32,7 +32,7 @@
 					Campaign creation section : create button
 				-->
 				<div>
-					<button onclick="send_debate();">Create</button>
+					<button onclick="send_blog();">Create</button>
 				</div>
 				<div>
 					<i class="fa fa-image"></i>Upload an Image
@@ -54,22 +54,21 @@
 
 				var obj={uid:uid};
 
-				$.post('/laravel/public/user_id',
+				$.post('/laravel/public/admin_id',
 				function(data){
 					if(data){
 						data=JSON.parse(data);
 						uid=data['user_id'];
-						$('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
-						$("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+uid+'">'+data.name+'</a>');
+						$("#polls-visible").remove();
 						$('#toggle-menu').css("visibility","visible");
 					}
 					else{
-						window.location="login.html";
+						//window.location="adminlogin.html";
 					}
 				});
 			});
 
-			function send_debate()
+			function send_blog()
 			{
 
 				if($("#blog-title").text()=="")
