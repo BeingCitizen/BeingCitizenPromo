@@ -301,36 +301,37 @@ class UserController extends Controller {
         $uid=$poll['user_id'];
         $poll_id=$poll['poll_id'];
         $choice=$poll['choice'];
-        $check=DB::table('user_pollRecord')->where(['poll_id'=>$poll_id, 'user_id'=>$uid, 'choice'=>$choice]);
+        $check=DB::table('user_pollrecord')->where(['poll_id'=>$poll_id, 'user_id'=>$uid])->get();
         if(!$check){//if user hasn't voted yet
-        DB::table('user_pollRecord')->insert(['poll_id'=>$poll_id, 'user_id'=>$uid, 'choice'=>$choice]);
-               if($choice=='Yes'){
-         DB::table('poll_count')->where(['poll_id'=>$poll_id])->increment('yes_count');
-       }
-        else if($choice=='No'){
-         DB::table('poll_count')->where(['poll_id'=>$poll_id])->increment('no_count');
-       }
-        else if($choice=='Can\'t Say'){
-         DB::table('poll_count')->where(['poll_id'=>$poll_id])->increment('other_count');
-      }
-    }
+        DB::table('user_pollrecord')->insert(['poll_id'=>$poll_id, 'user_id'=>$uid, 'choice'=>$choice]);
+          if($choice==1){
+            DB::table('poll_count')->where(['poll_id'=>$poll_id])->increment('yes_count');
+          }
+          else if($choice==0){
+            DB::table('poll_count')->where(['poll_id'=>$poll_id])->increment('no_count');
+          }
+          else if($choice==2){
+            DB::table('poll_count')->where(['poll_id'=>$poll_id])->increment('other_count');
+          }
+        }
      //if user has already voted
         else{
         //  $prechoice=DB::table('user_pollRecord')->where(['poll_id'=>$poll_id, 'user_id'=>$uid, 'choice'=>$choice])->first();
-          DB::table('user_pollRecord')->where(['poll_id'=>$poll_id, 'user_id'=>$uid, 'choice'=>$choice])->update(['choice'=>$choice]);
-        if($choice=='Yes'){
+          DB::table('user_pollrecord')->where(['poll_id'=>$poll_id, 'user_id'=>$uid])->update(['choice'=>$choice]);
+          if($choice==1){
         // DB::table('poll_count')->where(['poll_id'=>$poll_id])->decrement($prechoice['choice']);
-         DB::table('poll_count')->where(['poll_id'=>$poll_id])->increment('yes_count');
-       }
-        else if($choice=='No'){
+            DB::table('poll_count')->where(['poll_id'=>$poll_id])->increment('yes_count');
+           }
+           else if($choice==0){
           //DB::table('poll_count')->where(['poll_id'=>$poll_id])->decrement($prechoice['choice']);
-         DB::table('poll_count')->where(['poll_id'=>$poll_id])->increment('no_count');
-       }
-        else if($choice=='Can\'t Say'){
+            DB::table('poll_count')->where(['poll_id'=>$poll_id])->increment('no_count');
+           }
+           else if($choice==2){
           //DB::table('poll_count')->where(['poll_id'=>$poll_id])->decrement($prechoice['choice']);
-         DB::table('poll_count')->where(['poll_id'=>$poll_id])->increment('other_count');
-      }
-    }
+            DB::table('poll_count')->where(['poll_id'=>$poll_id])->increment('other_count');
+           }
+        }
+    print_r(json_encode($check));
         }
     
       public function create_poll(){
