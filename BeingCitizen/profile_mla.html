@@ -1001,11 +1001,9 @@
 						$("#user-name").html('<a href="/BeingCitizen/profile_mla.html?profile_id='+thisID+'">'+thisName+'</a>');
 						$("#user-menu-name").html('<a href="/BeingCitizen/profile_mla.html?profile_id='+thisID+'">'+thisName+'</a>');
 					}
-					else{
-						//window.location='/BeingCitizen/login_mla.html';
+					else {
+						window.location="404.html";
 					}
-
-					$("#"+(consti.split(' ').join('-'))).attr("fill","#b71c1c");
 					loadLeaders(consti);
 					user();
 					$("#conti-name-here").html(consti);
@@ -1096,6 +1094,8 @@
 							showName = data.name;
 							campaign_constituency();
 							user_hashtags();
+							$(".highlight-red").attr("fill","rgb(60,60,60)").removeClass("highlight-red");
+							$("#"+(consti.split(' ').join('-'))).attr("fill","#b71c1c").addClass("highlight-red");
 						}
 					}
 				});
