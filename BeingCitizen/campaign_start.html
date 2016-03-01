@@ -2,11 +2,13 @@
 	<head>
 		<link href="fonts/stylesheet.css" rel="stylesheet" />
 		<link href = "css/campaign.css" rel = "stylesheet" />
+		<link href = "css/menu.css" rel = "stylesheet" />
 		<link href = "css/editor.css" rel = "stylesheet" />
 		<link rel="stylesheet" href="css/font-awesome.min.css" />
 		<link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 		<script src="js/jquery.js"></script>
+		<title>Create Campaign: Being Citizen</title>
 	</head>
 	<body>
 		<div id="header">
@@ -15,117 +17,126 @@
 			</script>
 		</div>
 		<div class = "campaign-fake">
-			<div class = "title title-underline" id ="campaign-title" contenteditable="true" placeholder="Enter a title"></div>
+			<div class = "title title-underline arimo" id ="campaign-title" contenteditable="true" placeholder="Enter a title"></div>
 			<br />
 			<!--
 				Campaign category
 			-->
 			<div class = "bottom-space">
-				<i class = "fa fa-sitemap label-text"></i>Choose a category
-				<select id="campaign-category">
-					<option value="Public Law and Order">Public Law and Order</option>
-					<option value="Police">Police</option>
-					<option value="Public Health and Sanitation">Public Health and Sanitation</option>
-					<option value="Local Government">Local Government</option>
-					<option value="Communications – Roads and Bridges">Communications andmdash; Roads and Bridges</option>
-					<option value="Water Supplies">Water Supplies</option>
-					<option value="Industries">Industries</option>
-					<option value="Markets and Fairs">Markets and Fairs</option>
-					<option value="Trade and Commerce">Trade and Commerce (within State)</option>
-					<option value="State Taxes">State Taxes (Electricity, Land, Roads, Toll)</option>
-				</select>
+				<div class = "fact-icon"><i class = "fa fa-sitemap label-text"></i></div>
+				<div class = "fact-key">Choose a category</div>
+				<div class = "fact-data">
+					<select id="campaign-category">
+						<option value="Public Law and Order">Public Law and Order</option>
+						<option value="Police">Police</option>
+						<option value="Public Health and Sanitation">Public Health and Sanitation</option>
+						<option value="Local Government">Local Government</option>
+						<option value="Communications – Roads and Bridges">Communications andmdash; Roads and Bridges</option>
+						<option value="Water Supplies">Water Supplies</option>
+						<option value="Industries">Industries</option>
+						<option value="Markets and Fairs">Markets and Fairs</option>
+						<option value="Trade and Commerce">Trade and Commerce (within State)</option>
+						<option value="State Taxes">State Taxes (Electricity, Land, Roads, Toll)</option>
+					</select>
+				</div>
 			</div>
 			<!--
 				COnstituency drop-down
 			-->
 			<div class = "bottom-space">
-				<i class="fa fa-map-marker label-text"></i>Enter your constituency
-				<select id="campagin-const">
-					<option value="Adarsh Nagar">Adarsh Nagar</option>
-					<option value="Ambedkar Nagar">Ambedkar Nagar</option>
-					<option value="Angpura">Angpura</option>
-					<option value="Babarpur">Babarpur</option>
-					<option value="Badarpur">Badarpur</option>
-					<option value="Badli">Badli</option>
-					<option value="Ballimaran">Ballimaran</option>
-					<option value="Bawana">Bawana</option>
-					<option value="Bijwasan">Bijwasan</option>
-					<option value="Burari">Burari</option>
-					<option value="Chandni Chowk">Chandni Chowk</option>
-					<option value="Chhatarpur">Chhatarpur</option>
-					<option value="Delhi Cantt">Delhi Cantt</option>
-					<option value="Deoli">Deoli</option>
-					<option value="Dwarka">Dwarka</option>
-					<option value="Gandhi Nagar">Gandhi Nagar</option>
-					<option value="Ghonda">Ghonda</option>
-					<option value="Gokalpur">Gokalpur</option>
-					<option value="Greater Kailash">Greater Kailash</option>
-					<option value="Hari Nagar">Hari Nagar</option>
-					<option value="Janakpuri">Janakpuri</option>
-					<option value="Kalkaji">Kalkaji</option>
-					<option value="Karawal Nagar">Karawal Nagar</option>
-					<option value="Karol Bagh">Karol Bagh</option>
-					<option value="Kasturba Nagar">Kasturba Nagar</option>
-					<option value="Kirari">Kirari</option>
-					<option value="Kondli">Kondli</option>
-					<option value="Krishna Nagar">Krishna Nagar</option>
-					<option value="Laxmi Nagar">Laxmi Nagar</option>
-					<option value="Madipur">Madipur</option>
-					<option value="Malviya Nagar">Malviya Nagar</option>
-					<option value="Matia Mahal">Matia Mahal</option>
-					<option value="Matiala">Matiala</option>
-					<option value="Mehrauli">Mehrauli</option>
-					<option value="Model Town">Model Town</option>
-					<option value="Moti Nagar">Moti Nagar</option>
-					<option value="Mundka">Mundka</option>
-					<option value="Mustafabad">Mustafabad</option>
-					<option value="Najafgarh">Najafgarh</option>
-					<option value="Nangloi Jat">Nangloi Jat</option>
-					<option value="Nerela">Nerela</option>
-					<option value="New Delhi">New Delhi</option>
-					<option value="Okhla">Okhla</option>
-					<option value="Palam">Palam</option>
-					<option value="Patel Nagar">Patel Nagar</option>
-					<option value="Patparganj">Patparganj</option>
-					<option value="R.K. Puram">R.K. Puram</option>
-					<option value="Rajinder Nagar">Rajinder Nagar</option>
-					<option value="Rajouri Garden">Rajouri Garden</option>
-					<option value="Rithala">Rithala</option>
-					<option value="Rohini">Rohini</option>
-					<option value="Rohtas Nagar">Rohtas Nagar</option>
-					<option value="Sadar Bazar">Sadar Bazar</option>
-					<option value="Sangam Vihar">Sangam Vihar</option>
-					<option value="Seelam Pur">Seelam Pur</option>
-					<option value="Seemapuri">Seemapuri</option>
-					<option value="Shahdara">Shahdara</option>
-					<option value="Shakur Basti">Shakur Basti</option>
-					<option value="Shalimar Bagh">Shalimar Bagh</option>
-					<option value="Sultan Pur Majra">Sultan Pur Majra</option>
-					<option value="Tilak Nagar">Tilak Nagar</option>
-					<option value="Timarpur">Timarpur</option>
-					<option value="Tri Nagar">Tri Nagar</option>
-					<option value="Trilokpuri">Trilokpuri</option>
-					<option value="Tughlakabad">Tughlakabad</option>
-					<option value="Uttam Nagar">Uttam Nagar</option>
-					<option value="Vikaspuri">Vikaspuri</option>
-					<option value="Vishwas Nagar">Vishwas Nagar</option>
-					<option value="Wazirpur">Wazirpur</option>
-				</select>
+				<div class = "fact-icon"><i class="fa fa-map-marker label-text"></i></div>
+				<div class = "fact-key">Enter your constituency</div>
+				<div class = "fact-data">
+					<select id="campagin-const">
+						<option value="Adarsh Nagar">Adarsh Nagar</option>
+						<option value="Ambedkar Nagar">Ambedkar Nagar</option>
+						<option value="Angpura">Angpura</option>
+						<option value="Babarpur">Babarpur</option>
+						<option value="Badarpur">Badarpur</option>
+						<option value="Badli">Badli</option>
+						<option value="Ballimaran">Ballimaran</option>
+						<option value="Bawana">Bawana</option>
+						<option value="Bijwasan">Bijwasan</option>
+						<option value="Burari">Burari</option>
+						<option value="Chandni Chowk">Chandni Chowk</option>
+						<option value="Chhatarpur">Chhatarpur</option>
+						<option value="Delhi Cantt">Delhi Cantt</option>
+						<option value="Deoli">Deoli</option>
+						<option value="Dwarka">Dwarka</option>
+						<option value="Gandhi Nagar">Gandhi Nagar</option>
+						<option value="Ghonda">Ghonda</option>
+						<option value="Gokalpur">Gokalpur</option>
+						<option value="Greater Kailash">Greater Kailash</option>
+						<option value="Hari Nagar">Hari Nagar</option>
+						<option value="Janakpuri">Janakpuri</option>
+						<option value="Kalkaji">Kalkaji</option>
+						<option value="Karawal Nagar">Karawal Nagar</option>
+						<option value="Karol Bagh">Karol Bagh</option>
+						<option value="Kasturba Nagar">Kasturba Nagar</option>
+						<option value="Kirari">Kirari</option>
+						<option value="Kondli">Kondli</option>
+						<option value="Krishna Nagar">Krishna Nagar</option>
+						<option value="Laxmi Nagar">Laxmi Nagar</option>
+						<option value="Madipur">Madipur</option>
+						<option value="Malviya Nagar">Malviya Nagar</option>
+						<option value="Matia Mahal">Matia Mahal</option>
+						<option value="Matiala">Matiala</option>
+						<option value="Mehrauli">Mehrauli</option>
+						<option value="Model Town">Model Town</option>
+						<option value="Moti Nagar">Moti Nagar</option>
+						<option value="Mundka">Mundka</option>
+						<option value="Mustafabad">Mustafabad</option>
+						<option value="Najafgarh">Najafgarh</option>
+						<option value="Nangloi Jat">Nangloi Jat</option>
+						<option value="Nerela">Nerela</option>
+						<option value="New Delhi">New Delhi</option>
+						<option value="Okhla">Okhla</option>
+						<option value="Palam">Palam</option>
+						<option value="Patel Nagar">Patel Nagar</option>
+						<option value="Patparganj">Patparganj</option>
+						<option value="R.K. Puram">R.K. Puram</option>
+						<option value="Rajinder Nagar">Rajinder Nagar</option>
+						<option value="Rajouri Garden">Rajouri Garden</option>
+						<option value="Rithala">Rithala</option>
+						<option value="Rohini">Rohini</option>
+						<option value="Rohtas Nagar">Rohtas Nagar</option>
+						<option value="Sadar Bazar">Sadar Bazar</option>
+						<option value="Sangam Vihar">Sangam Vihar</option>
+						<option value="Seelam Pur">Seelam Pur</option>
+						<option value="Seemapuri">Seemapuri</option>
+						<option value="Shahdara">Shahdara</option>
+						<option value="Shakur Basti">Shakur Basti</option>
+						<option value="Shalimar Bagh">Shalimar Bagh</option>
+						<option value="Sultan Pur Majra">Sultan Pur Majra</option>
+						<option value="Tilak Nagar">Tilak Nagar</option>
+						<option value="Timarpur">Timarpur</option>
+						<option value="Tri Nagar">Tri Nagar</option>
+						<option value="Trilokpuri">Trilokpuri</option>
+						<option value="Tughlakabad">Tughlakabad</option>
+						<option value="Uttam Nagar">Uttam Nagar</option>
+						<option value="Vikaspuri">Vikaspuri</option>
+						<option value="Vishwas Nagar">Vishwas Nagar</option>
+						<option value="Wazirpur">Wazirpur</option>
+					</select>
+				</div>
 			</div>
 			<!--
 				Tagging feature comes here
 			-->
 			<div class = "bottom-space">
-				<i class="fa fa-tags label-text"></i>Tag people / ministries
-				<input type = "text" id = "contentbox"></input>
-				<div >
-					<div id="msgbox">
+				<div class = "fact-icon"><i class="fa fa-tags label-text"></i></div>
+				<div class = "fact-key">Tag people / ministries (Start with an @)</div>
+				<div class = "fact-data">
+					<input type = "text" id = "contentbox"></input>
+					<div >
+						<div id="msgbox">
+						</div>
+						<select name= "display" id="display" multiple="multiple">
+							<!--Options to be loaded here by AJAX-->
+						</select>
 					</div>
-					<select name= "display" id="display" multiple="multiple">
-						<!--Options to be loaded here by AJAX-->
-					</select>
+					<div id = "tagged"></div>
 				</div>
-				<div id = "tagged"></div>
 			</div>
 			<!--
 				The editor comes here, now
@@ -134,10 +145,13 @@
 			<!--
 				Actions for users : follow or volunteer
 			-->
-			<div>
-				<div class = "lbl"> Allow people to
-					<input type="checkbox" name="action" value="follow"><i class = "fa fa-eye"></i>Follow</input>
-					<input type="checkbox" name="action" value="volunteer"><i class = "fa fa-hand-o-up"></i>Volunteer</input>
+			<br />
+			<div class = "bottom-space">
+				<div class = "fact-icon"><i class = "fa fa-gear"></i></div>
+				<div class = "fact-key">Allow people to</div>
+				<div class = "fact-data">
+					<input type="checkbox" name="action" value="follow">&nbsp;&nbsp;<i class = "fa fa-eye"></i>&nbsp;&nbsp;Follow</input>
+					<input type="checkbox" name="action" value="volunteer">&nbsp;&nbsp;<i class = "fa fa-hand-o-up"></i>&nbsp;&nbsp;Volunteer</input>
 				</div>
 				<!--
 					End of editor section
@@ -146,12 +160,12 @@
 					Campaign creation section : create button
 				-->
 				<div>
-					<button onclick="send_camp();">Create</button>
+					<button onclick="send_camp();"><i class = "fa fa-check green"></i>Create</button>
 				</div>
 				<div>
 					<i class="fa fa-image"></i>Upload an Image
 					<div class="image_upload">
-						<button onclick="send_img();">Upload<i class = "flaticon-upload124"></i></button>
+						<button onclick="send_img();"><i class = "fa fa-upload red"></i>Upload</button>
 					</div>
 				</div>
 			</div>
@@ -186,13 +200,23 @@
 						thisName = data.name;
 						thisID = data.user_id;
 						$("#user-img").attr("src",data.pic_link);
-						$('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
-						$("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
-						$("#user-menu-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
+						$("#user-menu-name").html('<a class = "district" href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
+						$("#admin-panel").remove();
+						$("#mla-panel").remove();
 					}
 					else{
 						window.location="/BeingCitizen/login.html";
 					}
+				});
+
+				$("#campaign-title").focusin(function(){
+					$(this).addClass("black");
+				});
+
+				$("#campaign-title").focusout(function(){
+					var content = $(this).html();
+					if(content.trim() == "")
+						$(this).removeClass("black");
 				});
 
 				var start=/@/ig; // @ Match
@@ -257,7 +281,7 @@
 			function send_camp()
 			{
 
-				if($("#campaign-title").text()=="")
+				if($("#campaign-title").text().trim()=="")
 				{
 					alert("Please provide a title for the campaign");
 					return;

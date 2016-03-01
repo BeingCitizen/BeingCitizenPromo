@@ -155,6 +155,7 @@
 			$.post('/laravel/public/show-poll',function(data){
 			     data = JSON.parse(data);
 					 var i = 0;
+					 data = data.reverse();
 					 for(;data[i];i++)
 					 {
 						 var pollDisplay = pollDresser(data[i]);

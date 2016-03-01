@@ -4,53 +4,57 @@
 		<link href = "fonts/flaticon.css" rel = "stylesheet" />
 		<link rel="stylesheet" href="css/font-awesome.min.css" />
 		<link href="fonts/stylesheet.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="css/tipped/tipped.css"/>
 	</head>
-	<body>
+	<body class = "arimo">
 		<!--Horizontal menubar-->
 		<div class = "horizontal-bar">
-				<div class = "horiz-menu-sub-div put-left">
-					<i class = "fa fa-align-justify fa-lg" id = "toggle-menu" ></i>
-					<div class = "being-citizen-container inline-show-block">
-						<img src = "/BeingCitizen/images/logo-small.png" class="pull-down" />
-						<span class = "being-citizen pull-down">being citizen</span>
-					</div>
-					<div class = "spacer pull-down">&nbsp;</div>
-					<div class = "img-menu inline-show-block put-right">
-						<img id = "user-img" class = "pull-down-spl"/>
-						<div class = "user-menu hidden-box" id = "menu-down">
-							<div>welcome&nbsp;<span id = "user-menu-name"></span></div>
-							<div class = "create-campaign" onclick='window.location="/BeingCitizen/campaign_display.html"'>
-									create&nbsp;campaign<i class = "flaticon-fist"></i>
-							</div>
-							<div>edit&nbsp;profile</div>
-							<div><a href="/BeingCitizen/logout.html">logout</a></div>
-						</div>
-					</div>
+			<div class = "inline one-third center">
+				<!--Menu items here-->
+				<a href="/BeingCitizen/campaign_list.html"><i class = "flaticon-iris" id = "VC"></i></a>
+				<a href="/BeingCitizen/debate_list.html"><i class = "flaticon-megaphone27" id="VD"></i></a>
+				<a href="/BeingCitizen/feed.html?tags=false&type=none"><i class = "flaticon-user87" id = "VF"></i></a>
+
+				<div class = "inline" id = "user-panel">
+					<a href="/BeingCitizen/campaign_start.html"><i class = "flaticon-fist" id = "CC"></i></a>
+					<a href="/BeingCitizen/userpolls.html"><i class="fa fa-pie-chart" id = "UP" style="margin-right:20px"></i></a>
 				</div>
-		</div>
-		<!--Vertical menubar-->
-		<div class = "vertical-bar">
-			<div class = "icon-options">
-				<div class = "sentinel">&nbsp;</div>
-				<div class = "name-field">Hello&nbsp;<span id = "user-name"></span></div>
-				<div class = "option-menu"><i class = "flaticon-iris"></i><a href="/BeingCitizen/campaign_list.html">View&nbsp;Campaigns</a></div>
-				<div class = "option-menu" id = "make-invisible"><i class = "flaticon-fist"></i><a href="/BeingCitizen/campaign_start.html">Create&nbsp;Campaigns</a></div>
-				<div class = "option-menu"><i class = "flaticon-megaphone27"></i><a href="/BeingCitizen/debate_list.html">View&nbsp;Debates</a></div>
-				<div class = "option-menu"><i class = "flaticon-user87"></i><a href="/BeingCitizen/feed.html?tags=false&type=none">Compose&nbsp;feed</a></div>
-				<div class="option-menu" id="polls-admin"><i class="fa fa-pie-chart" style="margin-right:20px"></i><a href="/BeingCitizen/polls.html">Polls</a></div>
-				<div class="option-menu" id="polls-visible"><i class="fa fa-pie-chart" style="margin-right:20px"></i><a href="/BeingCitizen/userpolls.html">Polls</a></div>
+
+				<div class = "inline" id = "admin-panel">
+					<a href="/BeingCitizen/polls.html"><i class="fa fa-pie-chart" id = "EP"></i></a>
+				</div>
+
+				<div class = "inline" id = "mla-panel">
+				</div>
+
+			</div>
+
+
+			<div class = "inline one-third center">
+				<div class = "inline"><img src = "/BeingCitizen/images/logo-small.png" height="25"/></div>
+				<div class = "inline"><span class = "being-citizen">being citizen</span></div>
+			</div>
+
+			<div class = "inline one-third center">
+				<div class = "inline"><img id = "user-img" class = "circular" height = "25"/></div>
+				<div class = "inline arimo" id = "user-menu-name" style="vertical-align:super"></div>
+				<div class = "inline"><a href="/BeingCitizen/logout.html" style="vertical-align:super"><i id = "LO" class = "fa fa-sign-out" style="margin-left:20px"></i></a></div>
 			</div>
 		</div>
+
 	</body>
 	<script src="js/jquery.js"></script>
 	<script src="js/jquery-ui.min.js"></script>
-
+	<script type="text/javascript" src="js/tipped/tipped.js"></script>
 	<script>
-		$("#toggle-menu").click(function(){
-			$(".vertical-bar").toggle('slide',{direction:'left'});
-		});
-		$("#user-img").click(function(){
-			$("#menu-down").slideToggle();
-		});
+	$(document).ready(function() {
+		Tipped.create('#VC', 'View Campaigns',{ position: 'bottom' });
+		Tipped.create('#VD', 'View Debates',{ position: 'bottom' });
+		Tipped.create('#VF', 'View Feeds',{ position: 'bottom' });
+		Tipped.create('#CC', 'Create Campaigns',{ position: 'bottom' });
+		Tipped.create('#UP', 'View Polls',{ position: 'bottom' });
+		Tipped.create('#EP', 'Edit Polls',{ position: 'bottom' });
+		Tipped.create('#LO', 'Logout',{ position: 'bottom' });
+	});
 	</script>
 </html>

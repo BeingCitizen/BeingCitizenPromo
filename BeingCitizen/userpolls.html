@@ -74,28 +74,33 @@ function show_poll()
 	$.post('/laravel/public/show-poll',function(data){
 		data = JSON.parse(data);
 		var i = 0;
+		data = data.reverse();
 		for(;data[i];i++)
 		{
 			var obj={poll_id:data[i].poll_id, user_id:uid};
 			$.post('/laravel/public/check-vote', obj, function(data){
 				if(data){
-		    data = JSON.parse(data);
-		    console.log(data);//if user has voted
-		       }
-		    });
-			var pollDisplay = pollDresser(data[i]);
+					data = JSON.parse(data);
+					console.log(data)//if user has voted
+				}
+			});
+			var pollDisplay = pollDresser(data[i],i);
 			$("#poll-arena").append(pollDisplay);
 			makePieChart(data[i]);
 		}
 	});
-	vote(3,1);//0->no, 1->yes, 2->can't say
+	//vote(3,1);//0->no, 1->yes, 2->can't say
 }
 
-function pollDresser(data)
+function pollDresser(data,i)
 {
 	var pollString = '<div class = "poll-box" id = "poll'+data.poll_id+'" data-id="'+data.poll_id+'">';
 	pollString += '<div class = "poll-third text">'+dataBlock(data.poll_title,data.poll_description)+'</div>';
-	pollString += '<div class = "poll-third pie-chart"><canvas height="100" width="120" id="chart'+data.poll_id+'"></div>';
+	if(i == 0)
+		pollString += '<div class = "poll-third pie-chart"><canvas height="200" width="240" id="chart'+data.poll_id+'"></div>';
+	else {
+		pollString += '<div class = "poll-third pie-chart"><canvas height="100" width="120" id="chart'+data.poll_id+'"></div>';
+	}
 	pollString += '<div class = "poll-third btn-panel">';
 	pollString += '<button class = "button btn-clear btn-yes">Yes</button><br />';
 	pollString += '<button class = "button btn-clear btn-no">No</button><br />';
@@ -109,7 +114,6 @@ function pollDresser(data)
 function makePieChart(data)
 {
 	id = data.poll_id;
-	console.log(data);
 	var data = [
 		{
 			value: data.no_count,
@@ -156,12 +160,12 @@ function vote(poll_id,choice){
 		poll_id:poll_id,
 		choice:choice
 	};
-		$.post('/laravel/public/poll-vote',obj,
-		function(data){
-			if(data){
-               alert("your vote recorded");
-			}
-		});
-	}
+	$.post('/laravel/public/poll-vote',obj,
+	function(data){
+		if(data){
+			alert("your vote recorded");
+		}
+	});
+}
 
-	</script>
+</script>

@@ -79,6 +79,25 @@ hr{
   background: white;
   padding:3px;
   margin:3px;
+  width:49%;
+  display:inline-block;
+}
+.poll-box:nth-of-type(1){
+  width:99%;
+  height:250px;
+}
+.poll-box:nth-of-type(1) .poll-title{
+  font-size:30px;
+}
+.poll-box:nth-of-type(1) .poll-desc{
+  font-size:20px;
+}
+.poll-box:nth-of-type(1) .btn-panel{
+  height:100%;
+  padding-top:5%;
+}
+.poll-box:nth-of-type(1) canvas{
+  margin-top:5%;
 }
 .poll-third{
   width:32%;

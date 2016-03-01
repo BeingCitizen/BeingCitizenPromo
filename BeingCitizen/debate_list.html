@@ -1,10 +1,11 @@
 <html>
 <head>
-  <title>Campaigns: Being Citizen.com</title>
+  <title>Debates: Being Citizen.com</title>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
   <script src="js/jquery.js"></script>
   <!--For the editor's text-->
   <link href = "css/debate.css" rel = "stylesheet" />
+  <link href = "css/menu.css" rel = "stylesheet" />
   <link rel="stylesheet" href="css/font-awesome.min.css" />
   <link rel = "stylesheet" href="css/filter.css" />
 </head>
@@ -75,16 +76,18 @@ var uid = 0;
 var obj;
 
 $(document).ready(function(){
-  $("#polls-admin").remove();
   obj={uid:uid};
   $.post('/laravel/public/user_id',
   function(data){
     if(data){
       data=JSON.parse(data);
       uid=data['user_id'];
-      $('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
-      $("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+uid+'">'+data.name+'</a>');
-      $('#toggle-menu').css("visibility","visible");
+      thisName = data.name;
+      thisID = data.user_id;
+      $("#user-img").attr("src",data.pic_link);
+      $("#user-menu-name").html('<a class = "district" href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
+      $("#admin-panel").remove();
+      $("#mla-panel").remove();
     }
   });
 });

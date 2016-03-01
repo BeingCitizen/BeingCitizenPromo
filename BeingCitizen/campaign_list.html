@@ -5,6 +5,7 @@
 		<script src="js/jquery.js"></script>
 		<!--For the editor's text-->
 		<link href = "css/campaign.css" rel = "stylesheet" />
+		<link href = "css/menu.css" rel = "stylesheet" />
 		<link rel="stylesheet" href="css/font-awesome.min.css" />
 		<link rel = "stylesheet" href="css/filter.css" />
 		<style>
@@ -93,16 +94,54 @@
 			var obj={uid:uid};
 			$("#polls-admin").remove();
 			$(document).ready(function(){
-				$.post('/laravel/public/user_id',
+				$.post('/laravel/public/user_id',obj,
 				function(data){
 					if(data){
 						data=JSON.parse(data);
 						uid=data['user_id'];
-						$('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
-						$("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+uid+'">'+data.name+'</a>');
-						$('#toggle-menu').css("visibility","visible");
+						thisName = data.name;
+						thisID = data.user_id;
+						$("#user-img").attr("src",data.pic_link);
+						$("#user-menu-name").html('<a class = "district" href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
+						$("#admin-panel").remove();
+						$("#mla-panel").remove();
+						$("#switch-status").remove();
+						signed = true;
+						campaign();
 					}
-				});
+					else
+					{
+							$("#user-panel").remove();
+							$.post('/laravel/public/user_id_mla',obj,
+								function(data){
+									if(data){
+										mla_login = true;
+										admin_login = false;
+										data=JSON.parse(data);
+										uid=data['user_id'];
+										thisName = data.name;
+										thisID = data.user_id;
+										$("#user-img").attr("src",data.pic_link);
+										$("#user-menu-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
+										if(mla_login == true){
+											$("#admin-panel").remove();
+										}
+										else if(admin_login == true){
+											$("#mla-panel").remove();
+										}
+										signed  = true;
+										campaign();
+									}
+									else{
+										$("#admin-panel").remove();
+										$("#mla-panel").remove();
+										$("#user-panel").remove();
+										$("#switch-status").remove();
+										campaign();
+									}
+								});
+							}
+						});
 
 				//Campaigns on the basis of dates
 				$.post('/laravel/public/campaigns_dateSorted',obj,function(data){
@@ -270,7 +309,6 @@
 				var child = $(this).attr("data");
 				child = "#"+child;
 				$(child).slideToggle();
-				console.log(this);
 			});
 
 			$("#filter").click(function(){

@@ -124,11 +124,14 @@
 						if(data){
 							data=JSON.parse(data);
 							uid=data['user_id'];
+							thisName = data.name;
+							thisID = data.user_id;
 							$("#tag").attr("contenteditable","true");
 							$("#feed").attr("contenteditable","true");
-							$('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
-							$("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+uid+'">'+data.name+'</a>');
-							$('#toggle-menu').css("visibility","visible");
+							$("#user-img").attr("src",data.pic_link);
+							$("#user-menu-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
+							$("#admin-panel").remove();
+							$("#mla-panel").remove();
 							signed  = true;
 							profile = "civilian";
 						}
@@ -141,13 +144,12 @@
 									uid=data['user_id'];
 									thisName = data.name;
 									thisID = data.user_id;
-									consti = data.constituency;
-									$(".create-campaign").remove();
-									$("#make-invisible").remove();
+									$("#tag").attr("contenteditable","true");
+									$("#feed").attr("contenteditable","true");
 									$("#user-img").attr("src",data.pic_link);
-									$('#profile-page').attr('href','/BeingCitizen/profile_mla.html?profile_id='+uid);
-									$("#user-name").html('<a href="/BeingCitizen/profile_mla.html?profile_id='+thisID+'">'+thisName+'</a>');
-									$("#user-menu-name").html('<a href="/BeingCitizen/profile_mla.html?profile_id='+thisID+'">'+thisName+'</a>');
+									$("#user-menu-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
+									$("#user-panel").remove();
+									$("#admin-panel").remove();
 									signed  = true;
 									profile = "mla";
 						    }
