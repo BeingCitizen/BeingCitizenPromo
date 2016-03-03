@@ -133,10 +133,8 @@
 										campaign();
 									}
 									else{
-										$("#admin-panel").remove();
-										$("#mla-panel").remove();
-										$("#user-panel").remove();
-										$("#switch-status").remove();
+										$(".show-on").remove();
+										$("#unlogged").show().addClass("inline");
 										campaign();
 									}
 								});

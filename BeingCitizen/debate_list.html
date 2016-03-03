@@ -77,7 +77,7 @@ var obj;
 
 $(document).ready(function(){
   obj={uid:uid};
-  $.post('/laravel/public/user_id',
+  $.post('/laravel/public/user_id',obj,
   function(data){
     if(data){
       data=JSON.parse(data);
@@ -88,8 +88,41 @@ $(document).ready(function(){
       $("#user-menu-name").html('<a class = "district" href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
       $("#admin-panel").remove();
       $("#mla-panel").remove();
+      $("#switch-status").remove();
+      signed = true;
+
     }
-  });
+    else
+    {
+        $("#user-panel").remove();
+        $.post('/laravel/public/user_id_mla',obj,
+          function(data){
+            if(data){
+              mla_login = true;
+              admin_login = false;
+              data=JSON.parse(data);
+              uid=data['user_id'];
+              thisName = data.name;
+              thisID = data.user_id;
+              $("#user-img").attr("src",data.pic_link);
+              $("#user-menu-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
+              if(mla_login == true){
+                $("#admin-panel").remove();
+              }
+              else if(admin_login == true){
+                $("#mla-panel").remove();
+              }
+              signed  = true;
+
+            }
+            else{
+              $(".show-on").remove();
+              $("#unlogged").show().addClass("inline");
+
+            }
+          });
+        }
+      });
 });
 
 function returnLink(debate_info,text)

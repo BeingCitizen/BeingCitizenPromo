@@ -17,7 +17,7 @@
   display:inline-block;
   margin:0;
   padding:2px;
-  width:23%;
+  width:30%;
 }
 .inline-band div:nth-of-type(2n+1){
   background:#263238;
@@ -51,13 +51,13 @@ body,html{
 }
 .label-text{
   /*This rule is for the glyphicons and the label that follows them*/
-  font-family:'bebas_neuebold';
+  font-family:'bebas_neue_regularregular';
   font-size:18px !important; /*Overrides BootStrap files*/
   margin-right:4px;
   margin-left:4px;
 }
 .title{
-  font-family:'bebas_neuebold';
+  font-family:'arimo';
   font-size:60px !important; /*Overrides BootStrap files*/
 }
 .inline-show{

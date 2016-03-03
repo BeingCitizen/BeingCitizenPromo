@@ -63,7 +63,7 @@ aaarghnormal
 	padding-left:2%;
 }
 .inline{
-	display:inline-block;
+	display:inline-block !important;
 }
 .circular{
   border-radius:50%;
@@ -103,6 +103,14 @@ aaarghnormal
 }
 .err{
 	color:red;
+}
+.login-su{
+	color:black;
+	background:#E1F5FE;
+	border:none;
+	padding:2px;
+	border-radius:4px;
+	font-family:'arimo';
 }
 .pressed{ color:#78909C !important; }
 .unpressed{ color:#263238 !important; }

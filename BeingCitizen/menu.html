@@ -2,14 +2,14 @@
 	<head>
 		<link href = "css/menu.css" rel="stylesheet"/>
 		<link href = "fonts/flaticon.css" rel = "stylesheet" />
-		<link rel="stylesheet" href="css/font-awesome.min.css" />
-		<link href="fonts/stylesheet.css" rel="stylesheet" />
-		<link rel="stylesheet" type="text/css" href="css/tipped/tipped.css"/>
+		<link rel = "stylesheet" href="css/font-awesome.min.css" />
+		<link href = "fonts/stylesheet.css" rel="stylesheet" />
+		<link rel = "stylesheet" type="text/css" href="css/tipped/tipped.css"/>
 	</head>
 	<body class = "arimo">
 		<!--Horizontal menubar-->
 		<div class = "horizontal-bar">
-			<div class = "inline one-third center">
+			<div class = "inline one-third center show-on">
 				<!--Menu items here-->
 				<a href="/BeingCitizen/campaign_list.html"><i class = "flaticon-iris" id = "VC"></i></a>
 				<a href="/BeingCitizen/debate_list.html"><i class = "flaticon-megaphone27" id="VD"></i></a>
@@ -26,19 +26,22 @@
 
 				<div class = "inline" id = "mla-panel">
 				</div>
-
 			</div>
-
 
 			<div class = "inline one-third center">
 				<div class = "inline"><img src = "/BeingCitizen/images/logo-small.png" height="25"/></div>
 				<div class = "inline"><span class = "being-citizen">being citizen</span></div>
 			</div>
 
-			<div class = "inline one-third center">
+			<div class = "inline one-third center show-on">
 				<div class = "inline"><img id = "user-img" class = "circular" height = "25"/></div>
 				<div class = "inline arimo" id = "user-menu-name" style="vertical-align:super"></div>
 				<div class = "inline"><a href="/BeingCitizen/logout.html" style="vertical-align:super"><i id = "LO" class = "fa fa-sign-out" style="margin-left:20px"></i></a></div>
+			</div>
+
+			<div class = "inline one-third center hidden" id = "unlogged">
+				<button class = "login-su" onclick="loginPage()">Login</button> OR
+				<button class = "login-su" onclick="signupPage()">Signup</button> to learn more.
 			</div>
 		</div>
 
@@ -56,5 +59,13 @@
 		Tipped.create('#EP', 'Edit Polls',{ position: 'bottom' });
 		Tipped.create('#LO', 'Logout',{ position: 'bottom' });
 	});
+
+	function loginPage(){
+		window.location = '/BeingCitizen/login.html';
+	}
+
+	function signupPage(){
+		window.location = '/BeingCitizen/signup.html';
+	}
 	</script>
 </html>

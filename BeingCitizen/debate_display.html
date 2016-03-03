@@ -5,10 +5,11 @@
 		<!--For the editor's text-->
 		<link href = "css/bootstrap.min.css" rel="stylesheet" />
 		<link href = "css/debate.css" rel = "stylesheet" />
+		<link href = "css/menu.css" rel = "stylesheet" />
 		<link rel="stylesheet" href="css/font-awesome.min.css" />
 		<script src="js/d3.min.js"></script>
 	</head>
-	<body>
+	<body class = "arimo">
 		<div id = "overlay-load">
 			<!--
 				This space is reserved for the overlay
@@ -102,23 +103,50 @@
 		$(".screen").show();
 		$("#polls-admin").remove();
 		var obj={uid:uid};
-		$.post('/laravel/public/user_id',
+		$.post('/laravel/public/user_id',obj,
 		function(data){
 			if(data){
-				console.log("here");
 				data=JSON.parse(data);
 				uid=data['user_id'];
+				thisName = data.name;
+				thisID = data.user_id;
 				$("#user-img").attr("src",data.pic_link);
-				$("#polls-admin").remove();
-				$('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
-				$('#toggle-menu').css("visibility","visible");
-				$("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+uid+'">'+data.name+'</a>');
+				$("#user-menu-name").html('<a class = "district" href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
+				$("#admin-panel").remove();
+				$("#mla-panel").remove();
+				$("#switch-status").remove();
+				signed = true;
+				;
 			}
-			else{
-				//Do nothing
-				//Imply this check during the commenting action
-			}
-		});
+			else
+			{
+					$("#user-panel").remove();
+					$.post('/laravel/public/user_id_mla',obj,
+						function(data){
+							if(data){
+								mla_login = true;
+								admin_login = false;
+								data=JSON.parse(data);
+								uid=data['user_id'];
+								thisName = data.name;
+								thisID = data.user_id;
+								$("#user-img").attr("src",data.pic_link);
+								$("#user-menu-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
+								if(mla_login == true){
+									$("#admin-panel").remove();
+								}
+								else if(admin_login == true){
+									$("#mla-panel").remove();
+								}
+								signed  = true;
+							}
+							else{
+								$(".show-on").remove();
+								$("#unlogged").show().addClass("inline");
+							}
+						});
+					}
+				});
 
 		var debate_obj = {debate_id:debate_id}
 
