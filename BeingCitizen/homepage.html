@@ -35,17 +35,19 @@
 						<button onclick='window.location="/BeingCitizen/login.html"'>Login</button>
 						<button onclick='window.location="/BeingCitizen/signup.html"'>SignUp</button>
 				</div>
-				<div id = "map" class = "half">
+				<div class = "half inline">
+				<div id = "map">
 					<div class = "map-info district">
 						Click on any constituency on the adjacent map to know more about a constituency's leader
 					</div>
+					<br />
 					<!--SVG begins here-->
 					<div class = "map-svg">
 					<?xml version="1.0" encoding="utf-8"?>
 					<svg version="1.1"
 					id="svg2985" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" sodipodi:docname="test.svg" inkscape:version="0.48.4 r9939"
-					xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="400px" height="351px"
-					viewBox="0 0 400 351" enable-background="new 0 0 400 351" xml:space="preserve">
+					xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="400px" height="450px"
+					viewBox="0 0 400 450" enable-background="new 0 0 400 450" xml:space="preserve">
 						<sodipodi:namedview  inkscape:pageshadow="2" inkscape:pageopacity="0" id="namedview2987" inkscape:current-layer="svg2985" inkscape:window-maximized="1" inkscape:window-y="-8" inkscape:window-x="-8" inkscape:window-height="706" inkscape:window-width="1366" inkscape:cy="365.48397" inkscape:cx="355.14368" inkscape:zoom="0.83870819" showgrid="false" guidetolerance="10" gridtolerance="10" objecttolerance="10" bordercolor="#666666" pagecolor="#ffffff" borderopacity="1">
 						</sodipodi:namedview>
 						<g transform = "scale(0.6)">
@@ -901,12 +903,19 @@
 				</div>
 					<!--SVG ends here-->
 				</div>
-				<div id = "campaign-list" class = "half-half">
+			</div>
+			<div class = "half inline">
+				<div class = "scrollable">
+					<div id = "campaign-list">
+					</div>
+					<div id = "debate-list">
+					</div>
 				</div>
-				<div id = "debate-list" class = "half-half">
+				<div id = "tweets">
 				</div>
 			</div>
 		</div>
+	</div>
 
 		<script src="js/d3.min.js"></script>
 
@@ -935,16 +944,41 @@
 					thisName = data.name;
 					thisID = data.user_id;
 					$("#user-img").attr("src",data.pic_link);
-					$('#profile-page').attr('href','/BeingCitizen/profile_display.html?profile_id='+uid);
-					$("#user-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
-					$("#user-menu-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
+					$("#user-menu-name").html('<a class = "district" href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
+					$("#admin-panel").remove();
+					$("#mla-panel").remove();
 					$(".fixed-note").hide();
 				}
 				else{
-					//window.location='/BeingCitizen/login.html';
+					$("#user-panel").remove();
+					//For person other than a normal user, like an admin or MLA
+					$.post('/laravel/public/user_id_mla',obj,
+					function(data){
+						if(data){
+							mla_login = true;
+							admin_login = false;
+						}
+						data=JSON.parse(data);
+						uid=data['user_id'];
+						thisName = data.name;
+						thisID = data.user_id;
+						$("#user-img").attr("src",data.pic_link);
+						$("#user-menu-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
+						if(mla_login == true){
+							$("#admin-panel").remove();
+						}
+						else if(admin_login == true){
+							$("#mla-panel").remove();
+						}
+						user_follow();
+						user();
+						$("#overlay-load").hide();
+					});
 				}
 				loadCampaigns();
 				loadLeaders(data.constituency);
+				fetchFeed();
+				fetchFeedMLA();
 				$("#overlay-load").hide();
 			});
 		});
@@ -954,8 +988,12 @@
 			$.post('/laravel/public/campaigns_dateSorted',obj,function(data){
 				//the data here shall be displayed onto the screen
 				data= JSON.parse(data);
-				for(var i = 0;i<data.length;i++){
-					$("#campaign-list").append(returnLink(data[i]));
+				var limit = Math.min(data.length,5);
+				for(var i = 0;i<limit;i++){
+					var div = document.createElement("div");
+			    div.innerHTML = data[i].campaign_text;
+			    var text = div.textContent || div.innerText || "<br />";
+					$("#campaign-list").append(returnLink(data[i],text));
 				}
 			});
 		}
@@ -984,16 +1022,97 @@
 			else return "no-action";
 		}
 
-		function returnLink(campaign_info)
+		function returnLink(campaign_info,text)
 		{
+			text = text.substr(0,15);
 			if(!campaign_info.image)
 			campaign_info.image = '/public/uploads/null/null.jpg';
 			var string = '<div class="campaign-object">';
-			string += '<img src = "/laravel/public/'+campaign_info.image+'" class="thumbnail '+class_action(campaign_info.status)+'"/><br />';
-			string += '<a href="campaign_display.html?campaign_id='+campaign_info.campaign_id+'" class="'+class_action(campaign_info.status)+'">'+campaign_info.name+'</a>';
+			string += '<img src = "/laravel/public/'+campaign_info.image+'" class="thumbnail '+class_action(campaign_info.status)+'"/>';
+			string += '<a href="campaign_display.html?campaign_id='+campaign_info.campaign_id+'" class="'+class_action(campaign_info.status)+'">'+campaign_info.name;
+			string += '<br /> <i class = "tinier"> Started by '+campaign_info.started_by + '</i><hr color="white"/>'+text+'</a>';
 			string += '</div>';
 			return string;
 		}
+
+		function fetchFeed()
+		{
+			$("#tweets").html("");
+			$.post("/laravel/public/get_posts",
+			function(data){
+				data = JSON.parse(data);
+				data.reverse();
+				var limit = Math.min(5,data.length);
+				for(var i = 0;i<limit;i++)
+				{
+					if(data[i].content == null)
+					{
+						continue;
+					}
+					if(data[i].name || data[i].content.trim()!="")
+						{
+							$("#tweets").append(feedMixer(data[i]));
+						}
+				}
+			});
+		}
+
+		function fetchFeedMLA()
+		{
+			$("#tweets").html("");
+			$.post("/laravel/public/get_posts_mla",
+			function(data){
+				data = JSON.parse(data);
+				data.reverse();
+				var limit = Math.min(5,data.length);
+				for(var i = 0;i<limit;i++)
+				{
+					if(data[i].content == null)
+					{
+						continue;
+					}
+					if(data[i].name || data[i].content.trim()!="")
+						{
+							$("#tweets").append(feedMixer(data[i]));
+						}
+				}
+			});
+		}
+
+		function feedMixer(feedElement)
+		{
+			//has two components, the content and the user id
+			var feedComp = '<div class = "feedElementBox"><div class = "imgBox"><img width="50" /><div class = "hashName"></div></div><div class = "msgMix"><div class = "hashMsg"></div></div></div>';
+			var withContent = feedFiller(feedComp,feedElement);
+			$(withContent).children('.msgMix').children('.hashMsg').children('#tagged').removeAttr('id');
+			$('span.close-tag',withContent).remove();
+			return withContent;
+		}
+
+		function feedFiller(feedComp,content)
+		{
+			var element = $(feedComp);
+			var img = '/BeingCitizen/images/female.gif';
+			if(content.pic_link)img = content.pic_link;
+			element.children(".imgBox").children("img").attr("src",img); //append images
+			element.children(".imgBox").children(".hashName").html('<a href=/BeingCitizen/profile_display.html?user_id='+content.user_id+'>'+content.name+'</a>');
+			element.children(".msgMix").children(".hashMsg").html(content.content);
+			var listOfTags = element.children(".msgMix").children(".hashMsg").children("span").children(".lbl-tag");
+			for(var i = 0;i<listOfTags.length;i++)
+			{
+				//these are the divs
+				var tagIndiv = $(listOfTags[i]).text();
+				$(listOfTags[i]).html(returnURLLoc(tagIndiv));
+			}
+			return element;
+		}
+
+		function returnURLLoc(hashtag)
+		{
+			var string = '<a href="/BeingCitizen/feed.html?tags=true&tagname='+hashtag+'">'+hashtag+'</a>';
+			return string;
+		}
+
 		</script>
 	</body>
 </html>

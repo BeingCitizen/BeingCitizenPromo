@@ -1,14 +1,40 @@
 .map-info{
-  display:inline-block;
   background:white;
   border-radius:4px;
   vertical-align: top;
   padding:4px;
-  width:45%;
 }
 .map-svg{
   display:inline-block;
   width:45%;
+}
+.half.inline{
+  width: 45%;
+  vertical-align: top;
+}
+.campaign-object{
+  position: relative;
+  margin: 3%;
+  vertical-align: top;
+  display:block;
+  text-align: left;
+}
+.campaign-object a{
+  position: absolute;
+  transform: translateY(30%);
+  width: 60% !important;
+}
+.tinier{
+  /*Inside .campaign-object a*/
+  font-size:10px;
+}
+.feedElementBox .msgMix{
+  /*For feed elements*/
+  width:70%;
+}
+.scrollable{
+  height:60%;
+  overflow-y: scroll;
 }
 path
 {

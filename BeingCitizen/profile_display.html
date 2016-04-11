@@ -111,10 +111,11 @@
 			var showName = '';//refers to the display name of the user being viewed
 
 			$(document).ready(function(){
-				$(".scrollable-camp").niceScroll();
-				$(".suggestions").niceScroll();
-				$("#polls-admin").remove();
+				//$(".scrollable-camp").niceScroll();
+				//$(".suggestions").niceScroll();
+				//$("#polls-admin").remove();
 				var obj={uid:uid};
+
 				$.post('/laravel/public/user_id',obj,
 				function(data){
 					if(data){
@@ -126,37 +127,53 @@
 						$("#user-menu-name").html('<a class = "district" href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
 						$("#admin-panel").remove();
 						$("#mla-panel").remove();
+						$("#switch-status").remove();
+						signed = true;
 						user();
+						user_follow();
 					}
-					else{
-						$("#user-panel").remove();
-						//For person other than a normal user, like an admin or MLA
-						$.post('/laravel/public/user_id_mla',obj,
-						function(data){
-							if(data){
-								mla_login = true;
-								admin_login = false;
+					else
+					{
+							$("#user-panel").remove();
+							$.post('/laravel/public/user_id_mla',obj,
+								function(data){
+									if(data){
+										mla_login = true;
+										admin_login = false;
+										data=JSON.parse(data);
+										uid=data['user_id'];
+										thisName = data.name;
+										thisID = data.user_id;
+										$("#user-img").attr("src",data.pic_link);
+										$("#user-menu-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
+										if(mla_login == true){
+											$("#admin-panel").remove();
+										}
+										else if(admin_login == true){
+											$("#mla-panel").remove();
+										}
+										signed  = true;
+										user();
+										user_follow();
+										var x = $(".follow-btn button");
+										console.log(x);
+										x.attr('disabled','disabled');
+									}
+									else{
+										$(".show-on").remove();
+										$("#unlogged").show();
+										$("#switch-status").remove();
+										user();
+										user_follow();
+										var x = $(".follow-btn button");
+										console.log(x);
+										x.attr('disabled','disabled');
+									}
+								});
 							}
-							data=JSON.parse(data);
-							uid=data['user_id'];
-							thisName = data.name;
-							thisID = data.user_id;
-							$("#user-img").attr("src",data.pic_link);
-							$("#user-menu-name").html('<a href="/BeingCitizen/profile_display.html?profile_id='+thisID+'">'+thisName+'</a>');
-							if(mla_login == true){
-								$("#admin-panel").remove();
-							}
-							else if(admin_login == true){
-								$("#mla-panel").remove();
-							}
-							user_follow();
-							user();
-							$("#overlay-load").hide();
-							var x = $(".follow-btn button");
-							x.find('button').attr('disabled','disabled');
 						});
-					}});
-				});
+					});
+
 
 			function user(){
 				var user={uid:user_id};
